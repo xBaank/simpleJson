@@ -1,10 +1,9 @@
-sealed class Json
-data class JsonArray(val value: List<Json>) : Json()
-data class JsonObject(val value: Values) : Json()
-data class JsonString(val value: String) : Json()
-data class JsonNumber(val value: Number) : Json()
-data class JsonBoolean(val value: Boolean) : Json()
-object JsonNull : Json()
+sealed class JsonNode
+data class JsonArray(val value: List<JsonNode>) : JsonNode()
+data class JsonObject(val value: List<Pair<String, Any>>) : JsonNode()
+data class JsonString(val value: String) : JsonNode()
+data class JsonNumber(val value: Number) : JsonNode()
+data class JsonBoolean(val value: Boolean) : JsonNode()
+object JsonNull : JsonNode()
 
 
-typealias Values = List<Pair<String, Json>>
