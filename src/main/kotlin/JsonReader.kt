@@ -33,24 +33,6 @@ object JsonReader {
         return resultString
     }
 
-    private fun BufferedReader.readWhile(predicate: (Char) -> Boolean): String? {
-        mark(10)
-        val result = StringBuilder()
-
-        current = readOrEof() ?: return null
-
-        if (!predicate(current!!)) {
-            reset()
-            return null
-        }
-        while (predicate(current!!)) {
-            result.append(current)
-            current = readOrEof() ?: break
-        }
-
-        return result.toString()
-    }
-
     private tailrec fun BufferedReader.skipWhiteSpaces() {
         if (current != null && current.toString() !in WHITESPACE) return
 

@@ -3,6 +3,10 @@ fun main(args: Array<String>) {
         """
             {
                 "glossary": {
+                    "title": null,
+                    "title" : false,
+                    "title" : null,
+                    "title" : 1,
                     "title": "example glossary",
             		"GlossDiv": {
                         "title": "S",
