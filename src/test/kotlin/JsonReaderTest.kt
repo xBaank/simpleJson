@@ -1,6 +1,7 @@
 import exceptions.JsonException
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import java.net.URI
 
 internal class JsonReaderTest {
 
@@ -213,5 +214,17 @@ internal class JsonReaderTest {
         assert(json.tryGetArray("f")?.size == 3)
         assert(json.tryGetObject("g")?.tryGetInt("h") == 1)
         assert(json.tryGetObject("g")?.tryGetObject("i")?.tryGetInt("j") == 1)
+    }
+
+    @Test
+    fun `should read from stream`() {
+        val data = URI.create("https://jsonplaceholder.typicode.com/photos").toURL().openStream()
+        val json = JsonReader.read(data) as JsonArray
+        assert(json.value.size == 5000)
+        assert(json.value.map {  it.tryGetProperty("albumId")}.all { it != null })
+        assert(json.value.map {  it.tryGetProperty("id")}.all { it != null })
+        assert(json.value.map {  it.tryGetProperty("title")}.all { it != null })
+        assert(json.value.map {  it.tryGetProperty("url")}.all { it != null })
+        assert(json.value.map {  it.tryGetProperty("thumbnailUrl")}.all { it != null })
     }
 }

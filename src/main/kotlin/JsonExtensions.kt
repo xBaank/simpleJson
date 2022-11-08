@@ -44,6 +44,6 @@ fun JsonNode.tryGetObject(key: String): JsonObject? = tryGetProperty(key)?.let {
     }
 }
 
-fun JsonNode.tryGetNull(key: String): JsonNull? = tryGetProperty(key) as JsonNull?
+fun JsonNode.tryGetNull(key: String): JsonNull? = tryGetProperty(key) as? JsonNull?
 
 operator fun JsonObject.get(key: String): JsonNode? = value.getOrDefault(key, null)

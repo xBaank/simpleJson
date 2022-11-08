@@ -23,7 +23,7 @@ class JsonReader(inputStream: InputStream, charset: Charset = Charsets.UTF_8) {
     private val reader = BufferedReader(inputStream.reader(charset))
     private var current: Char? = null
 
-    fun read(): JsonNode = readObjectOrNull() ?: throw JsonException("Unexpected  character $current")
+    fun read(): JsonNode = readObjectOrNull() ?: readArrayOrNull() ?: throw JsonException("Unexpected  character $current")
 
     private fun readNext() {
         current = readOrEof()
