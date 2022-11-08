@@ -221,8 +221,8 @@ internal class JsonReaderTest {
         assert(json.tryGetBoolean("d") == false)
         assert(json.tryGetNull("e") == JsonNull)
         assert(json.tryGetArray("f")?.size == 3)
-        assert(json.tryGetObject("g")?.tryGetInt("h") == 1)
-        assert(json.tryGetObject("g")?.tryGetObject("i")?.tryGetInt("j") == 1)
+        assert(json.tryGetProperty("g")?.tryGetInt("h") == 1)
+        assert(json.tryGetProperty("g")?.tryGetProperty("i")?.tryGetInt("j") == 1)
     }
 
     @Test
