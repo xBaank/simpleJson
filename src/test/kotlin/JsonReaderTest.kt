@@ -6,14 +6,14 @@ import java.net.URI
 internal class JsonReaderTest {
 
     @Test
-    fun readUnicode() {
-        val data = "{\"a\": \"\u00e9\"}"
+    fun `should read unicode`() {
+        val data = "{\"a\": \"\u00e9\"} "
         val json = JsonReader.read(data)
         assert(json.tryGetString("a") == "é")
     }
 
     @Test
-    fun readNumber() {
+    fun `should read number`() {
         val data = "{\"a\": 1}"
         val json = JsonReader.read(data)
         val number = json.tryGetInt("a")
@@ -21,7 +21,7 @@ internal class JsonReaderTest {
     }
 
     @Test
-    fun readNegativeNumber() {
+    fun `should read number with -`() {
         val data = "{\"a\": -1}"
         val json = JsonReader.read(data)
         val number = json.tryGetInt("a")
@@ -29,7 +29,7 @@ internal class JsonReaderTest {
     }
 
     @Test
-    fun readPlusNumber() {
+    fun `should read number with +`() {
         val data = "{\"a\": +1}"
         val json = JsonReader.read(data)
         val number = json.tryGetInt("a")
@@ -37,7 +37,7 @@ internal class JsonReaderTest {
     }
 
     @Test
-    fun readDecimalNumber() {
+    fun `should read decimal number`() {
         val data = "{\"a\": 1.1}"
         val json = JsonReader.read(data)
         val number = json.tryGetDouble("a")
@@ -45,7 +45,7 @@ internal class JsonReaderTest {
     }
 
     @Test
-    fun readNegativeDecimalNumber() {
+    fun `should read decimal number with -`() {
         val data = "{\"a\": -1.1}"
         val json = JsonReader.read(data)
         val number = json.tryGetDouble("a")
@@ -53,7 +53,7 @@ internal class JsonReaderTest {
     }
 
     @Test
-    fun readPlusDecimalNumber() {
+    fun `should read decimal number with +`() {
         val data = "{\"a\": +1.1}"
         val json = JsonReader.read(data)
         val number = json.tryGetDouble("a")
@@ -61,22 +61,30 @@ internal class JsonReaderTest {
     }
 
     @Test
-    fun readBoolean() {
+    fun `should read boolean`() {
         val data = "{\"a\": true}"
         val json = JsonReader.read(data)
         assert(json.tryGetBoolean("a") == true)
     }
 
     @Test
-    fun readArray() {
-        val data = "{\"a\": [1, 2, 3]}"
+    fun `should read array`() {
+        val data = " [ 1 , 2 , 3 ] "
+        val json = JsonReader.read(data)
+        val array = json as JsonArray
+        assert(array.value.size == 3)
+    }
+
+    @Test
+    fun `should read array in object`() {
+        val data = "{ \"a\" : [ 1 , 2 , 3 ] }"
         val json = JsonReader.read(data)
         val array = json.tryGetArray("a")
         assert(array?.size == 3)
     }
 
     @Test
-    fun readObject() {
+    fun `should read object`() {
         val data = "{\"a\": {\"b\": 1}}"
         val json = JsonReader.read(data)
         val obj = json.tryGetObject("a")
@@ -84,7 +92,7 @@ internal class JsonReaderTest {
     }
 
     @Test
-    fun readNull() {
+    fun `should read null`() {
         val data = "{\"a\": null}"
         val json = JsonReader.read(data)
         assert(json.tryGetNull("a") == JsonNull)

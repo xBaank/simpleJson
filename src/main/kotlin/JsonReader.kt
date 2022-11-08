@@ -23,7 +23,10 @@ class JsonReader(inputStream: InputStream, charset: Charset = Charsets.UTF_8) {
     private val reader = BufferedReader(inputStream.reader(charset))
     private var current: Char? = null
 
-    fun read(): JsonNode = readObjectOrNull() ?: readArrayOrNull() ?: throw JsonException("Unexpected  character $current")
+    //After reading all json skip all whitespace and check for no more data after
+    fun read(): JsonNode = (readObjectOrNull() ?: readArrayOrNull())
+        .takeIf { skipWhiteSpaces(); current == null } ?:
+        throw JsonException("Unexpected  character $current")
 
     private fun readNext() {
         current = readOrEof()
@@ -117,11 +120,17 @@ class JsonReader(inputStream: InputStream, charset: Charset = Charsets.UTF_8) {
 
         val array = mutableListOf<JsonNode>()
         do {
-            readNext()
-            val item =
-                readObjectOrNull() ?: readArrayOrNull() ?: readStringOrNull() ?: readNumberOrNull() ?: readBooleanOrNull() ?: readNullOrNull()
+            val item = withoutWhitespaces {
+                readNext()
+                    readObjectOrNull() ?:
+                    readArrayOrNull()?:
+                    readStringOrNull() ?:
+                    readNumberOrNull() ?:
+                    readBooleanOrNull() ?:
+                    readNullOrNull()
+            } ?: break
 
-            if (item != null) array.add(item)
+            array.add(item)
         } while (current == JSON_COMMA)
 
         withoutWhitespaces { if (current != JSON_RIGHT_BRACKET) return null }
@@ -166,7 +175,8 @@ class JsonReader(inputStream: InputStream, charset: Charset = Charsets.UTF_8) {
             } while (current == JSON_COMMA)
         }
 
-        if (current != JSON_RIGHT_BRACE) return null
+        withoutWhitespaces { if (current != JSON_RIGHT_BRACE) return null }
+
         readNext()
 
         return JsonObject(objectMap)
