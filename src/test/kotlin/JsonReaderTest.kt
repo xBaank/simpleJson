@@ -1,7 +1,7 @@
 import exceptions.JsonException
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import java.net.URI
+import java.io.File
 
 internal class JsonReaderTest {
 
@@ -227,7 +227,7 @@ internal class JsonReaderTest {
 
     @Test
     fun `should read from stream`() {
-        val data = URI.create("https://jsonplaceholder.typicode.com/photos").toURL().openStream()
+        val data = File("src/test/resources/photos.json").inputStream()
         val json = JsonReader.read(data) as JsonArray
         assert(json.value.size == 5000)
         assert(json.value.map {  it.tryGetProperty("albumId")}.all { it != null })
@@ -235,5 +235,51 @@ internal class JsonReaderTest {
         assert(json.value.map {  it.tryGetProperty("title")}.all { it != null })
         assert(json.value.map {  it.tryGetProperty("url")}.all { it != null })
         assert(json.value.map {  it.tryGetProperty("thumbnailUrl")}.all { it != null })
+    }
+
+    @Test
+    fun `should try parse`() {
+        val data = """
+            {
+                "a": 1,
+                "b": "2",
+                "c": true,
+                "d": false,
+                "e": null,
+                "f": [1, 2, 3],
+                "g": {
+                    "h": 1,
+                    "i": {
+                        "j": 1
+                    }
+                }
+            }
+        """.trimIndent()
+
+        val json = JsonReader.tryRead(data)
+        assert(json != null)
+    }
+
+    @Test
+    fun `try parse should return null`() {
+        val data = """
+            {
+                "a": 1, asd
+                "b": "2",
+                "c": true,
+                "d": false,
+                "e": null,
+                "f": [1, 2, 3],
+                "g": {
+                    "h": 1,
+                    "i": {
+                        "j": 1
+                    }
+                }
+            }
+        """.trimIndent()
+
+        val json = JsonReader.tryRead(data)
+        assert(json == null)
     }
 }
