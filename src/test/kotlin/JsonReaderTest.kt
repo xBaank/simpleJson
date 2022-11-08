@@ -91,16 +91,17 @@ internal class JsonReaderTest {
     }
 
     @Test
-    fun readEmptyObject() {
+    fun `should read empty object`() {
         val data = "{}"
         val json = JsonReader.read(data)
         assert(json is JsonObject)
     }
 
     @Test
-    fun `should only read object`() {
+    fun `should empty array`() {
         val data = "[]"
-        assertThrows<JsonException> { JsonReader.read(data) }
+        val json = JsonReader.read(data)
+        assert(json is JsonArray)
     }
 
     @Test

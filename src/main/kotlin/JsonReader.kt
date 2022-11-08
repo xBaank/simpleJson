@@ -36,7 +36,7 @@ class JsonReader(inputStream: InputStream, charset: Charset = Charsets.UTF_8) {
         val result = StringBuilder().append(current)
 
         repeat(length) {
-            result.append(readOrEof() ?: throw JsonException("Unexpected end of file"))
+            result.append(readOrEof())
         }
         val resultString = result.toString()
         if (!predicate(resultString)) {
