@@ -218,7 +218,7 @@ internal class JsonReaderTest {
     }
 
     @Test
-    fun `should json with nested objects`() {
+    fun `should read json with nested objects`() {
         val data = """
             {
                 "a": 1,
@@ -247,7 +247,7 @@ internal class JsonReaderTest {
     }
 
     @Test
-    fun `should read from stream`() {
+    fun `should json read from stream`() {
         val data = File("src/test/resources/photos.json").inputStream()
         val json = JsonReader.read(data) as JsonArray
         assert(json.value.size == 5000)
@@ -259,7 +259,7 @@ internal class JsonReaderTest {
     }
 
     @Test
-    fun `should try parse`() {
+    fun `should try parse json`() {
         val data = """
             {
                 "a": 1,

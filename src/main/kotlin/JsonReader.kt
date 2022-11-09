@@ -25,8 +25,7 @@ class JsonReader(inputStream: InputStream, charset: Charset = Charsets.UTF_8) {
 
     //After reading all json skip all whitespace and check for no more data after
     fun read(): JsonNode = tryRead()
-        .takeIf { skipWhiteSpaces(); current == null } ?:
-        throw JsonException("Unexpected  character $current")
+        .takeIf { skipWhiteSpaces(); current == null } ?: throw JsonException("Unexpected  character $current")
 
     fun tryRead(): JsonNode? = readObjectOrNull() ?: readArrayOrNull()
 
@@ -56,7 +55,7 @@ class JsonReader(inputStream: InputStream, charset: Charset = Charsets.UTF_8) {
     private tailrec fun skipWhiteSpaces() {
         if (current != null && current !in WHITESPACE) return
         readNext()
-        if(current == null) return
+        if (current == null) return
         skipWhiteSpaces()
     }
 
@@ -124,12 +123,8 @@ class JsonReader(inputStream: InputStream, charset: Charset = Charsets.UTF_8) {
         do {
             val item = withoutWhitespaces {
                 readNext()
-                    readObjectOrNull() ?:
-                    readArrayOrNull()?:
-                    readStringOrNull() ?:
-                    readNumberOrNull() ?:
-                    readBooleanOrNull() ?:
-                    readNullOrNull()
+                readObjectOrNull() ?: readArrayOrNull() ?: readStringOrNull() ?: readNumberOrNull()
+                ?: readBooleanOrNull() ?: readNullOrNull()
             } ?: break
 
             array.add(item)
@@ -161,15 +156,8 @@ class JsonReader(inputStream: InputStream, charset: Charset = Charsets.UTF_8) {
 
                 withoutWhitespaces {
                     val value =
-                        readObjectOrNull() ?:
-                        readArrayOrNull() ?:
-                        readStringOrNull() ?:
-                        readNumberOrNull() ?:
-                        readBooleanOrNull() ?:
-                        readNullOrNull()
-                        ?: throw JsonException(
-                            "Unexpected character: $current"
-                        )
+                        readObjectOrNull() ?: readArrayOrNull() ?: readStringOrNull() ?: readNumberOrNull()
+                        ?: readBooleanOrNull() ?: readNullOrNull() ?: return null
 
                     objectMap.put(key, value)
                 }
@@ -195,7 +183,9 @@ class JsonReader(inputStream: InputStream, charset: Charset = Charsets.UTF_8) {
     companion object {
         fun read(string: String): JsonNode = JsonReader(string).read()
         fun read(inputStream: InputStream, charset: Charset = Charsets.UTF_8): JsonNode = JsonReader(inputStream).read()
-        fun tryRead(inputStream: InputStream, charset: Charset = Charsets.UTF_8): JsonNode? = JsonReader(inputStream).tryRead()
+        fun tryRead(inputStream: InputStream, charset: Charset = Charsets.UTF_8): JsonNode? =
+            JsonReader(inputStream).tryRead()
+
         fun tryRead(string: String): JsonNode? = JsonReader(string).tryRead()
     }
 }
