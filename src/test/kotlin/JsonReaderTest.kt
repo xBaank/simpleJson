@@ -76,6 +76,27 @@ internal class JsonReaderTest {
     }
 
     @Test
+    fun `should read array with all types`() {
+        val data = " [ 1 , 2 , 3, \"a\", true, false, null, {\"a\": 1}, [1, 2, 3] ] "
+        val json = JsonReader.read(data)
+        val array = json.tryGetArray()
+        assert(array?.size == 9)
+        assert(array?.getOrNull(0)?.tryGetInt() == 1)
+        assert(array?.getOrNull(1)?.tryGetInt() == 2)
+        assert(array?.getOrNull(2)?.tryGetInt() == 3)
+        assert(array?.getOrNull(3)?.tryGetString() == "a")
+        assert(array?.getOrNull(4)?.tryGetBoolean() == true)
+        assert(array?.getOrNull(5)?.tryGetBoolean() == false)
+        assert(array?.getOrNull(6)?.tryGetNull() == JsonNull)
+        assert(array?.getOrNull(7)?.tryGetObject()?.tryGetInt("a") == 1)
+        assert(array?.getOrNull(8)?.tryGetArray()?.size == 3)
+        assert(array?.getOrNull(8)?.tryGetArray()?.getOrNull(0)?.tryGetInt() == 1)
+        assert(array?.getOrNull(8)?.tryGetArray()?.getOrNull(1)?.tryGetInt() == 2)
+        assert(array?.getOrNull(8)?.tryGetArray()?.getOrNull(2)?.tryGetInt() == 3)
+
+    }
+
+    @Test
     fun `should read array in object`() {
         val data = "{ \"a\" : [ 1 , 2 , 3 ] }"
         val json = JsonReader.read(data)
@@ -132,7 +153,7 @@ internal class JsonReaderTest {
             }
         """.trimIndent()
         val json = JsonReader.read(data)
-        assert(json.tryGetString("a") ==  "\n \t \"hola\" \t \n")
+        assert(json.tryGetString("a") == "\n \t \"hola\" \t \n")
     }
 
     @Test
@@ -230,11 +251,11 @@ internal class JsonReaderTest {
         val data = File("src/test/resources/photos.json").inputStream()
         val json = JsonReader.read(data) as JsonArray
         assert(json.value.size == 5000)
-        assert(json.value.map {  it.tryGetProperty("albumId")}.all { it != null })
-        assert(json.value.map {  it.tryGetProperty("id")}.all { it != null })
-        assert(json.value.map {  it.tryGetProperty("title")}.all { it != null })
-        assert(json.value.map {  it.tryGetProperty("url")}.all { it != null })
-        assert(json.value.map {  it.tryGetProperty("thumbnailUrl")}.all { it != null })
+        assert(json.value.map { it.tryGetProperty("albumId") }.all { it != null })
+        assert(json.value.map { it.tryGetProperty("id") }.all { it != null })
+        assert(json.value.map { it.tryGetProperty("title") }.all { it != null })
+        assert(json.value.map { it.tryGetProperty("url") }.all { it != null })
+        assert(json.value.map { it.tryGetProperty("thumbnailUrl") }.all { it != null })
     }
 
     @Test

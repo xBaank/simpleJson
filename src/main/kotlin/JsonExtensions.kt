@@ -1,4 +1,3 @@
-
 fun JsonNode.tryGetProperty(key: String): JsonNode? = when (this) {
     is JsonObject -> this[key]
     else -> null
@@ -42,6 +41,41 @@ fun JsonNode.tryGetObject(key: String): JsonObject? = tryGetProperty(key)?.let {
         is JsonObject -> it
         else -> null
     }
+}
+
+fun JsonNode.tryGetNumber() = when (this) {
+    is JsonNumber -> this.value
+    else -> null
+}
+
+fun JsonNode.tryGetInt() = tryGetNumber()?.toInt()
+fun JsonNode.tryGetDouble() = tryGetNumber()?.toDouble()
+fun JsonNode.tryGetFloat() = tryGetNumber()?.toFloat()
+fun JsonNode.tryGetLong() = tryGetNumber()?.toLong()
+
+fun JsonNode.tryGetString() = when (this) {
+    is JsonString -> this.value
+    else -> null
+}
+
+fun JsonNode.tryGetBoolean() = when (this) {
+    is JsonBoolean -> this.value
+    else -> null
+}
+
+fun JsonNode.tryGetNull() = when (this) {
+    is JsonNull -> this
+    else -> null
+}
+
+fun JsonNode.tryGetArray() = when (this) {
+    is JsonArray -> this.value
+    else -> null
+}
+
+fun JsonNode.tryGetObject() = when (this) {
+    is JsonObject -> this
+    else -> null
 }
 
 fun JsonNode.tryGetNull(key: String): JsonNull? = tryGetProperty(key) as? JsonNull?
