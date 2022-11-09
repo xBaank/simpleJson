@@ -37,5 +37,49 @@ val isPublic =
     json.tryGetArray("photos")?.getOrNull(0)?.tryGetBoolean("isPublic") ?: throw Exception("isPublic not found")
 ```
 
+## Gradle
+
+Add jitpack
+
+```kotlin
+repositories {
+    maven { url("https://jitpack.io") }
+}
+```
+
+Add dependency
+
+```kotlin
+dependencies {
+    implementation("com.github.xBaank:simpleJson:1.0.0")
+}
+
+```
+
+## Maven
+
+Add jitpack
+
+```xml
+
+<repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
+</repositories>
+```
+
+Add dependency
+
+```xml
+
+<dependency>
+    <groupId>com.github.xBaank</groupId>
+    <artifactId>simpleJson</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
+
 
 
