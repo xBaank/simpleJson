@@ -43,7 +43,7 @@ Add jitpack
 
 ```kotlin
 repositories {
-    maven { url("https://jitpack.io") }
+    maven("https://jitpack.io")
 }
 ```
 
