@@ -1,4 +1,4 @@
-## simpleJson
+## simpleJson [![Java CI with Gradle](https://github.com/xBaank/simpleJson/actions/workflows/gradle.yml/badge.svg)](https://github.com/xBaank/simpleJson/actions/workflows/gradle.yml)
 
 simpleJson is a simple json parser for the jvm made in kotlin.
 
@@ -25,13 +25,17 @@ val data = File("src/test/resources/photos.json").inputStream()
 val json = JsonReader.read(data, Charsets.UTF_32LE)
 ```
 
-After reading, you can access the data using the `tryGet` methods which will return null if the key is not found or the value is not of the correct type.
+After reading, you can access the data using the `tryGet` methods which will return null if the key is not found or the
+value is not of the correct type.
 
 ```kotlin
 val json = JsonReader.read(data)
 val name = json.tryGetString("name")
 val age = json.tryGetInt("age")
 val infoName = json.tryGetObject("info")?.tryGetString("name") ?: "unknown"
-val isPublic = json.tryGetArray("photos")?.getOrNull(0)?.tryGetBoolean("isPublic") ?: throw Exception("isPublic not found")
+val isPublic =
+    json.tryGetArray("photos")?.getOrNull(0)?.tryGetBoolean("isPublic") ?: throw Exception("isPublic not found")
 ```
+
+
 
