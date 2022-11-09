@@ -17,7 +17,6 @@ repositories {
 dependencies {
     implementation("junit:junit:4.13.2")
     implementation("org.junit.jupiter:junit-jupiter:5.9.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
     testImplementation(kotlin("test"))
 }
 
