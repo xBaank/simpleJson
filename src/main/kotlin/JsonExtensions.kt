@@ -1,83 +1,96 @@
-fun JsonNode.tryGetProperty(key: String): JsonNode? = when (this) {
+/**
+ * Returns the value of the property with the given [key] or null if the node is not a JsonObject.
+ */
+fun JsonNode.getPropertyOrNull(key: String): JsonNode? = when (this) {
     is JsonObject -> this[key]
     else -> null
 }
 
-fun JsonNode.tryGetArray(key: String): List<JsonNode>? = tryGetProperty(key)?.let {
+
+/**
+ * Returns the value at the [index] or null if the value is not found or the node is not a JsonArray
+ */
+fun JsonNode.getPropertyOrNull(index : Int): JsonNode? = when (this) {
+    is JsonArray -> this.value.getOrNull(index)
+    else -> null
+}
+
+
+fun JsonNode.getArrayOrNull(key: String): List<JsonNode>? = getPropertyOrNull(key)?.let {
     when (it) {
         is JsonArray -> it.value
         else -> null
     }
 }
 
-fun JsonNode.tryGetString(key: String): String? = tryGetProperty(key)?.let {
+fun JsonNode.getStringOrNull(key: String): String? = getPropertyOrNull(key)?.let {
     when (it) {
         is JsonString -> it.value
         else -> null
     }
 }
 
-fun JsonNode.tryGetNumber(key: String): Number? = tryGetProperty(key)?.let {
+fun JsonNode.getNumberOrNull(key: String): Number? = getPropertyOrNull(key)?.let {
     when (it) {
         is JsonNumber -> it.value
         else -> null
     }
 }
 
-fun JsonNode.tryGetInt(key: String): Number? = tryGetNumber(key)?.toInt()
-fun JsonNode.tryGetDouble(key: String): Number? = tryGetNumber(key)?.toDouble()
-fun JsonNode.tryGetFloat(key: String): Number? = tryGetNumber(key)?.toFloat()
-fun JsonNode.tryGetLong(key: String): Number? = tryGetNumber(key)?.toLong()
+fun JsonNode.getIntOrNull(key: String): Number? = getNumberOrNull(key)?.toInt()
+fun JsonNode.getDoubleOrNull(key: String): Number? = getNumberOrNull(key)?.toDouble()
+fun JsonNode.getFloatOrNull(key: String): Number? = getNumberOrNull(key)?.toFloat()
+fun JsonNode.getLongOrNull(key: String): Number? = getNumberOrNull(key)?.toLong()
 
-fun JsonNode.tryGetBoolean(key: String): Boolean? = tryGetProperty(key)?.let {
+fun JsonNode.getBooleanOrNull(key: String): Boolean? = getPropertyOrNull(key)?.let {
     when (it) {
         is JsonBoolean -> it.value
         else -> null
     }
 }
 
-fun JsonNode.tryGetObject(key: String): JsonObject? = tryGetProperty(key)?.let {
+fun JsonNode.getObjectOrNull(key: String): JsonObject? = getPropertyOrNull(key)?.let {
     when (it) {
         is JsonObject -> it
         else -> null
     }
 }
 
-fun JsonNode.tryGetNumber() = when (this) {
+fun JsonNode.getJsonNullOrNull(key: String): JsonNull? = getPropertyOrNull(key) as? JsonNull?
+
+fun JsonNode.toNumberOrNull() = when (this) {
     is JsonNumber -> this.value
     else -> null
 }
 
-fun JsonNode.tryGetInt() = tryGetNumber()?.toInt()
-fun JsonNode.tryGetDouble() = tryGetNumber()?.toDouble()
-fun JsonNode.tryGetFloat() = tryGetNumber()?.toFloat()
-fun JsonNode.tryGetLong() = tryGetNumber()?.toLong()
+fun JsonNode.toIntOrNull() = toNumberOrNull()?.toInt()
+fun JsonNode.toDoubleOrNull() = toNumberOrNull()?.toDouble()
+fun JsonNode.toFloatOrNull() = toNumberOrNull()?.toFloat()
+fun JsonNode.toLongOrNull() = toNumberOrNull()?.toLong()
 
-fun JsonNode.tryGetString() = when (this) {
+fun JsonNode.toStringOrNull() = when (this) {
     is JsonString -> this.value
     else -> null
 }
 
-fun JsonNode.tryGetBoolean() = when (this) {
+fun JsonNode.toBooleanOrNull() = when (this) {
     is JsonBoolean -> this.value
     else -> null
 }
 
-fun JsonNode.tryGetNull() = when (this) {
+fun JsonNode.toJsonNullOrNull() = when (this) {
     is JsonNull -> this
     else -> null
 }
 
-fun JsonNode.tryGetArray() = when (this) {
+fun JsonNode.toArrayOrNull() = when (this) {
     is JsonArray -> this.value
     else -> null
 }
 
-fun JsonNode.tryGetObject() = when (this) {
+fun JsonNode.toObjectOrNull() = when (this) {
     is JsonObject -> this
     else -> null
 }
-
-fun JsonNode.tryGetNull(key: String): JsonNull? = tryGetProperty(key) as? JsonNull?
-
 operator fun JsonObject.get(key: String): JsonNode? = value.getOrDefault(key, null)
+operator fun JsonArray.get(index: Int): JsonNode = value[index]

@@ -30,11 +30,11 @@ value is not of the correct type.
 
 ```kotlin
 val json = JsonReader.read(data)
-val name = json.tryGetString("name")
-val age = json.tryGetInt("age")
-val infoName = json.tryGetObject("info")?.tryGetString("name") ?: "unknown"
+val name = json.getStringOrNull("name")
+val age = json.getIntOrNull("age")
+val infoName = json.getObjectOrNull("info")?.getStringOrNull("name") ?: "unknown"
 val isPublic =
-    json.tryGetArray("photos")?.getOrNull(0)?.tryGetBoolean("isPublic") ?: throw Exception("isPublic not found")
+    json.toArrayOrNull("photos")?.getOrNull(0)?.toBooleanOrNull("isPublic") ?: throw Exception("isPublic not found")
 ```
 
 ## Gradle

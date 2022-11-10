@@ -9,14 +9,14 @@ internal class JsonReaderTest {
     fun `should read unicode`() {
         val data = "{\"a\": \"\u00e9\"} "
         val json = JsonReader.read(data)
-        assert(json.tryGetString("a") == "é")
+        assert(json.getStringOrNull("a") == "é")
     }
 
     @Test
     fun `should read number`() {
         val data = "{\"a\": 1}"
         val json = JsonReader.read(data)
-        val number = json.tryGetInt("a")
+        val number = json.getIntOrNull("a")
         assert(number == 1)
     }
 
@@ -24,7 +24,7 @@ internal class JsonReaderTest {
     fun `should read number with -`() {
         val data = "{\"a\": -1}"
         val json = JsonReader.read(data)
-        val number = json.tryGetInt("a")
+        val number = json.getIntOrNull("a")
         assert(number == -1)
     }
 
@@ -32,7 +32,7 @@ internal class JsonReaderTest {
     fun `should read number with +`() {
         val data = "{\"a\": +1}"
         val json = JsonReader.read(data)
-        val number = json.tryGetInt("a")
+        val number = json.getIntOrNull("a")
         assert(number == 1)
     }
 
@@ -40,7 +40,7 @@ internal class JsonReaderTest {
     fun `should read decimal number`() {
         val data = "{\"a\": 1.1}"
         val json = JsonReader.read(data)
-        val number = json.tryGetDouble("a")
+        val number = json.getDoubleOrNull("a")
         assert(number == 1.1)
     }
 
@@ -48,7 +48,7 @@ internal class JsonReaderTest {
     fun `should read decimal number with -`() {
         val data = "{\"a\": -1.1}"
         val json = JsonReader.read(data)
-        val number = json.tryGetDouble("a")
+        val number = json.getDoubleOrNull("a")
         assert(number == -1.1)
     }
 
@@ -56,7 +56,7 @@ internal class JsonReaderTest {
     fun `should read decimal number with +`() {
         val data = "{\"a\": +1.1}"
         val json = JsonReader.read(data)
-        val number = json.tryGetDouble("a")
+        val number = json.getDoubleOrNull("a")
         assert(number == 1.1)
     }
 
@@ -64,35 +64,44 @@ internal class JsonReaderTest {
     fun `should read boolean`() {
         val data = "{\"a\": true}"
         val json = JsonReader.read(data)
-        assert(json.tryGetBoolean("a") == true)
+        assert(json.getBooleanOrNull("a") == true)
     }
 
     @Test
     fun `should read array`() {
-        val data = " [ 1 , 2 , 3 ] "
+        val data = " [ 1 , 2 , 3,4.4,\"a\",{}, [[[]]], true, false, null ] "
         val json = JsonReader.read(data)
-        val array = json as JsonArray
-        assert(array.value.size == 3)
+        assert(json.toArrayOrNull()?.size == 10)
+        assert(json.getPropertyOrNull(0)?.toIntOrNull() == 1)
+        assert(json.getPropertyOrNull(1)?.toDoubleOrNull() == 2.0)
+        assert(json.getPropertyOrNull(2)?.toLongOrNull() == 3L)
+        assert(json.getPropertyOrNull(3)?.toFloatOrNull() == 4.4f)
+        assert(json.getPropertyOrNull(4)?.toStringOrNull() == "a")
+        assert(json.getPropertyOrNull(5)?.toObjectOrNull()?.value?.isEmpty() == true)
+        assert(json.getPropertyOrNull(6)?.toArrayOrNull()?.size == 1)
+        assert(json.getPropertyOrNull(7)?.toBooleanOrNull() == true)
+        assert(json.getPropertyOrNull(8)?.toBooleanOrNull() == false)
+        assert(json.getPropertyOrNull(9) is JsonNull)
     }
 
     @Test
     fun `should read array with all types`() {
         val data = " [ 1 , 2 , 3, \"a\", true, false, null, {\"a\": 1}, [1, 2, 3] ] "
         val json = JsonReader.read(data)
-        val array = json.tryGetArray()
+        val array = json.toArrayOrNull()
         assert(array?.size == 9)
-        assert(array?.getOrNull(0)?.tryGetInt() == 1)
-        assert(array?.getOrNull(1)?.tryGetInt() == 2)
-        assert(array?.getOrNull(2)?.tryGetInt() == 3)
-        assert(array?.getOrNull(3)?.tryGetString() == "a")
-        assert(array?.getOrNull(4)?.tryGetBoolean() == true)
-        assert(array?.getOrNull(5)?.tryGetBoolean() == false)
-        assert(array?.getOrNull(6)?.tryGetNull() == JsonNull)
-        assert(array?.getOrNull(7)?.tryGetObject()?.tryGetInt("a") == 1)
-        assert(array?.getOrNull(8)?.tryGetArray()?.size == 3)
-        assert(array?.getOrNull(8)?.tryGetArray()?.getOrNull(0)?.tryGetInt() == 1)
-        assert(array?.getOrNull(8)?.tryGetArray()?.getOrNull(1)?.tryGetInt() == 2)
-        assert(array?.getOrNull(8)?.tryGetArray()?.getOrNull(2)?.tryGetInt() == 3)
+        assert(array?.getOrNull(0)?.toIntOrNull() == 1)
+        assert(array?.getOrNull(1)?.toIntOrNull() == 2)
+        assert(array?.getOrNull(2)?.toIntOrNull() == 3)
+        assert(array?.getOrNull(3)?.toStringOrNull() == "a")
+        assert(array?.getOrNull(4)?.toBooleanOrNull() == true)
+        assert(array?.getOrNull(5)?.toBooleanOrNull() == false)
+        assert(array?.getOrNull(6)?.toJsonNullOrNull() == JsonNull)
+        assert(array?.getOrNull(7)?.toObjectOrNull()?.getIntOrNull("a") == 1)
+        assert(array?.getOrNull(8)?.toArrayOrNull()?.size == 3)
+        assert(array?.getOrNull(8)?.toArrayOrNull()?.getOrNull(0)?.toIntOrNull() == 1)
+        assert(array?.getOrNull(8)?.toArrayOrNull()?.getOrNull(1)?.toIntOrNull() == 2)
+        assert(array?.getOrNull(8)?.toArrayOrNull()?.getOrNull(2)?.toIntOrNull() == 3)
 
     }
 
@@ -100,23 +109,26 @@ internal class JsonReaderTest {
     fun `should read array in object`() {
         val data = "{ \"a\" : [ 1 , 2 , 3 ] }"
         val json = JsonReader.read(data)
-        val array = json.tryGetArray("a")
+        val array = json.getArrayOrNull("a")
         assert(array?.size == 3)
+        assert(array?.getOrNull(0)?.toIntOrNull() == 1)
+        assert(array?.getOrNull(1)?.toIntOrNull() == 2)
+        assert(array?.getOrNull(2)?.toIntOrNull() == 3)
     }
 
     @Test
     fun `should read object`() {
         val data = "{\"a\": {\"b\": 1}}"
         val json = JsonReader.read(data)
-        val obj = json.tryGetObject("a")
-        assert(obj?.tryGetNumber("b")?.toInt() == 1)
+        val obj = json.getObjectOrNull("a")
+        assert(obj?.getNumberOrNull("b")?.toInt() == 1)
     }
 
     @Test
     fun `should read null`() {
         val data = "{\"a\": null}"
         val json = JsonReader.read(data)
-        assert(json.tryGetNull("a") == JsonNull)
+        assert(json.getJsonNullOrNull("a") == JsonNull)
     }
 
     @Test
@@ -153,7 +165,7 @@ internal class JsonReaderTest {
             }
         """.trimIndent()
         val json = JsonReader.read(data)
-        assert(json.tryGetString("a") == "\n \t \"hola\" \t \n")
+        assert(json.getStringOrNull("a") == "\n \t \"hola\" \t \n")
     }
 
     @Test
@@ -173,13 +185,13 @@ internal class JsonReaderTest {
             }
         """
         val json = JsonReader.read(data)
-        assert(json.tryGetInt("a") == 1)
-        assert(json.tryGetString("b") == "2")
-        assert(json.tryGetBoolean("c") == true)
-        assert(json.tryGetBoolean("d") == false)
-        assert(json.tryGetNull("e") == JsonNull)
-        assert(json.tryGetArray(" f ")?.size == 3)
-        assert(json.tryGetObject("g")?.tryGetInt("h") == 1)
+        assert(json.getIntOrNull("a") == 1)
+        assert(json.getStringOrNull("b") == "2")
+        assert(json.getBooleanOrNull("c") == true)
+        assert(json.getBooleanOrNull("d") == false)
+        assert(json.getJsonNullOrNull("e") == JsonNull)
+        assert(json.getArrayOrNull(" f ")?.size == 3)
+        assert(json.getObjectOrNull("g")?.getIntOrNull("h") == 1)
     }
 
     @Test
@@ -237,14 +249,14 @@ internal class JsonReaderTest {
             }
         """.trimIndent()
         val json = JsonReader.read(data)
-        assert(json.tryGetInt("a") == 1)
-        assert(json.tryGetString("b") == "2")
-        assert(json.tryGetBoolean("c") == true)
-        assert(json.tryGetBoolean("d") == false)
-        assert(json.tryGetNull("e") == JsonNull)
-        assert(json.tryGetArray("f")?.size == 3)
-        assert(json.tryGetProperty("g")?.tryGetInt("h") == 1)
-        assert(json.tryGetProperty("g")?.tryGetProperty("i")?.tryGetInt("j") == 1)
+        assert(json.getIntOrNull("a") == 1)
+        assert(json.getStringOrNull("b") == "2")
+        assert(json.getBooleanOrNull("c") == true)
+        assert(json.getBooleanOrNull("d") == false)
+        assert(json.getJsonNullOrNull("e") == JsonNull)
+        assert(json.getArrayOrNull("f")?.size == 3)
+        assert(json.getPropertyOrNull("g")?.getIntOrNull("h") == 1)
+        assert(json.getPropertyOrNull("g")?.getPropertyOrNull("i")?.getIntOrNull("j") == 1)
     }
 
     @Test
@@ -252,11 +264,11 @@ internal class JsonReaderTest {
         val data = File("src/test/resources/photos.json").inputStream()
         val json = JsonReader.read(data) as JsonArray
         assert(json.value.size == 5000)
-        assert(json.value.map { it.tryGetProperty("albumId") }.all { it != null })
-        assert(json.value.map { it.tryGetProperty("id") }.all { it != null })
-        assert(json.value.map { it.tryGetProperty("title") }.all { it != null })
-        assert(json.value.map { it.tryGetProperty("url") }.all { it != null })
-        assert(json.value.map { it.tryGetProperty("thumbnailUrl") }.all { it != null })
+        assert(json.value.map { it.getPropertyOrNull("albumId") }.all { it != null })
+        assert(json.value.map { it.getPropertyOrNull("id") }.all { it != null })
+        assert(json.value.map { it.getPropertyOrNull("title") }.all { it != null })
+        assert(json.value.map { it.getPropertyOrNull("url") }.all { it != null })
+        assert(json.value.map { it.getPropertyOrNull("thumbnailUrl") }.all { it != null })
     }
 
     @Test
