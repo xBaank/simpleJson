@@ -165,19 +165,20 @@ internal class JsonReaderTest {
                 "c": true,
                 "d": false,
                 "e": null,
-                "f": [1, 2, 3],
+                 " f "  :  [   1  , 2     , 3    ]    , 
+                 
                 "g": {
                     "h": 1
                 }
             }
-        """.trimIndent()
+        """
         val json = JsonReader.read(data)
         assert(json.tryGetInt("a") == 1)
         assert(json.tryGetString("b") == "2")
         assert(json.tryGetBoolean("c") == true)
         assert(json.tryGetBoolean("d") == false)
         assert(json.tryGetNull("e") == JsonNull)
-        assert(json.tryGetArray("f")?.size == 3)
+        assert(json.tryGetArray(" f ")?.size == 3)
         assert(json.tryGetObject("g")?.tryGetInt("h") == 1)
     }
 
@@ -290,7 +291,7 @@ internal class JsonReaderTest {
                 "c": true,
                 "d": false,
                 "e": null,
-                "f": [1, 2, 3],
+                "f":  [ 1, 2, 3],
                 "g": {
                     "h": 1,
                     "i": {

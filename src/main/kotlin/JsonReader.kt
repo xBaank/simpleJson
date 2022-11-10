@@ -121,11 +121,9 @@ class JsonReader(inputStream: InputStream, charset: Charset = Charsets.UTF_8) {
 
         val array = mutableListOf<JsonNode>()
         do {
-            val item = withoutWhitespaces {
-                readNext()
-                readObjectOrNull() ?: readArrayOrNull() ?: readStringOrNull() ?: readNumberOrNull()
-                ?: readBooleanOrNull() ?: readNullOrNull()
-            } ?: break
+            val item =
+                readValue()
+             ?: break
 
             array.add(item)
         } while (current == JSON_COMMA)
@@ -139,10 +137,14 @@ class JsonReader(inputStream: InputStream, charset: Charset = Charsets.UTF_8) {
         readNext()
         val key = withoutWhitespaces { readStringOrNull() ?: return null }
         if (current != JSON_COLON) return null
-        readNext()
         return key.value
     }
 
+    private fun readValue(): JsonNode? = withoutWhitespaces {
+        readNext()
+        readObjectOrNull() ?: readArrayOrNull() ?: readStringOrNull() ?: readNumberOrNull()
+        ?: readBooleanOrNull() ?: readNullOrNull()
+    }
     private fun readObjectOrNull(): JsonObject? {
 
         val objectMap = mutableMapOf<String, JsonNode>()
@@ -153,22 +155,14 @@ class JsonReader(inputStream: InputStream, charset: Charset = Charsets.UTF_8) {
             do {
 
                 val key = readKey() ?: break
-
-                withoutWhitespaces {
-                    val value =
-                        readObjectOrNull() ?: readArrayOrNull() ?: readStringOrNull() ?: readNumberOrNull()
-                        ?: readBooleanOrNull() ?: readNullOrNull() ?: return null
-
-                    objectMap.put(key, value)
-                }
+                val value = readValue() ?: return null
+                objectMap[key] = value
 
             } while (current == JSON_COMMA)
         }
 
         withoutWhitespaces { if (current != JSON_RIGHT_BRACE) return null }
-
         readNext()
-
         return JsonObject(objectMap)
     }
 
