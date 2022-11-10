@@ -25,7 +25,7 @@ val data = File("src/test/resources/photos.json").inputStream()
 val json = JsonReader.read(data, Charsets.UTF_32LE)
 ```
 
-After reading, you can access the data using the `get` methods which will return null if the key is not found or the
+After reading, you can access the data using the `getOrNull` methods which will return null if the key is not found or the
 value is not of the correct type.
 
 ```kotlin
