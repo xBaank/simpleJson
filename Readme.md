@@ -37,6 +37,13 @@ val isPublic =
     json.toArrayOrNull("photos")?.getOrNull(0)?.toBooleanOrNull("isPublic") ?: throw Exception("isPublic not found")
 ```
 
+You can also use the `toOrNull` methods which will return null if the value is not of the correct type.
+
+```kotlin
+val json = JsonReader.read(data)
+val name = json.getPropertyOrNull("name").toStringOrNull()
+```
+
 ## Gradle
 
 Add jitpack
