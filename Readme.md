@@ -34,7 +34,7 @@ val name = json.getStringOrNull("name")
 val age = json.getIntOrNull("age")
 val infoName = json.getObjectOrNull("info")?.getStringOrNull("name") ?: "unknown"
 val isPublic =
-    json.toArrayOrNull("photos")?.getOrNull(0)?.toBooleanOrNull("isPublic") ?: throw Exception("isPublic not found")
+    json.toArrayOrNull("photos")?.getOrNull(0)?.getBooleanOrNull("isPublic") ?: throw Exception("isPublic not found")
 ```
 
 You can also use the `toOrNull` methods which will return null if the value is not of the correct type.
