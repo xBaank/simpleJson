@@ -51,7 +51,7 @@ Add dependency
 
 ```kotlin
 dependencies {
-    implementation("com.github.xBaank:simpleJson:1.0.1")
+    implementation("com.github.xBaank:simpleJson:2.0.0")
 }
 
 ```
@@ -77,7 +77,7 @@ Add dependency
 <dependency>
     <groupId>com.github.xBaank</groupId>
     <artifactId>simpleJson</artifactId>
-    <version>1.0.1</version>
+    <version>2.0.0</version>
 </dependency>
 ```
 
