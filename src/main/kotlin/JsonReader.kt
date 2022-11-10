@@ -35,7 +35,7 @@ class JsonReader(inputStream: InputStream, charset: Charset = Charsets.UTF_8) {
 
     private fun readOrEof(): Char? = reader.read().takeIf { it != -1 }?.toChar()
 
-    private fun readLength(length: Int, predicate: (String) -> Boolean): String? = with(reader) {
+    private inline fun readLength(length: Int, predicate: (String) -> Boolean): String? = with(reader) {
         mark(length)
         val result = StringBuilder().append(current)
 

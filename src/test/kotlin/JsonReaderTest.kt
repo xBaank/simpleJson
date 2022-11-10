@@ -13,6 +13,55 @@ internal class JsonReaderTest {
     }
 
     @Test
+    fun `should read backslash`() {
+        val data = "{\"a\": \"\\\"\"} "
+        val json = JsonReader.read(data)
+        assert(json.getStringOrNull("a") == "\"")
+    }
+
+    @Test
+    fun `should read slash`() {
+        val data = "{\"a\": \"\\/\"} "
+        val json = JsonReader.read(data)
+        assert(json.getStringOrNull("a") == "/")
+    }
+
+    @Test
+    fun `should read backspace`() {
+        val data = "{\"a\": \"\b\"} "
+        val json = JsonReader.read(data)
+        assert(json.getStringOrNull("a") == "\b")
+    }
+
+    @Test
+    fun `should read newline`() {
+        val data = "{\"a\": \"\n\"} "
+        val json = JsonReader.read(data)
+        assert(json.getStringOrNull("a") == "\n")
+    }
+
+    @Test
+    fun `should read formfeed`() {
+        val data = "{\"a\": \"\u000c\"} "
+        val json = JsonReader.read(data)
+        assert(json.getStringOrNull("a") == "\u000c")
+    }
+
+    @Test
+    fun `should read carriage return`() {
+        val data = "{\"a\": \"\r\"} "
+        val json = JsonReader.read(data)
+        assert(json.getStringOrNull("a") == "\r")
+    }
+
+    @Test
+    fun `should read tab`() {
+        val data = "{\"a\": \"\t\"} "
+        val json = JsonReader.read(data)
+        assert(json.getStringOrNull("a") == "\t")
+    }
+
+    @Test
     fun `should read number`() {
         val data = "{\"a\": 1}"
         val json = JsonReader.read(data)
