@@ -12,7 +12,7 @@ class JsonWriterTest {
             "string" to "string"
             "array" to jArray {
                 add(1.2)
-                jObject {
+                addObj{
                     "string" to "string"
                     "array" to jArray {
                         add("first")
@@ -24,13 +24,13 @@ class JsonWriterTest {
                 add(false)
                 add(null)
                 add(jArray { add("first") })
-                add(jObject { "string" to "string" })
+                addObj { "string" to "string" }
             }
             "object" to jObject {}
         }
 
         val string = JsonWriter.write(json)
-        assert(string == """{"null":null,"true":true,"false":false,"number":5.5,"string":"string","array":[1.2,{"string":"string","array":["first","second"]},"string",true,false,null,["first"],{"string":"string"},true],"object":{}}""")
+        assert(string == """{"null":null,"true":true,"false":false,"number":5.5,"string":"string","array":[1.2,{"string":"string","array":["first","second"]},"string",true,false,null,["first"],{"string":"string"}],"object":{}}""")
 
     }
 }

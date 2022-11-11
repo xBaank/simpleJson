@@ -13,21 +13,22 @@ internal class JsonBuilderTest {
             "string" to "string"
             "array" to jArray {
                 add(1.2)
-                jObject {
+                add(jObject {
                     "string" to "string"
                     "array" to jArray {
                         add("first")
                         add("second")
                     }
-                }
+                })
                 add("string")
                 add(true)
                 add(false)
                 add(null)
-                add(jArray { add("first") })
-                add(jObject { "string" to "string" })
+                addArray { add("first") }
+                addObj { "string" to "string" }
             }
             "object" to jObject {}
+            jObject("object2") {}
         }
 
         assert(json.getJsonNullOrNull("null") == JsonNull)
@@ -46,6 +47,7 @@ internal class JsonBuilderTest {
         assert(json.getArrayOrNull("array")?.get(6)?.toArrayOrNull()?.get(0)?.toStringOrNull() == "first")
         assert(json.getArrayOrNull("array")?.get(7)?.toObjectOrNull()?.getStringOrNull("string") == "string")
         assert(json.getObjectOrNull("object") != null)
+        assert(json.getObjectOrNull("object2") != null)
 
 
     }
@@ -55,19 +57,19 @@ internal class JsonBuilderTest {
 
         val json = jArray {
             add(1.2)
-            jObject {
+            add(jObject {
                 "string" to "string"
                 "array" to jArray {
                     add("first")
                     add("second")
                 }
-            }
+            })
             add("string")
             add(true)
             add(false)
             add(null)
-            add(jArray { add("first") })
-            add(jObject { "string" to "string" })
+            addArray { add("first") }
+            addObj { "string" to "string" }
         }
 
         assert(json[0].toDoubleOrNull() == 1.2)

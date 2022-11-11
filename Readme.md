@@ -44,6 +44,50 @@ val json = JsonReader.read(data)
 val name = json.getPropertyOrNull("name").toStringOrNull()
 ```
 
+## Dsl
+
+The dsl/builder provides a safe way to create the json without the problem of adding a
+wrong type that could cause a runtime error.
+
+```kotlin
+val json = jObject {
+    "null" to null
+    "true" to true
+    "false" to false
+    "number" to 5.5
+    "string" to "string"
+    "array" to jArray {
+        add(1.2)
+        add(jObject {
+            "string" to "string"
+            "array" to jArray {
+                add("first")
+                add("second")
+            }
+        })
+        add("string")
+        add(true)
+        add(false)
+        add(null)
+        addArray { add("first") }
+        addObj { "string" to "string" }
+    }
+    "object" to jObject {}
+    jObject("object2") {}
+}
+```
+
+You can write it to string 
+```kotlin
+val jsonString = JsonWriter.write(json)
+```
+
+And to an output stream.
+```kotlin
+val stream = ByteArrayOutputStream()
+JsonWriter(stream).write(json)
+```
+
 ## Gradle
 
 Add jitpack
