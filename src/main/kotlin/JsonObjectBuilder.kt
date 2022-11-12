@@ -14,6 +14,7 @@ class JsonObjectBuilder {
     infix fun String.to(value: Nothing?) = map.put(this, JsonNull) //Nullable nothing can only be null or nothing but nothing is nothing, so it is just null
 
     fun jObject(name : String ,block: JsonObjectBuilder.() -> Unit) = map.put(name, JsonObjectBuilder().apply(block).build())
+    fun jArray(name : String ,block: JsonArrayBuilder.() -> Unit) = map.put(name, JsonArrayBuilder().apply(block).build())
 
 
     fun build() = JsonObject(map)

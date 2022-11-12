@@ -27,6 +27,7 @@ internal class JsonBuilderTest {
                 addArray { add("first") }
                 addObj { "string" to "string" }
             }
+            jArray("array2") {add(1)}
             "object" to jObject {}
             jObject("object2") {}
         }
@@ -46,6 +47,7 @@ internal class JsonBuilderTest {
         assert(json.getArrayOrNull("array")?.get(5)?.toJsonNullOrNull() == JsonNull)
         assert(json.getArrayOrNull("array")?.get(6)?.toArrayOrNull()?.get(0)?.toStringOrNull() == "first")
         assert(json.getArrayOrNull("array")?.get(7)?.toObjectOrNull()?.getStringOrNull("string") == "string")
+        assert(json.getArrayOrNull("array2")?.get(0)?.toIntOrNull() == 1)
         assert(json.getObjectOrNull("object") != null)
         assert(json.getObjectOrNull("object2") != null)
 
