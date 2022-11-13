@@ -11,10 +11,16 @@ class JsonObjectBuilder {
     infix fun String.to(value: Boolean) = map.put(this, JsonBoolean(value))
     infix fun String.to(value: JsonArray) = map.put(this, value)
     infix fun String.to(value: JsonObject) = map.put(this, value)
-    infix fun String.to(value: Nothing?) = map.put(this, JsonNull) //Nullable nothing can only be null or nothing but nothing is nothing, so it is just null
+    infix fun String.to(value: Nothing?) = map.put(
+        this,
+        JsonNull
+    ) //Nullable nothing can only be null or nothing but nothing is nothing, so it is just null
 
-    fun jObject(name : String ,block: JsonObjectBuilder.() -> Unit) = map.put(name, JsonObjectBuilder().apply(block).build())
-    fun jArray(name : String ,block: JsonArrayBuilder.() -> Unit) = map.put(name, JsonArrayBuilder().apply(block).build())
+    fun jObject(name: String, block: JsonObjectBuilder.() -> Unit) =
+        map.put(name, JsonObjectBuilder().apply(block).build())
+
+    fun jArray(name: String, block: JsonArrayBuilder.() -> Unit) =
+        map.put(name, JsonArrayBuilder().apply(block).build())
 
 
     fun build() = JsonObject(map)
@@ -33,7 +39,10 @@ class JsonArrayBuilder {
     infix fun add(value: JsonObject) = list.add(value)
     infix fun add(value: JsonArray) = list.add(value)
 
-    fun addObj(block: JsonObjectBuilder.() -> Unit) = list.add(JsonObjectBuilder().apply(block).build())
+    fun addObject(block: JsonObjectBuilder.() -> Unit) = list.add(JsonObjectBuilder().apply(block).build())
+
+    @Deprecated("Use addObject instead", ReplaceWith("addObject(block)"))
+    fun addObj(block: JsonObjectBuilder.() -> Unit) = addObject(block)
     fun addArray(block: JsonArrayBuilder.() -> Unit) = list.add(JsonArrayBuilder().apply(block).build())
 
     fun build() = JsonArray(list)

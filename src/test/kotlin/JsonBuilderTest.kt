@@ -25,9 +25,9 @@ internal class JsonBuilderTest {
                 add(false)
                 add(null)
                 addArray { add("first") }
-                addObj { "string" to "string" }
+                addObject { "string" to "string" }
             }
-            jArray("array2") {add(1)}
+            jArray("array2") { add(1) }
             "object" to jObject {}
             jObject("object2") {}
         }
@@ -39,8 +39,14 @@ internal class JsonBuilderTest {
         assert(json.getStringOrNull("string") == "string")
         assert(json.getArrayOrNull("array")?.get(0)?.toDoubleOrNull() == 1.2)
         assert(json.getArrayOrNull("array")?.get(1)?.toObjectOrNull()?.getStringOrNull("string") == "string")
-        assert(json.getArrayOrNull("array")?.get(1)?.toObjectOrNull()?.getArrayOrNull("array")?.get(0)?.toStringOrNull() == "first")
-        assert(json.getArrayOrNull("array")?.get(1)?.toObjectOrNull()?.getArrayOrNull("array")?.get(1)?.toStringOrNull() == "second")
+        assert(
+            json.getArrayOrNull("array")?.get(1)?.toObjectOrNull()?.getArrayOrNull("array")?.get(0)
+                ?.toStringOrNull() == "first"
+        )
+        assert(
+            json.getArrayOrNull("array")?.get(1)?.toObjectOrNull()?.getArrayOrNull("array")?.get(1)
+                ?.toStringOrNull() == "second"
+        )
         assert(json.getArrayOrNull("array")?.get(2)?.toStringOrNull() == "string")
         assert(json.getArrayOrNull("array")?.get(3)?.toBooleanOrNull() == true)
         assert(json.getArrayOrNull("array")?.get(4)?.toBooleanOrNull() == false)
@@ -71,7 +77,7 @@ internal class JsonBuilderTest {
             add(false)
             add(null)
             addArray { add("first") }
-            addObj { "string" to "string" }
+            addObject { "string" to "string" }
         }
 
         assert(json[0].toDoubleOrNull() == 1.2)

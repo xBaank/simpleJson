@@ -12,7 +12,7 @@ class JsonWriterTest {
             "string" to "string"
             "array" to jArray {
                 add(1.2)
-                addObj{
+                addObject {
                     "string" to "string"
                     "array" to jArray {
                         add("first")
@@ -24,7 +24,7 @@ class JsonWriterTest {
                 add(false)
                 add(null)
                 add(jArray { add("first") })
-                addObj { "string" to "string" }
+                addObject { "string" to "string" }
             }
             "object" to jObject {}
         }
