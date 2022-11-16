@@ -41,7 +41,7 @@ You can also use the `toOrNull` methods which will return null if the value is n
 
 ```kotlin
 val json = JsonReader.read(data)
-val name = json.getPropertyOrNull("name").toStringOrNull()
+val name = json.getPropertyOrNull("name")?.toStringOrNull()
 ```
 
 ## Dsl
@@ -70,7 +70,7 @@ val json = jObject {
         add(false)
         add(null)
         addArray { add("first") }
-        addObj { "string" to "string" }
+        addObject { "string" to "string" }
     }
     "object" to jObject {}
     jObject("object2") {}
