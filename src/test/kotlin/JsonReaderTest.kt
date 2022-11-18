@@ -339,7 +339,7 @@ internal class JsonReaderTest {
             }
         """.trimIndent()
 
-        val json = JsonReader.tryRead(data)
+        val json = JsonReader.readOrNull(data)
         assert(json != null)
     }
 
@@ -362,7 +362,7 @@ internal class JsonReaderTest {
             }
         """.trimIndent()
 
-        val json = JsonReader.tryRead(data)
+        val json = JsonReader.readOrNull(data)
         assert(json == null)
     }
 }

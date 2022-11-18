@@ -7,15 +7,22 @@ simpleJson is a simple json parser for the jvm made in kotlin.
 You can read using.
 
 ```kotlin
-val json = JsonReader.tryRead(""" { a : "a", b : [1 , "1"] } """) //will return null if data is not a valid json
+val json = JsonReader.readOrNull(""" { a : "a", b : [1 , "1"] } """) //will return null if data is not a valid json
 val json = JsonReader.read(""" { a : "a", b : [1 , "1"] } """) //will throw an exception if data is not a valid json
+```
+
+or
+
+```kotlin
+val json = """ { a : "a", b : [1 , "1"] } """.deserialize() //will return null if data is not a valid json
+val json = """ { a : "a", b : [1 , "1"] } """.deserializeOrNull() //will throw an exception if data is not a valid json
 ```
 
 You can also read from a stream such as a file.
 
 ```kotlin
 val data = File("src/test/resources/photos.json").inputStream()
-val json = JsonReader.read(data) 
+val json = JsonReader.read(data)
 ```
 
 And specify the encoding too.
@@ -77,9 +84,9 @@ val json = jObject {
 }
 ```
 
-You can write it to string 
+You can serialize it to string 
 ```kotlin
-val jsonString = JsonWriter.write(json)
+val jsonString = json.serialize()
 ```
 
 And to an output stream.
@@ -102,7 +109,7 @@ Add dependency
 
 ```kotlin
 dependencies {
-    implementation("com.github.xBaank:simpleJson:3.0.1")
+    implementation("com.github.xBaank:simpleJson:4.0.0")
 }
 
 ```
@@ -128,7 +135,7 @@ Add dependency
 <dependency>
     <groupId>com.github.xBaank</groupId>
     <artifactId>simpleJson</artifactId>
-    <version>3.0.1</version>
+    <version>4.0.0</version>
 </dependency>
 ```
 

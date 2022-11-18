@@ -1,13 +1,13 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.7.20"
+    kotlin("jvm") version "1.7.21"
     `maven-publish`
     application
 }
 
 group = "org.bank"
-version = "3.0.1"
+version = "4.0.0"
 
 
 repositories {
@@ -15,9 +15,7 @@ repositories {
 }
 
 dependencies {
-    implementation("junit:junit:4.13.2")
-    implementation("org.junit.jupiter:junit-jupiter:5.9.0")
-    testImplementation(kotlin("test"))
+    testImplementation("org.junit.jupiter:junit-jupiter:5.9.0")
 }
 
 //publish

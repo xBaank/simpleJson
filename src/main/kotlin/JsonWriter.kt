@@ -58,5 +58,8 @@ class JsonWriter(stream: OutputStream, charset: Charset = Charsets.UTF_8) {
             JsonWriter(stream).write(node)
             return stream.toString()
         }
+
+        fun write(node: JsonNode, stream: OutputStream, charset: Charset = Charsets.UTF_8) =
+            JsonWriter(stream, charset).write(node)
     }
 }

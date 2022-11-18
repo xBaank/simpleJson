@@ -94,3 +94,16 @@ fun JsonNode.toObjectOrNull() = when (this) {
 }
 operator fun JsonObject.get(key: String): JsonNode? = value.getOrDefault(key, null)
 operator fun JsonArray.get(index: Int): JsonNode = value[index]
+
+
+fun Number.toJson(): JsonNumber = JsonNumber(this)
+fun String.toJson(): JsonString = JsonString(this)
+fun Boolean.toJson(): JsonBoolean = JsonBoolean(this)
+fun Nothing?.toJson(): JsonNull = JsonNull
+fun List<JsonNode>.toJson(): JsonArray = JsonArray(this)
+fun Map<String, JsonNode>.toJson(): JsonObject = JsonObject(this)
+
+
+fun JsonNode.serialize(): String = JsonWriter.write(this)
+fun String.deserialize(): JsonNode = JsonReader.read(this)
+fun String.deserializeOrNull(): JsonNode? = JsonReader.readOrNull(this)

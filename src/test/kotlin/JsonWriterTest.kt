@@ -3,7 +3,6 @@ import org.junit.jupiter.api.Test
 class JsonWriterTest {
     @Test
     fun `should write json`() {
-        // TODO change builder to nodes?
         val json = jObject {
             "null" to null
             "true" to true
@@ -29,7 +28,7 @@ class JsonWriterTest {
             "object" to jObject {}
         }
 
-        val string = JsonWriter.write(json)
+        val string = json.serialize()
         assert(string == """{"null":null,"true":true,"false":false,"number":5.5,"string":"string","array":[1.2,{"string":"string","array":["first","second"]},"string",true,false,null,["first"],{"string":"string"}],"object":{}}""")
 
     }
