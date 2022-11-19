@@ -84,7 +84,7 @@ fun JsonNode.toJsonNullOrNull() = when (this) {
 }
 
 fun JsonNode.toArrayOrNull() = when (this) {
-    is JsonArray -> this.value
+    is JsonArray -> this
     else -> null
 }
 
@@ -92,8 +92,6 @@ fun JsonNode.toObjectOrNull() = when (this) {
     is JsonObject -> this
     else -> null
 }
-operator fun JsonObject.get(key: String): JsonNode? = value.getOrDefault(key, null)
-operator fun JsonArray.get(index: Int): JsonNode = value[index]
 
 
 fun Number.toJson(): JsonNumber = JsonNumber(this)
