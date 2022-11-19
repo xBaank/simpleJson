@@ -14,8 +14,8 @@ val json = JsonReader.read(""" { a : "a", b : [1 , "1"] } """) //will throw an e
 or
 
 ```kotlin
-val json = """ { a : "a", b : [1 , "1"] } """.deserialize() //will return null if data is not a valid json
-val json = """ { a : "a", b : [1 , "1"] } """.deserializeOrNull() //will throw an exception if data is not a valid json
+val json = """ { a : "a", b : [1 , "1"] } """.deserializeOrNull() //will return null if data is not a valid json
+val json = """ { a : "a", b : [1 , "1"] } """.deserialize() //will throw an exception if data is not a valid json
 ```
 
 You can also read from a stream such as a file.
