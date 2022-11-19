@@ -365,4 +365,57 @@ internal class JsonReaderTest {
         val json = JsonReader.readOrNull(data)
         assert(json == null)
     }
+
+    @Test
+    fun `should deserialize`() {
+        val data = """
+            {
+                "a": 1,
+                "b": "2",
+                "c": true,
+                "d": false,
+                "e": null,
+                "f": [1, 2, 3],
+                "g": {
+                    "h": 1,
+                    "i": {
+                        "j": 1
+                    }
+                }
+            }
+        """.trimIndent()
+
+        val json = data.deserialize()
+        assert(json.getIntOrNull("a") == 1)
+        assert(json.getStringOrNull("b") == "2")
+        assert(json.getBooleanOrNull("c") == true)
+        assert(json.getBooleanOrNull("d") == false)
+        assert(json.getJsonNullOrNull("e") == JsonNull)
+        assert(json.getArrayOrNull("f")?.size == 3)
+        assert(json.getPropertyOrNull("g")?.getIntOrNull("h") == 1)
+        assert(json.getPropertyOrNull("g")?.getPropertyOrNull("i")?.getIntOrNull("j") == 1)
+    }
+
+    @Test
+    fun `should not deserialize`() {
+        val data = """
+            {
+                "a": 1,
+                "b": "2", asd
+                "c": true,
+                "d": false,
+                "e": null,
+                "f": [1, 2, 3],
+                "g": {
+                    "h": 1,
+                    "i": {
+                        "j": 1
+                    }
+                }
+            }
+        """.trimIndent()
+
+        val json = data.deserializeOrNull()
+        assert(json == null)
+    }
 }

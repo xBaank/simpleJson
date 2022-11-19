@@ -82,7 +82,10 @@ internal class JsonBuilderTest {
                 1.toJson(),
                 "asd".toJson(),
                 5L.toJson(),
-                null.toJson()
+                null.toJson(),
+                true.toJson(),
+                listOf(1.toJson(), 2.toJson()).toJson(),
+                mapOf("a" to 1.toJson(), "b" to 2.toJson()).toJson()
             )
         }
 
@@ -100,6 +103,11 @@ internal class JsonBuilderTest {
         assert(json[9].toStringOrNull() == "asd")
         assert(json[10].toIntOrNull() == 5)
         assert(json[11].toJsonNullOrNull() == JsonNull)
+        assert(json[12].toBooleanOrNull() == true)
+        assert(json[13].toArrayOrNull()?.getOrNull(0)?.toIntOrNull() == 1)
+        assert(json[13].toArrayOrNull()?.getOrNull(1)?.toIntOrNull() == 2)
+        assert(json[14].toObjectOrNull()?.getIntOrNull("a") == 1)
+        assert(json[14].toObjectOrNull()?.getIntOrNull("b") == 2)
 
     }
 }
