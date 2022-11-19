@@ -16,9 +16,9 @@ fun JsonNode.getPropertyOrNull(index : Int): JsonNode? = when (this) {
 }
 
 
-fun JsonNode.getArrayOrNull(key: String): List<JsonNode>? = getPropertyOrNull(key)?.let {
+fun JsonNode.getArrayOrNull(key: String): JsonArray? = getPropertyOrNull(key)?.let {
     when (it) {
-        is JsonArray -> it.value
+        is JsonArray -> it
         else -> null
     }
 }
