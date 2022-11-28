@@ -30,6 +30,5 @@ class JsonWriterTest {
 
         val string = json.serialize()
         assert(string == """{"null":null,"true":true,"false":false,"number":5.5,"string":"string","array":[1.2,{"string":"string","array":["first","second"]},"string",true,false,null,["first"],{"string":"string"}],"object":{}}""")
-
     }
 }

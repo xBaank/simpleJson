@@ -97,11 +97,13 @@ fun JsonNode.toObjectOrNull() = when (this) {
 fun Number.toJson(): JsonNumber = JsonNumber(this)
 fun String.toJson(): JsonString = JsonString(this)
 fun Boolean.toJson(): JsonBoolean = JsonBoolean(this)
+@Suppress("UnusedReceiverParameter")
 fun Nothing?.toJson(): JsonNull = JsonNull
 fun List<JsonNode>.toJson(): JsonArray = JsonArray(this)
 fun Map<String, JsonNode>.toJson(): JsonObject = JsonObject(this)
 
 
 fun JsonNode.serialize(): String = JsonWriter.write(this)
+fun JsonNode.serializePretty(): String = PrettyJsonWriter.write(this)
 fun String.deserialize(): JsonNode = JsonReader.read(this)
 fun String.deserializeOrNull(): JsonNode? = JsonReader.readOrNull(this)

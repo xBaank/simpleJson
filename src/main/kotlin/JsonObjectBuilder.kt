@@ -14,10 +14,10 @@ class JsonObjectBuilder {
     @Suppress("UNUSED_PARAMETER")
     infix fun String.to(value: Nothing?) = map.put(this,JsonNull) //Nullable nothing can only be null or nothing but nothing is nothing, so it is just null
 
-    fun jObject(name: String, block: JsonObjectBuilder.() -> Unit) =
+    fun jObject(name: String, block: JsonObjectBuilder.() -> Unit = {}) =
         map.put(name, jObject(block))
 
-    fun jArray(name: String, block: JsonArrayBuilder.() -> Unit) =
+    fun jArray(name: String, block: JsonArrayBuilder.() -> Unit = {}) =
         map.put(name, jArray(block))
 
 
@@ -40,8 +40,8 @@ class JsonArrayBuilder {
     //As union types are not supported in Kotlin neither custom implicit conversions do, We need to ask for a node directly,
     //but we can still use the DSL converting supported types to nodes with toJson() extension functions
     fun addAll(vararg values : JsonNode) = list.addAll(values)
-    fun addObject(block: JsonObjectBuilder.() -> Unit) = add(JsonObjectBuilder().apply(block).build())
-    fun addArray(block: JsonArrayBuilder.() -> Unit) = add(JsonArrayBuilder().apply(block).build())
+    fun addObject(block: JsonObjectBuilder.() -> Unit = {}) = add(JsonObjectBuilder().apply(block).build())
+    fun addArray(block: JsonArrayBuilder.() -> Unit = {}) = add(JsonArrayBuilder().apply(block).build())
 
     fun build() = JsonArray(list)
 
