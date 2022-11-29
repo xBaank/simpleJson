@@ -7,7 +7,7 @@ internal class JsonReaderTest {
 
     @Test
     fun `should read unicode`() {
-        val data = "{\"a\": \"\u00e9\"} "
+        val data = "{\"a\": \"\\u00e9\"} "
         val json = JsonReader.read(data)
         assert(json.getStringOrNull("a") == "é")
     }

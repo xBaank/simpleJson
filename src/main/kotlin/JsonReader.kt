@@ -72,11 +72,15 @@ class JsonReader(inputStream: InputStream, charset: Charset = Charsets.UTF_8) {
                 current = readOrEof().takeIf { it in CONTROL_CHARACTERS } ?: return null
 
                 if (current == 'u') {
+
                     val charArray = CharArray(4)
                     val read = reader.read(charArray)
+
                     if (read != 4) return null
 
-                    result.append(charArray.toString())
+                    val unicode = String(charArray).toInt(16)
+                    result.append(unicode.toChar())
+
                 } else result.append(CONTROL_CHARACTERS[current])
 
             } else result.append(current)
