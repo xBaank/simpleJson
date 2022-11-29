@@ -10,7 +10,7 @@ fun JsonNode.getPropertyOrNull(key: String): JsonNode? = when (this) {
 /**
  * Returns the value at the [index] or null if the value is not found or the node is not a JsonArray
  */
-fun JsonNode.getPropertyOrNull(index : Int): JsonNode? = when (this) {
+fun JsonNode.getPropertyOrNull(index: Int): JsonNode? = when (this) {
     is JsonArray -> this.value.getOrNull(index)
     else -> null
 }
@@ -97,6 +97,7 @@ fun JsonNode.toObjectOrNull() = when (this) {
 fun Number.toJson(): JsonNumber = JsonNumber(this)
 fun String.toJson(): JsonString = JsonString(this)
 fun Boolean.toJson(): JsonBoolean = JsonBoolean(this)
+
 @Suppress("UnusedReceiverParameter")
 fun Nothing?.toJson(): JsonNull = JsonNull
 fun List<JsonNode>.toJson(): JsonArray = JsonArray(this)

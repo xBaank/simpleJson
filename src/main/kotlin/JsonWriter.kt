@@ -2,74 +2,20 @@ import java.io.ByteArrayOutputStream
 import java.io.OutputStream
 import java.nio.charset.Charset
 
-class JsonWriter(stream: OutputStream, charset: Charset = Charsets.UTF_8) {
-    private val writer = stream.bufferedWriter(charset)
-
-        fun write(node: JsonNode) = when (node) {
-            is JsonArray -> writeArray(node)
-            is JsonObject -> writeObject(node)
-            is JsonString -> writeString(node)
-            is JsonNumber -> writeNumber(node)
-            is JsonBoolean -> writeBoolean(node)
-            JsonNull -> writeNull()
-        }.also { writer.flush() }
-
-        private fun writeArray(node: JsonArray) {
-            writer.write("[")
-            node.value.forEachIndexed { index, jsonNode ->
-                if (index != 0) writer.write(",")
-                write(jsonNode)
-            }
-            writer.write("]")
-        }
-
-        private fun writeObject(node: JsonObject) {
-            writer.write("{")
-            node.value.entries.forEachIndexed { index, (key, value) ->
-                if (index != 0) writer.write(",")
-                writeString(JsonString(key))
-                writer.write(":")
-                write(value)
-            }
-            writer.write("}")
-        }
-
-        private fun writeString(node: JsonString) {
-            writer.write("\"")
-            writer.write(node.value)
-            writer.write("\"")
-        }
-
-        private fun writeNumber(node: JsonNumber) {
-            writer.write(node.value.toString())
-        }
-
-        private fun writeBoolean(node: JsonBoolean) {
-            writer.write(node.value.toString())
-        }
-
-        private fun writeNull() {
-            writer.write("null")
-        }
-
-    companion object {
-        fun write(node: JsonNode) : String {
-            val stream = ByteArrayOutputStream()
-            JsonWriter(stream).write(node)
-            return stream.toString()
-        }
-
-        fun write(node: JsonNode, stream: OutputStream, charset: Charset = Charsets.UTF_8) =
-            JsonWriter(stream, charset).write(node)
-    }
+interface IJsonWriter {
+    fun write(node: JsonNode)
+    fun writeArray(node: JsonArray)
+    fun writeObject(node: JsonObject)
+    fun writeString(node: JsonString)
+    fun writeNumber(node: JsonNumber)
+    fun writeBoolean(node: JsonBoolean)
+    fun writeNull()
 }
 
-class PrettyJsonWriter(stream: OutputStream, charset: Charset = Charsets.UTF_8) {
+class JsonWriter(stream: OutputStream, charset: Charset = Charsets.UTF_8) : IJsonWriter {
     private val writer = stream.bufferedWriter(charset)
-    private var indent = 0
-    private val indentSize = "  "
 
-    fun write(node: JsonNode) = when (node) {
+    override fun write(node: JsonNode) = when (node) {
         is JsonArray -> writeArray(node)
         is JsonObject -> writeObject(node)
         is JsonString -> writeString(node)
@@ -78,9 +24,73 @@ class PrettyJsonWriter(stream: OutputStream, charset: Charset = Charsets.UTF_8) 
         JsonNull -> writeNull()
     }.also { writer.flush() }
 
-    private fun writeArray(node: JsonArray) {
+    override fun writeArray(node: JsonArray) {
         writer.write("[")
-        if(node.value.isNotEmpty()) {
+        node.value.forEachIndexed { index, jsonNode ->
+            if (index != 0) writer.write(",")
+            write(jsonNode)
+        }
+        writer.write("]")
+    }
+
+    override fun writeObject(node: JsonObject) {
+        writer.write("{")
+        node.value.entries.forEachIndexed { index, (key, value) ->
+            if (index != 0) writer.write(",")
+            writeString(JsonString(key))
+            writer.write(":")
+            write(value)
+        }
+        writer.write("}")
+    }
+
+    override fun writeString(node: JsonString) {
+        writer.write("\"")
+        writer.write(node.value)
+        writer.write("\"")
+    }
+
+    override fun writeNumber(node: JsonNumber) {
+        writer.write(node.value.toString())
+    }
+
+    override fun writeBoolean(node: JsonBoolean) {
+        writer.write(node.value.toString())
+    }
+
+    override fun writeNull() {
+        writer.write("null")
+    }
+
+    companion object {
+        fun write(node: JsonNode): String {
+            val stream = ByteArrayOutputStream()
+            JsonWriter(stream).write(node)
+            return stream.toString()
+        }
+
+        fun write(node: JsonNode, stream: OutputStream, charset: Charset) =
+            JsonWriter(stream, charset).write(node)
+    }
+}
+
+class PrettyJsonWriter(stream: OutputStream, charset: Charset = Charsets.UTF_8) : IJsonWriter {
+    private val writer = stream.bufferedWriter(charset)
+    private var indent = 0
+    private val indentSize = "  "
+
+    override fun write(node: JsonNode) = when (node) {
+        is JsonArray -> writeArray(node)
+        is JsonObject -> writeObject(node)
+        is JsonString -> writeString(node)
+        is JsonNumber -> writeNumber(node)
+        is JsonBoolean -> writeBoolean(node)
+        JsonNull -> writeNull()
+    }.also { writer.flush() }
+
+    override fun writeArray(node: JsonArray) {
+        writer.write("[")
+        if (node.value.isNotEmpty()) {
             writer.newLine()
             indent++
             node.value.forEachIndexed { index, jsonNode ->
@@ -98,9 +108,9 @@ class PrettyJsonWriter(stream: OutputStream, charset: Charset = Charsets.UTF_8) 
         writer.write("]")
     }
 
-    private fun writeObject(node: JsonObject) {
+    override fun writeObject(node: JsonObject) {
         writer.write("{")
-        if(node.value.isNotEmpty()) {
+        if (node.value.isNotEmpty()) {
             writer.newLine()
             indent++
             node.value.entries.forEachIndexed { index, (key, value) ->
@@ -120,21 +130,21 @@ class PrettyJsonWriter(stream: OutputStream, charset: Charset = Charsets.UTF_8) 
         writer.write("}")
     }
 
-    private fun writeString(node: JsonString) {
+    override fun writeString(node: JsonString) {
         writer.write("\"")
         writer.write(node.value)
         writer.write("\"")
     }
 
-    private fun writeNumber(node: JsonNumber) {
+    override fun writeNumber(node: JsonNumber) {
         writer.write(node.value.toString())
     }
 
-    private fun writeBoolean(node: JsonBoolean) {
+    override fun writeBoolean(node: JsonBoolean) {
         writer.write(node.value.toString())
     }
 
-    private fun writeNull() {
+    override fun writeNull() {
         writer.write("null")
     }
 
@@ -145,7 +155,7 @@ class PrettyJsonWriter(stream: OutputStream, charset: Charset = Charsets.UTF_8) 
     }
 
     companion object {
-        fun write(node: JsonNode) : String {
+        fun write(node: JsonNode): String {
             val stream = ByteArrayOutputStream()
             PrettyJsonWriter(stream).write(node)
             return stream.toString()

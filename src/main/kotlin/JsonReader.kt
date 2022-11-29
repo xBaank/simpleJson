@@ -127,7 +127,7 @@ class JsonReader(inputStream: InputStream, charset: Charset = Charsets.UTF_8) {
         do {
             val item =
                 readValue()
-             ?: break
+                    ?: break
 
             array.add(item)
         } while (current == JSON_COMMA)
@@ -149,6 +149,7 @@ class JsonReader(inputStream: InputStream, charset: Charset = Charsets.UTF_8) {
         readObjectOrNull() ?: readArrayOrNull() ?: readStringOrNull() ?: readNumberOrNull()
         ?: readBooleanOrNull() ?: readNullOrNull()
     }
+
     private fun readObjectOrNull(): JsonObject? {
 
         val objectMap = mutableMapOf<String, JsonNode>()
@@ -180,7 +181,9 @@ class JsonReader(inputStream: InputStream, charset: Charset = Charsets.UTF_8) {
 
     companion object {
         fun read(string: String): JsonNode = JsonReader(string).read()
-        fun read(inputStream: InputStream, charset: Charset = Charsets.UTF_8): JsonNode = JsonReader(inputStream, charset).read()
+        fun read(inputStream: InputStream, charset: Charset = Charsets.UTF_8): JsonNode =
+            JsonReader(inputStream, charset).read()
+
         fun readOrNull(inputStream: InputStream, charset: Charset = Charsets.UTF_8): JsonNode? =
             JsonReader(inputStream, charset).readOrNull()
 
