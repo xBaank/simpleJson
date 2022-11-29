@@ -32,7 +32,8 @@ val data = File("src/test/resources/photos.json").inputStream()
 val json = JsonReader.read(data, Charsets.UTF_32LE)
 ```
 
-After reading, you can access the data using the `getOrNull` methods which will return null if the key is not found or the
+After reading, you can access the data using the `getOrNull` methods which will return null if the key is not found or
+the
 value is not of the correct type.
 
 ```kotlin
@@ -84,12 +85,20 @@ val json = jObject {
 }
 ```
 
-You can serialize it to string 
+You can serialize it to string
+
 ```kotlin
 val jsonString = json.serialize()
 ```
 
+or
+
+```kotlin
+val jsonString = json.serializePretty()
+```
+
 And to an output stream.
+
 ```kotlin
 val stream = ByteArrayOutputStream()
 JsonWriter(stream).write(json)
