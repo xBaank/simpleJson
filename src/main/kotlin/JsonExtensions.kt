@@ -37,10 +37,10 @@ fun JsonNode.getNumberOrNull(key: String): Number? = getPropertyOrNull(key)?.let
     }
 }
 
-fun JsonNode.getIntOrNull(key: String): Number? = getNumberOrNull(key)?.toInt()
-fun JsonNode.getDoubleOrNull(key: String): Number? = getNumberOrNull(key)?.toDouble()
-fun JsonNode.getFloatOrNull(key: String): Number? = getNumberOrNull(key)?.toFloat()
-fun JsonNode.getLongOrNull(key: String): Number? = getNumberOrNull(key)?.toLong()
+fun JsonNode.getIntOrNull(key: String) = getNumberOrNull(key)?.toInt()
+fun JsonNode.getDoubleOrNull(key: String) = getNumberOrNull(key)?.toDouble()
+fun JsonNode.getFloatOrNull(key: String) = getNumberOrNull(key)?.toFloat()
+fun JsonNode.getLongOrNull(key: String) = getNumberOrNull(key)?.toLong()
 
 fun JsonNode.getBooleanOrNull(key: String): Boolean? = getPropertyOrNull(key)?.let {
     when (it) {
