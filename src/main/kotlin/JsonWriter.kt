@@ -1,6 +1,19 @@
+import java.io.BufferedWriter
 import java.io.ByteArrayOutputStream
 import java.io.OutputStream
 import java.nio.charset.Charset
+
+//Inverse map of CONTROL_CHARACTERS version in JsonReader
+private val CONTROL_CHARACTERS_ESCAPED = mapOf(
+    '\\' to "\\\\",
+    '"' to "\\\"",
+    '\b' to "\\b",
+    '\n' to "\\n",
+    '\r' to "\\r",
+    '\u000c' to "\\f",
+    '\t' to "\\t",
+    '/' to "/"
+)
 
 interface IJsonWriter {
     fun write(node: JsonNode)
@@ -46,7 +59,7 @@ class JsonWriter(stream: OutputStream, charset: Charset = Charsets.UTF_8) : IJso
 
     override fun writeString(node: JsonString) {
         writer.write("\"")
-        writer.write(node.value)
+        writer.writeEscaped(node.value)
         writer.write("\"")
     }
 
@@ -74,10 +87,9 @@ class JsonWriter(stream: OutputStream, charset: Charset = Charsets.UTF_8) : IJso
     }
 }
 
-class PrettyJsonWriter(stream: OutputStream, charset: Charset = Charsets.UTF_8) : IJsonWriter {
+class PrettyJsonWriter(stream: OutputStream, charset: Charset = Charsets.UTF_8, val indentSize: String = "  ") : IJsonWriter {
     private val writer = stream.bufferedWriter(charset)
     private var indent = 0
-    private val indentSize = "  "
 
     override fun write(node: JsonNode) = when (node) {
         is JsonArray -> writeArray(node)
@@ -132,7 +144,7 @@ class PrettyJsonWriter(stream: OutputStream, charset: Charset = Charsets.UTF_8) 
 
     override fun writeString(node: JsonString) {
         writer.write("\"")
-        writer.write(node.value)
+        writer.writeEscaped(node.value)
         writer.write("\"")
     }
 
@@ -163,5 +175,12 @@ class PrettyJsonWriter(stream: OutputStream, charset: Charset = Charsets.UTF_8) 
 
         fun write(node: JsonNode, stream: OutputStream, charset: Charset = Charsets.UTF_8) =
             PrettyJsonWriter(stream, charset).write(node)
+    }
+}
+
+fun BufferedWriter.writeEscaped(value : String) {
+    value.forEach { char ->
+        val escaped = CONTROL_CHARACTERS_ESCAPED.getOrDefault(char, null)
+        if (escaped != null) write(escaped) else write(char.code)
     }
 }
