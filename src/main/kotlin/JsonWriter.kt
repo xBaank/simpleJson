@@ -26,7 +26,7 @@ interface IJsonWriter {
 }
 
 class JsonWriter(stream: OutputStream, charset: Charset = Charsets.UTF_8) : IJsonWriter {
-    private val writer = stream.bufferedWriter(charset)
+    internal val writer = stream.bufferedWriter(charset)
 
     override fun write(node: JsonNode) = when (node) {
         is JsonArray -> writeArray(node)
@@ -87,24 +87,15 @@ class JsonWriter(stream: OutputStream, charset: Charset = Charsets.UTF_8) : IJso
     }
 }
 
-class PrettyJsonWriter(stream: OutputStream, charset: Charset = Charsets.UTF_8, val indentSize: String = "  ") : IJsonWriter {
-    private val writer = stream.bufferedWriter(charset)
-    private var indent = 0
-
-    override fun write(node: JsonNode) = when (node) {
-        is JsonArray -> writeArray(node)
-        is JsonObject -> writeObject(node)
-        is JsonString -> writeString(node)
-        is JsonNumber -> writeNumber(node)
-        is JsonBoolean -> writeBoolean(node)
-        JsonNull -> writeNull()
-    }.also { writer.flush() }
+class PrettyJsonWriter(private val jsonWriter: JsonWriter, val indent: String = "  ") : IJsonWriter by jsonWriter {
+    private var indentLevel = 0
+    private val writer = jsonWriter.writer
 
     override fun writeArray(node: JsonArray) {
         writer.write("[")
         if (node.value.isNotEmpty()) {
             writer.newLine()
-            indent++
+            indentLevel++
             node.value.forEachIndexed { index, jsonNode ->
                 if (index != 0) {
                     writer.write(",")
@@ -114,7 +105,7 @@ class PrettyJsonWriter(stream: OutputStream, charset: Charset = Charsets.UTF_8, 
                 write(jsonNode)
             }
             writer.newLine()
-            indent--
+            indentLevel--
             writeIndent()
         }
         writer.write("]")
@@ -124,7 +115,7 @@ class PrettyJsonWriter(stream: OutputStream, charset: Charset = Charsets.UTF_8, 
         writer.write("{")
         if (node.value.isNotEmpty()) {
             writer.newLine()
-            indent++
+            indentLevel++
             node.value.entries.forEachIndexed { index, (key, value) ->
                 if (index != 0) {
                     writer.write(",")
@@ -136,45 +127,27 @@ class PrettyJsonWriter(stream: OutputStream, charset: Charset = Charsets.UTF_8, 
                 write(value)
             }
             writer.newLine()
-            indent--
+            indentLevel--
             writeIndent()
         }
         writer.write("}")
     }
 
-    override fun writeString(node: JsonString) {
-        writer.write("\"")
-        writer.writeEscaped(node.value)
-        writer.write("\"")
-    }
-
-    override fun writeNumber(node: JsonNumber) {
-        writer.write(node.value.toString())
-    }
-
-    override fun writeBoolean(node: JsonBoolean) {
-        writer.write(node.value.toString())
-    }
-
-    override fun writeNull() {
-        writer.write("null")
-    }
-
     private fun writeIndent() {
-        repeat(indent) {
-            writer.write(indentSize)
+        repeat(indentLevel) {
+            writer.write(indent)
         }
     }
 
     companion object {
         fun write(node: JsonNode): String {
             val stream = ByteArrayOutputStream()
-            PrettyJsonWriter(stream).write(node)
+            JsonWriter(stream).prettyPrint().write(node)
             return stream.toString()
         }
 
         fun write(node: JsonNode, stream: OutputStream, charset: Charset = Charsets.UTF_8) =
-            PrettyJsonWriter(stream, charset).write(node)
+            JsonWriter(stream,charset).prettyPrint().write(node)
     }
 }
 

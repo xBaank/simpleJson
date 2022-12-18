@@ -108,3 +108,5 @@ fun JsonNode.serialize(): String = JsonWriter.write(this)
 fun JsonNode.serializePretty(): String = PrettyJsonWriter.write(this)
 fun String.deserialize(): JsonNode = JsonReader.read(this)
 fun String.deserializeOrNull(): JsonNode? = JsonReader.readOrNull(this)
+
+fun JsonWriter.prettyPrint(indent: String = "  ") = PrettyJsonWriter(this,indent)
