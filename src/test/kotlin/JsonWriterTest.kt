@@ -95,4 +95,14 @@ class JsonWriterTest {
         val jsonAgain = string.deserialize()
         assert(json == jsonAgain)
     }
+
+    @Test
+    fun `should write json with escaped characters`() {
+        val json = jObject {
+            "string" to " \" \\ / \b \u000c \n \r \t \n "
+        }
+
+        val string = json.serialize()
+        assert(string == """{"string":" \" \\ / \b \f \n \r \t \n "}""")
+    }
 }
