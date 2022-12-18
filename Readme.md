@@ -91,7 +91,7 @@ You can serialize it to string
 val jsonString = json.serialize()
 ```
 
-or
+or with a pretty print
 
 ```kotlin
 val jsonString = json.serializePretty()
@@ -102,6 +102,12 @@ And to an output stream.
 ```kotlin
 val stream = ByteArrayOutputStream()
 JsonWriter(stream).write(json)
+```
+with pretty print
+
+```kotlin
+val stream = ByteArrayOutputStream()
+JsonWriter(stream).prettyPrint().write(json)
 ```
 
 ## Gradle
@@ -118,7 +124,7 @@ Add dependency
 
 ```kotlin
 dependencies {
-    implementation("com.github.xBaank:simpleJson:5.0.2")
+    implementation("com.github.xBaank:simpleJson:6.0.0")
 }
 
 ```
@@ -144,7 +150,7 @@ Add dependency
 <dependency>
     <groupId>com.github.xBaank</groupId>
     <artifactId>simpleJson</artifactId>
-    <version>5.0.2</version>
+    <version>6.0.0</version>
 </dependency>
 ```
 

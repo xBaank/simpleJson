@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "org.bank"
-version = "5.0.2"
+version = "6.0.0"
 
 
 repositories {
