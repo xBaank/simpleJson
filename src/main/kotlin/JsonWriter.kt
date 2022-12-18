@@ -151,9 +151,7 @@ class PrettyJsonWriter(private val jsonWriter: JsonWriter, val indent: String = 
     }
 }
 
-fun BufferedWriter.writeEscaped(value : String) {
-    value.forEach { char ->
-        val escaped = CONTROL_CHARACTERS_ESCAPED.getOrDefault(char, null)
-        if (escaped != null) write(escaped) else write(char.code)
-    }
+fun BufferedWriter.writeEscaped(value : String) = value.forEach { char ->
+    val escaped = CONTROL_CHARACTERS_ESCAPED.getOrDefault(char, null)
+    if (escaped != null) write(escaped) else write(char.code)
 }
