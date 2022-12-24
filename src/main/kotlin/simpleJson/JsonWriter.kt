@@ -18,7 +18,7 @@ private val CONTROL_CHARACTERS_ESCAPED = mapOf(
 )
 
 interface IJsonWriter {
-    fun write(node: JsonNode)
+    val writer: BufferedWriter
     fun writeArray(node: JsonArray)
     fun writeObject(node: JsonObject)
     fun writeString(node: JsonString)
@@ -27,17 +27,17 @@ interface IJsonWriter {
     fun writeNull()
 }
 
-class JsonWriter(stream: OutputStream, charset: Charset = Charsets.UTF_8) : IJsonWriter {
-    internal val writer = stream.bufferedWriter(charset)
+fun IJsonWriter.write(node: JsonNode) = when (node) {
+    is JsonArray -> writeArray(node)
+    is JsonObject -> writeObject(node)
+    is JsonString -> writeString(node)
+    is JsonNumber -> writeNumber(node)
+    is JsonBoolean -> writeBoolean(node)
+    JsonNull -> writeNull()
+}.also { writer.flush() }
 
-    override fun write(node: JsonNode) = when (node) {
-        is JsonArray -> writeArray(node)
-        is JsonObject -> writeObject(node)
-        is JsonString -> writeString(node)
-        is JsonNumber -> writeNumber(node)
-        is JsonBoolean -> writeBoolean(node)
-        JsonNull -> writeNull()
-    }.also { writer.flush() }
+class JsonWriter(stream: OutputStream, charset: Charset = Charsets.UTF_8) : IJsonWriter {
+    override val writer = stream.bufferedWriter(charset)
 
     override fun writeArray(node: JsonArray) {
         writer.write("[")
@@ -91,7 +91,7 @@ class JsonWriter(stream: OutputStream, charset: Charset = Charsets.UTF_8) : IJso
 
 class PrettyJsonWriter(private val jsonWriter: JsonWriter, val indent: String = "  ") : IJsonWriter by jsonWriter {
     private var indentLevel = 0
-    private val writer = jsonWriter.writer
+    override val writer = jsonWriter.writer
 
     override fun writeArray(node: JsonArray) {
         writer.write("[")
