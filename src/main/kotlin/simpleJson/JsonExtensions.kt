@@ -1,5 +1,7 @@
+package simpleJson
+
 /**
- * Returns the value of the property with the given [key] or null if the node is not a JsonObject.
+ * Returns the value of the property with the given [key] or null if the node is not a simpleJson.JsonObject.
  */
 fun JsonNode.getPropertyOrNull(key: String): JsonNode? = when (this) {
     is JsonObject -> this[key]
@@ -8,7 +10,7 @@ fun JsonNode.getPropertyOrNull(key: String): JsonNode? = when (this) {
 
 
 /**
- * Returns the value at the [index] or null if the value is not found or the node is not a JsonArray
+ * Returns the value at the [index] or null if the value is not found or the node is not a simpleJson.JsonArray
  */
 fun JsonNode.getPropertyOrNull(index: Int): JsonNode? = when (this) {
     is JsonArray -> this.value.getOrNull(index)
@@ -109,4 +111,4 @@ fun JsonNode.serializePretty(): String = PrettyJsonWriter.write(this)
 fun String.deserialize(): JsonNode = JsonReader.read(this)
 fun String.deserializeOrNull(): JsonNode? = JsonReader.readOrNull(this)
 
-fun JsonWriter.prettyPrint(indent: String = "  ") = PrettyJsonWriter(this,indent)
+fun JsonWriter.prettyPrint(indent: String = "  ") = PrettyJsonWriter(this, indent)

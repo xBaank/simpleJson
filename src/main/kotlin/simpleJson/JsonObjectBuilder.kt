@@ -1,3 +1,5 @@
+package simpleJson
+
 @DslMarker
 internal annotation class JsonDsl
 
@@ -43,7 +45,7 @@ class JsonArrayBuilder {
     fun add(value: JsonNode) = list.add(value)
 
     //As union types are not supported in Kotlin neither custom implicit conversions do, We need to ask for a node directly,
-    //but we can still use the DSL converting supported types to nodes with toJson() extension functions
+    //but we can still use the DSL converting supported types to nodes with simpleJson.toJson() extension functions
     fun addAll(vararg values: JsonNode) = list.addAll(values)
     fun addObject(block: JsonObjectBuilder.() -> Unit = {}) = add(JsonObjectBuilder().apply(block).build())
     fun addArray(block: JsonArrayBuilder.() -> Unit = {}) = add(JsonArrayBuilder().apply(block).build())

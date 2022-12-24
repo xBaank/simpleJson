@@ -1,4 +1,6 @@
-import exceptions.JsonException
+package simpleJson
+
+import simpleJson.exceptions.JsonException
 import java.io.BufferedReader
 import java.io.InputStream
 import java.nio.charset.Charset

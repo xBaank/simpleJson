@@ -1,3 +1,5 @@
+package simpleJson
+
 import java.io.BufferedWriter
 import java.io.ByteArrayOutputStream
 import java.io.OutputStream
@@ -147,11 +149,11 @@ class PrettyJsonWriter(private val jsonWriter: JsonWriter, val indent: String = 
         }
 
         fun write(node: JsonNode, stream: OutputStream, charset: Charset = Charsets.UTF_8) =
-            JsonWriter(stream,charset).prettyPrint().write(node)
+            JsonWriter(stream, charset).prettyPrint().write(node)
     }
 }
 
-fun BufferedWriter.writeEscaped(value : String) = value.forEach { char ->
+fun BufferedWriter.writeEscaped(value: String) = value.forEach { char ->
     val escaped = CONTROL_CHARACTERS_ESCAPED.getOrDefault(char, null)
     if (escaped != null) write(escaped) else write(char.code)
 }

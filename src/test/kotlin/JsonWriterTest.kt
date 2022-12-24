@@ -1,4 +1,5 @@
 import org.junit.jupiter.api.Test
+import simpleJson.*
 
 class JsonWriterTest {
     @Test

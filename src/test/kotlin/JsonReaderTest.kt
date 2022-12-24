@@ -1,6 +1,7 @@
-import exceptions.JsonException
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import simpleJson.*
+import simpleJson.exceptions.JsonException
 import java.io.File
 
 internal class JsonReaderTest {
