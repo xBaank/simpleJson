@@ -402,7 +402,7 @@ internal class JsonReaderTest {
         assert(json.getNull("e").getOrThrow() == null)
         assert(json.getArray("f").map(JsonArray::size).getOrThrow() == 3)
         assert(json["g"].getInt("h").getOrThrow() == 1)
-        assert(json["g"]["i"].getInt("j").getOrThrow() == 1)
+        assert(json["g"]["i"]["j"].toInt().getOrThrow() == 1)
     }
 
     @Test

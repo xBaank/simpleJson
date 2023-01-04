@@ -2,7 +2,7 @@
 
 simpleJson is a simple json parser for the jvm made in kotlin.
 
-### Usage
+### Deserialization
 
 You can read using.
 
@@ -30,28 +30,72 @@ val data = File("src/test/resources/photos.json").inputStream()
 val json = JsonReader.read(data, Charsets.UTF_32LE)
 ```
 
-After reading, you can access the data using the `getOrNull` methods which will return null if the key is not found or
-the
-value is not of the correct type.
+You can also use the `to` methods to cast to a type which will return either the type or a json exception.
 
 ```kotlin
+val json = JsonReader.read(data)
+val name = json["name"].toString()
+```
+
+After reading, you can access the data using the `get` operator which will return either the value or a json exception.
+
+```kotlin
+val json = """
+{
+    "name" : "Juan",
+    "age" : 20,
+    "info": {
+        "address" : "Mexico",
+        "phone" : 1234567890
+    }
+    "photos" : [
+        {
+            "name" : "photo1",
+            "size" : 100
+        },
+        {
+            "name" : "photo2",
+            "size" : 200
+        }
+    ]
+}
+""".deserialize()
 val json = JsonReader.read(data)
 val name = json.getString("name").orNull() //will return null if the key is not found or the value is not a string
 val age = json.getInt("age").orNull()
-val infoName = json["info"]["name"].toString().orNull() ?: "unknown" // will return "unknown" if the key is not found
-val isPublic =
-    json.getArray("photos")[0]["isPublic"].getOrHandle { throw it } 
+val address = json["info"]["address"].toString().orNull() ?: "unknown" // will return "unknown" if the key is not found
+val phone = json["info"]["phone"].toInt().getOrHandle { throw it } // will throw the exception if the key is not found or is not an int
+val isPublic = json["photos"][0]["name"].toString().getOrHandle { throw it } 
 //Throws the exception if property photos is not an array, it is not found, the index is out of bounds, isPublic is not a boolean, or it is not found
 ```
 
-You can also use the `toOrNull` methods to cast to a type which will return null if the value is not of the correct type.
+### Serialization
+You can serialize jsonNode to string
 
 ```kotlin
-val json = JsonReader.read(data)
-val name = json.getProperty("name").toString()
+val jsonString = json.serialize()
 ```
 
-## Dsl
+or with a pretty print
+
+```kotlin
+val jsonString = json.serializePretty()
+```
+
+And to an output stream.
+
+```kotlin
+val stream = ByteArrayOutputStream()
+JsonWriter(stream).write(json)
+```
+with pretty print
+
+```kotlin
+val stream = ByteArrayOutputStream()
+JsonWriter(stream).prettyPrint().write(json)
+```
+
+### Dsl
 
 The dsl/builder provides a safe way to create the json without the problem of adding a
 wrong type that could cause a runtime error.
@@ -82,31 +126,6 @@ val json = jObject {
     "object" to jObject {}
     jObject("object2") {}
 }
-```
-
-You can serialize it to string
-
-```kotlin
-val jsonString = json.serialize()
-```
-
-or with a pretty print
-
-```kotlin
-val jsonString = json.serializePretty()
-```
-
-And to an output stream.
-
-```kotlin
-val stream = ByteArrayOutputStream()
-JsonWriter(stream).write(json)
-```
-with pretty print
-
-```kotlin
-val stream = ByteArrayOutputStream()
-JsonWriter(stream).prettyPrint().write(json)
 ```
 
 ## Gradle
