@@ -1,98 +1,100 @@
 package simpleJson
 
-/**
- * Returns the value of the property with the given [key] or null if the node is not a simpleJson.JsonObject.
- */
-fun JsonNode.getPropertyOrNull(key: String): JsonNode? = when (this) {
-    is JsonObject -> this[key]
-    else -> null
+import arrow.core.*
+import simpleJson.exceptions.JsonException
+
+
+operator fun JsonNode.get(key: String): Either<JsonException, JsonNode> = when (val node = this) {
+    is JsonObject -> node[key].rightIfNotNull { JsonException("Property $key not found") }
+    else -> JsonException("${this::class.simpleName} is not a ${JsonObject::class.simpleName}").left()
 }
 
-
-/**
- * Returns the value at the [index] or null if the value is not found or the node is not a simpleJson.JsonArray
- */
-fun JsonNode.getPropertyOrNull(index: Int): JsonNode? = when (this) {
-    is JsonArray -> this.value.getOrNull(index)
-    else -> null
+operator fun JsonNode.get(index: Int): Either<JsonException, JsonNode> = when (val node = this) {
+    is JsonArray -> node.value.getOrNull(index).rightIfNotNull { JsonException("Property $index not found") }
+    else -> JsonException("${this::class.simpleName} is not a ${JsonArray::class.simpleName}").left()
 }
 
-
-fun JsonNode.getArrayOrNull(key: String): JsonArray? = getPropertyOrNull(key)?.let {
+fun JsonNode.getObject(key: String): Either<JsonException,JsonObject> = get(key).flatMap {
     when (it) {
-        is JsonArray -> it
-        else -> null
+        is JsonObject -> it.right()
+        else -> JsonException("Property $key is a ${it::class.simpleName}, not a ${JsonObject::class.simpleName}").left()
     }
 }
 
-fun JsonNode.getStringOrNull(key: String): String? = getPropertyOrNull(key)?.let {
+fun JsonNode.getArray(key: String): Either<JsonException, JsonArray> = get(key).flatMap {
     when (it) {
-        is JsonString -> it.value
-        else -> null
+        is JsonArray -> it.right()
+        else -> JsonException("Property $key is a ${it::class.simpleName}, not a ${JsonArray::class.simpleName}").left()
     }
 }
 
-fun JsonNode.getNumberOrNull(key: String): Number? = getPropertyOrNull(key)?.let {
+fun JsonNode.getString(key: String): Either<JsonException,String> = get(key).flatMap {
     when (it) {
-        is JsonNumber -> it.value
-        else -> null
+        is JsonString -> it.value.right()
+        else -> JsonException("Property $key is a ${it::class.simpleName}, not a ${JsonString::class.simpleName}").left()
     }
 }
 
-fun JsonNode.getIntOrNull(key: String) = getNumberOrNull(key)?.toInt()
-fun JsonNode.getDoubleOrNull(key: String) = getNumberOrNull(key)?.toDouble()
-fun JsonNode.getFloatOrNull(key: String) = getNumberOrNull(key)?.toFloat()
-fun JsonNode.getLongOrNull(key: String) = getNumberOrNull(key)?.toLong()
-
-fun JsonNode.getBooleanOrNull(key: String): Boolean? = getPropertyOrNull(key)?.let {
+fun JsonNode.getNumber(key: String): Either<JsonException, Number> = get(key).flatMap {
     when (it) {
-        is JsonBoolean -> it.value
-        else -> null
+        is JsonNumber -> it.value.right()
+        else -> JsonException("Property $key is a ${it::class.simpleName}, not a ${JsonNumber::class.simpleName}").left()
     }
 }
 
-fun JsonNode.getObjectOrNull(key: String): JsonObject? = getPropertyOrNull(key)?.let {
+fun JsonNode.getInt(key: String): Either<JsonException, Int> = getNumber(key).map(Number::toInt)
+fun JsonNode.getDouble(key: String): Either<JsonException, Double> = getNumber(key).map(Number::toDouble)
+fun JsonNode.getFloat(key: String): Either<JsonException, Float> = getNumber(key).map(Number::toFloat)
+fun JsonNode.getLong(key: String): Either<JsonException, Long> = getNumber(key).map(Number::toLong)
+
+
+fun  JsonNode.getBoolean(key: String): Either<JsonException,Boolean> = get(key).flatMap {
     when (it) {
-        is JsonObject -> it
-        else -> null
+        is JsonBoolean -> it.value.right()
+        else -> JsonException("Property $key is a ${it::class.simpleName}, not a ${JsonBoolean::class.simpleName}").left()
     }
 }
 
-fun JsonNode.getJsonNullOrNull(key: String): JsonNull? = getPropertyOrNull(key) as? JsonNull?
-
-fun JsonNode.toNumberOrNull() = when (this) {
-    is JsonNumber -> this.value
-    else -> null
+fun JsonNode.getNull(key: String): Either<JsonException, Nothing?> = get(key).flatMap {
+    when (it) {
+        is JsonNull -> null.right()
+        else -> JsonException("Property $key is a ${it::class.simpleName}, not a ${JsonNull::class.simpleName}").left()
+    }
 }
 
-fun JsonNode.toIntOrNull() = toNumberOrNull()?.toInt()
-fun JsonNode.toDoubleOrNull() = toNumberOrNull()?.toDouble()
-fun JsonNode.toFloatOrNull() = toNumberOrNull()?.toFloat()
-fun JsonNode.toLongOrNull() = toNumberOrNull()?.toLong()
-
-fun JsonNode.toStringOrNull() = when (this) {
-    is JsonString -> this.value
-    else -> null
+fun JsonNode.toNumber(): Either<JsonException, Number> = when (this) {
+        is JsonNumber -> value.right()
+        else -> JsonException("${this::class.simpleName} is not a ${JsonNumber::class.simpleName}").left()
 }
 
-fun JsonNode.toBooleanOrNull() = when (this) {
-    is JsonBoolean -> this.value
-    else -> null
+fun JsonNode.toInt(): Either<JsonException, Int> = toNumber().map(Number::toInt)
+fun JsonNode.toDouble(): Either<JsonException, Double> = toNumber().map(Number::toDouble)
+fun JsonNode.toFloat(): Either<JsonException, Float> = toNumber().map(Number::toFloat)
+fun JsonNode.toLong(): Either<JsonException, Long> = toNumber().map(Number::toLong)
+
+fun JsonNode.to_String(): Either<JsonException, String> = when (this) {
+    is JsonString -> value.right()
+    else -> JsonException("${this::class.simpleName} is not a ${JsonString::class.simpleName}").left()
 }
 
-fun JsonNode.toJsonNullOrNull() = when (this) {
-    is JsonNull -> this
-    else -> null
+fun JsonNode.toBoolean(): Either<JsonException, Boolean> = when (this) {
+    is JsonBoolean -> value.right()
+    else -> JsonException("${this::class.simpleName} is not a ${JsonBoolean::class.simpleName}").left()
 }
 
-fun JsonNode.toArrayOrNull() = when (this) {
-    is JsonArray -> this
-    else -> null
+fun JsonNode.toNull(): Either<JsonException, Nothing?> = when (this) {
+    is JsonNull -> null.right()
+    else -> JsonException("${this::class.simpleName} is not a ${JsonNull::class.simpleName}").left()
 }
 
-fun JsonNode.toObjectOrNull() = when (this) {
-    is JsonObject -> this
-    else -> null
+fun JsonNode.toArray() = when (this) {
+    is JsonArray -> right()
+    else -> JsonException("${this::class.simpleName} is not a ${JsonArray::class.simpleName}").left()
+}
+
+fun JsonNode.toObject() = when (this) {
+    is JsonObject -> right()
+    else ->  JsonException("${this::class.simpleName} is not a ${JsonObject::class.simpleName}").left()
 }
 
 
@@ -108,7 +110,6 @@ fun Map<String, JsonNode>.toJson(): JsonObject = JsonObject(this)
 
 fun JsonNode.serialize(): String = JsonWriter.write(this)
 fun JsonNode.serializePretty(): String = PrettyJsonWriter.write(this)
-fun String.deserialize(): JsonNode = JsonReader.read(this)
-fun String.deserializeOrNull(): JsonNode? = JsonReader.readOrNull(this)
+fun String.deserialize(): Either<JsonException, JsonNode> = JsonReader.read(this)
 
 fun JsonWriter.prettyPrint(indent: String = "  ") = PrettyJsonWriter(this, indent)

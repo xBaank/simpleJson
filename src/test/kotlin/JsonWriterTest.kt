@@ -61,7 +61,7 @@ class JsonWriterTest {
         }
 
         val string = json.serialize()
-        val jsonAgain = string.deserialize()
+        val jsonAgain = string.deserialize().getOrThrow()
         assert(json == jsonAgain)
     }
 
@@ -93,7 +93,7 @@ class JsonWriterTest {
         }
 
         val string = json.serializePretty()
-        val jsonAgain = string.deserialize()
+        val jsonAgain = string.deserialize().getOrThrow()
         assert(json == jsonAgain)
     }
 

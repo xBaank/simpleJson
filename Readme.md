@@ -7,15 +7,13 @@ simpleJson is a simple json parser for the jvm made in kotlin.
 You can read using.
 
 ```kotlin
-val json = JsonReader.readOrNull(""" { a : "a", b : [1 , "1"] } """) //will return null if data is not a valid json
-val json = JsonReader.read(""" { a : "a", b : [1 , "1"] } """) //will throw an exception if data is not a valid json
+val json = JsonReader.read(""" { a : "a", b : [1 , "1"] } """) //will return either a JsonNode or a JsonException
 ```
 
-or
+or using the extension methods
 
 ```kotlin
-val json = """ { a : "a", b : [1 , "1"] } """.deserializeOrNull() //will return null if data is not a valid json
-val json = """ { a : "a", b : [1 , "1"] } """.deserialize() //will throw an exception if data is not a valid json
+val json = """ { a : "a", b : [1 , "1"] } """.deserialize() //will return either a JsonNode or a JsonException
 ```
 
 You can also read from a stream such as a file.
@@ -38,18 +36,19 @@ value is not of the correct type.
 
 ```kotlin
 val json = JsonReader.read(data)
-val name = json.getStringOrNull("name")
-val age = json.getIntOrNull("age")
-val infoName = json.getObjectOrNull("info")?.getStringOrNull("name") ?: "unknown"
+val name = json.getString("name").orNull() //will return null if the key is not found or the value is not a string
+val age = json.getInt("age").orNull()
+val infoName = json["info"]["name"].toString().orNull() ?: "unknown" // will return "unknown" if the key is not found
 val isPublic =
-    json.getArrayOrNull("photos")?.getOrNull(0)?.getBooleanOrNull("isPublic") ?: throw Exception("isPublic not found")
+    json.getArray("photos")[0]["isPublic"].getOrHandle { throw it } 
+//Throws the exception if property photos is not an array, it is not found, the index is out of bounds, isPublic is not a boolean, or it is not found
 ```
 
-You can also use the `toOrNull` methods which will return null if the value is not of the correct type.
+You can also use the `toOrNull` methods to cast to a type which will return null if the value is not of the correct type.
 
 ```kotlin
 val json = JsonReader.read(data)
-val name = json.getPropertyOrNull("name")?.toStringOrNull()
+val name = json.getProperty("name").toString()
 ```
 
 ## Dsl
@@ -124,7 +123,7 @@ Add dependency
 
 ```kotlin
 dependencies {
-    implementation("com.github.xBaank:simpleJson:6.0.0")
+    implementation("com.github.xBaank:simpleJson:7.0.0")
 }
 
 ```
@@ -150,7 +149,7 @@ Add dependency
 <dependency>
     <groupId>com.github.xBaank</groupId>
     <artifactId>simpleJson</artifactId>
-    <version>6.0.0</version>
+    <version>7.0.0</version>
 </dependency>
 ```
 
