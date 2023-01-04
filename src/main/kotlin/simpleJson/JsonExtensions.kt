@@ -6,12 +6,12 @@ import simpleJson.exceptions.JsonException
 
 operator fun JsonNode.get(key: String): Either<JsonException, JsonNode> = when (val node = this) {
     is JsonObject -> node[key].rightIfNotNull { JsonException("Property $key not found") }
-    else -> JsonException("${this::class.simpleName} is not a ${JsonObject::class.simpleName}").left()
+    else -> JsonException("Property $key is a ${this::class.simpleName}, not a ${JsonObject::class.simpleName}").left()
 }
 
 operator fun JsonNode.get(index: Int): Either<JsonException, JsonNode> = when (val node = this) {
-    is JsonArray -> node.value.getOrNull(index).rightIfNotNull { JsonException("Property $index not found") }
-    else -> JsonException("${this::class.simpleName} is not a ${JsonArray::class.simpleName}").left()
+    is JsonArray -> node.value.getOrNull(index).rightIfNotNull { JsonException("Property at index $index not found") }
+    else -> JsonException("Property at index $index is a ${this::class.simpleName}, not a ${JsonArray::class.simpleName}").left()
 }
 
 fun JsonNode.getObject(key: String): Either<JsonException,JsonObject> = get(key).flatMap {
