@@ -31,7 +31,7 @@ internal class JsonBuilderTest {
             jArray("array2") { add(1) }
             "object" to jObject {}
             jObject("object2") {}
-        }
+        } as JsonNode
 
         @Suppress("SENSELESS_COMPARISON")
         assert(json.getNull("null").getOrThrow() == null)
@@ -39,26 +39,20 @@ internal class JsonBuilderTest {
         assert(!json.getBoolean("false").getOrThrow())
         assert(json.getDouble("number").getOrThrow() == 5.5)
         assert(json.getString("string").getOrThrow() == "string")
-        assert(json.getArray("array")[0].toDouble().getOrThrow() == 1.2)
-        assert(json.getArray("array")[1].toObject().getString("string").getOrThrow() == "string")
-        assert(
-            json.getArray("array")[1].toObject().getArray("array")[0]
-                .to_String().getOrThrow() == "first"
-        )
-        assert(
-            json.getArray("array")[1].toObject().getArray("array")[1]
-                .to_String().getOrThrow() == "second"
-        )
-        assert(json.getArray("array")[2].to_String().getOrThrow() == "string")
-        assert(json.getArray("array")[3].toBoolean().getOrThrow())
-        assert(!json.getArray("array")[4].toBoolean().getOrThrow())
+        assert(json["array"][0].toDouble().getOrThrow() == 1.2)
+        assert(json["array"][1].getString("string").getOrThrow() == "string")
+        assert(json["array"][1]["array"][0].to_String().getOrThrow() == "first")
+        assert(json["array"][1]["array"][1].to_String().getOrThrow() == "second")
+        assert(json["array"][2].to_String().getOrThrow() == "string")
+        assert(json["array"][3].toBoolean().getOrThrow())
+        assert(!json["array"][4].toBoolean().getOrThrow())
         @Suppress("SENSELESS_COMPARISON")
-        assert(json.getArray("array")[5].toNull().getOrThrow() == null)
-        assert(json.getArray("array")[6].toArray()[0].to_String().getOrThrow() == "first")
-        assert(json.getArray("array")[7].toObject().getString("string").getOrThrow() == "string")
-        assert(json.getArray("array2")[0].toInt().getOrThrow() == 1)
-        assert(json.getObject("object").isRightOrThrow())
-        assert(json.getObject("object2").isRightOrThrow())
+        assert(json["array"][5].toNull().getOrThrow() == null)
+        assert(json["array"][6][0].to_String().getOrThrow() == "first")
+        assert(json["array"][7].toObject().getString("string").getOrThrow() == "string")
+        assert(json["array2"][0].toInt().getOrThrow() == 1)
+        assert(json["object"].isRightOrThrow())
+        assert(json["object2"].isRightOrThrow())
 
 
     }
@@ -93,25 +87,25 @@ internal class JsonBuilderTest {
         }
 
         assert(json[0].toDouble().getOrThrow() == 1.2)
-        assert(json[1].toObject().getString("string").getOrThrow() == "string")
-        assert(json[1].toObject().getArray("array")[0].to_String().getOrThrow() == "first")
-        assert(json[1].toObject().getArray("array")[1].to_String().getOrThrow() == "second")
+        assert(json[1].getString("string").getOrThrow() == "string")
+        assert(json[1]["array"][0].to_String().getOrThrow() == "first")
+        assert(json[1]["array"][1].to_String().getOrThrow() == "second")
         assert(json[2].to_String().getOrThrow() == "string")
         assert(json[3].toBoolean().getOrThrow())
         assert(!json[4].toBoolean().getOrThrow())
         @Suppress("SENSELESS_COMPARISON")
         assert(json[5].toNull().getOrThrow() == null)
-        assert(json[6].toArray()[0].to_String().getOrThrow() == "first")
-        assert(json[7].toObject().getString("string").getOrThrow() == "string")
+        assert(json[6][0].to_String().getOrThrow() == "first")
+        assert(json[7].getString("string").getOrThrow() == "string")
         assert(json[8].toInt().getOrThrow() == 1)
         assert(json[9].to_String().getOrThrow() == "asd")
         assert(json[10].toLong().getOrThrow() == 5L)
         @Suppress("SENSELESS_COMPARISON")
         assert(json[11].toNull().getOrThrow() == null)
         assert(json[12].toBoolean().getOrThrow())
-        assert(json[13].toArray()[0].toInt().getOrThrow()== 1)
-        assert(json[13].toArray()[1].toInt().getOrThrow() == 2)
-        assert(json[14].toObject()["a"].toInt().getOrThrow() == 1)
+        assert(json[13][0].toInt().getOrThrow()== 1)
+        assert(json[13][1].toInt().getOrThrow() == 2)
+        assert(json[14]["a"].toInt().getOrThrow() == 1)
 
     }
 }
