@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "org.bank"
-version = "6.0.0"
+version = "7.0.0"
 
 
 repositories {
@@ -15,6 +15,8 @@ repositories {
 }
 
 dependencies {
+    //arrow core
+    implementation("io.arrow-kt:arrow-core:1.1.2")
     testImplementation("org.junit.jupiter:junit-jupiter:5.9.0")
 }
 

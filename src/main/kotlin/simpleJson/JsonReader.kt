@@ -1,5 +1,7 @@
 package simpleJson
 
+import arrow.core.Either
+import arrow.core.rightIfNotNull
 import simpleJson.exceptions.JsonException
 import java.io.BufferedReader
 import java.io.InputStream
@@ -26,10 +28,10 @@ class JsonReader(inputStream: InputStream, charset: Charset = Charsets.UTF_8) {
     private var current: Char? = null
 
     //After reading all json skip all whitespace and check for no more data after
-    fun read(): JsonNode = readOrNull()
-        .takeIf { skipWhiteSpaces(); current == null } ?: throw JsonException("Unexpected  character $current")
+    fun read(): Either<JsonException,JsonNode> = readOrNull()
+        .takeIf { skipWhiteSpaces(); current == null }.rightIfNotNull { JsonException("Unexpected  character $current, on line ${reader.readLine()}") }
 
-    fun readOrNull(): JsonNode? = readObjectOrNull() ?: readArrayOrNull()
+    private fun readOrNull(): JsonNode? = readObjectOrNull() ?: readArrayOrNull()
 
     private fun readNext() {
         current = readOrEof()
@@ -182,14 +184,9 @@ class JsonReader(inputStream: InputStream, charset: Charset = Charsets.UTF_8) {
     }
 
     companion object {
-        fun read(string: String): JsonNode = JsonReader(string).read()
-        fun read(inputStream: InputStream, charset: Charset = Charsets.UTF_8): JsonNode =
+        fun read(string: String): Either<JsonException,JsonNode> = JsonReader(string).read()
+        fun read(inputStream: InputStream, charset: Charset = Charsets.UTF_8): Either<JsonException,JsonNode> =
             JsonReader(inputStream, charset).read()
-
-        fun readOrNull(inputStream: InputStream, charset: Charset = Charsets.UTF_8): JsonNode? =
-            JsonReader(inputStream, charset).readOrNull()
-
-        fun readOrNull(string: String): JsonNode? = JsonReader(string).readOrNull()
     }
 }
 
