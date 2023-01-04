@@ -60,7 +60,6 @@ val json = """
     ]
 }
 """.deserialize()
-val json = JsonReader.read(data)
 val name = json.getString("name").orNull() //will return null if the key is not found or the value is not a string
 val age = json.getInt("age").orNull()
 val address = json["info"]["address"].toString().orNull() ?: "unknown" // will return "unknown" if the key is not found
