@@ -30,14 +30,14 @@ val data = File("src/test/resources/photos.json").inputStream()
 val json = JsonReader.read(data, Charsets.UTF_32LE)
 ```
 
-You can also use the `to` methods to cast to a type which will return either the type or a json exception.
+You can also use the `to` methods to cast to a type which will return either the type or a JsonException.
 
 ```kotlin
 val json = JsonReader.read(data)
 val name = json["name"].toString()
 ```
 
-After reading, you can access the data using the `get` operator which will return either the value or a json exception.
+After reading, you can access the data using the `get` operator which will return either the corresponding JsonType or a JsonException.
 
 ```kotlin
 val json = """
@@ -66,11 +66,11 @@ val age = json.getInt("age").orNull()
 val address = json["info"]["address"].toString().orNull() ?: "unknown" // will return "unknown" if the key is not found
 val phone = json["info"]["phone"].toInt().getOrHandle { throw it } // will throw the exception if the key is not found or is not an int
 val isPublic = json["photos"][0]["name"].toString().getOrHandle { throw it } 
-//Throws the exception if property photos is not an array, it is not found, the index is out of bounds, isPublic is not a boolean, or it is not found
+//Throws the exception if property photos is not an array, it is not found, the index is out of bounds, name is not a string, or it is not found
 ```
 
 ### Serialization
-You can serialize jsonNode to string
+You can serialize JsonNode to String
 
 ```kotlin
 val jsonString = json.serialize()
