@@ -28,8 +28,9 @@ class JsonReader(inputStream: InputStream, charset: Charset = Charsets.UTF_8) {
     private var current: Char? = null
 
     //After reading all json skip all whitespace and check for no more data after
-    fun read(): Either<JsonException,JsonNode> = readOrNull()
-        .takeIf { skipWhiteSpaces(); current == null }.rightIfNotNull { JsonException("Unexpected  character $current, on line ${reader.readLine()}") }
+    fun read(): Either<JsonException, JsonNode> = readOrNull()
+        .takeIf { skipWhiteSpaces(); current == null }
+        .rightIfNotNull { JsonException("Unexpected  character $current, on line ${reader.readLine()}") }
 
     private fun readOrNull(): JsonNode? = readObjectOrNull() ?: readArrayOrNull()
 
@@ -176,16 +177,15 @@ class JsonReader(inputStream: InputStream, charset: Charset = Charsets.UTF_8) {
     }
 
     private inline fun <T> withoutWhitespaces(block: () -> T): T {
-        val result: T?
         skipWhiteSpaces()
-        result = block()
+        val result: T = block()
         skipWhiteSpaces()
         return result
     }
 
     companion object {
-        fun read(string: String): Either<JsonException,JsonNode> = JsonReader(string).read()
-        fun read(inputStream: InputStream, charset: Charset = Charsets.UTF_8): Either<JsonException,JsonNode> =
+        fun read(string: String): Either<JsonException, JsonNode> = JsonReader(string).read()
+        fun read(inputStream: InputStream, charset: Charset = Charsets.UTF_8): Either<JsonException, JsonNode> =
             JsonReader(inputStream, charset).read()
     }
 }

@@ -7,16 +7,16 @@ internal class JsonBuilderTest {
     fun `should build json`() {
 
         val json = jObject {
-            "null" to null
-            "true" to true
-            "false" to false
-            "number" to 5.5
-            "string" to "string"
-            "array" to jArray {
+            "null" += null
+            "true" += true
+            "false" += false
+            "number" += 5.5
+            "string" += "string"
+            "array" += jArray {
                 add(1.2)
                 add(jObject {
-                    "string" to "string"
-                    "array" to jArray {
+                    "string" += "string"
+                    "array" += jArray {
                         add("first")
                         add("second")
                     }
@@ -28,9 +28,12 @@ internal class JsonBuilderTest {
                 addArray { add("first") }
                 addObject { "string" to "string" }
             }
-            jArray("array2") { add(1) }
+            "array2" to jArray {
+                add(1)
+            }
             "object" to jObject {}
-            jObject("object2") {}
+            "object2" to jObject {}
+            "object3" += jArray(1.toJson(), null.toJson())
         } as JsonNode
 
         @Suppress("SENSELESS_COMPARISON")
@@ -53,6 +56,9 @@ internal class JsonBuilderTest {
         assert(json["array2"][0].toInt().getOrThrow() == 1)
         assert(json["object"].isRightOrThrow())
         assert(json["object2"].isRightOrThrow())
+        assert(json["object3"][0].toInt().getOrThrow() == 1)
+        @Suppress("SENSELESS_COMPARISON")
+        assert(json["object3"][1].toNull().getOrThrow() == null)
 
 
     }
@@ -103,7 +109,7 @@ internal class JsonBuilderTest {
         @Suppress("SENSELESS_COMPARISON")
         assert(json[11].toNull().getOrThrow() == null)
         assert(json[12].toBoolean().getOrThrow())
-        assert(json[13][0].toInt().getOrThrow()== 1)
+        assert(json[13][0].toInt().getOrThrow() == 1)
         assert(json[13][1].toInt().getOrThrow() == 2)
         assert(json[14]["a"].toInt().getOrThrow() == 1)
 

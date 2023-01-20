@@ -20,11 +20,37 @@ class JsonObjectBuilder {
         JsonNull
     ) //Nullable nothing can only be null or nothing but nothing is nothing, so it is just null
 
-    fun jObject(name: String, block: JsonObjectBuilder.() -> Unit = {}) =
-        map.put(name, jObject(block))
+    operator fun String.plusAssign(value: String) {
+        this to value
+    }
 
+    operator fun String.plusAssign(value: Number) {
+        this to value
+    }
+
+    operator fun String.plusAssign(value: Boolean) {
+        this to value
+    }
+
+    operator fun String.plusAssign(value: JsonArray) {
+        this to value
+    }
+
+    operator fun String.plusAssign(value: JsonObject) {
+        this to value
+    }
+
+    operator fun String.plusAssign(value: Nothing?) {
+        this to value
+    }
+
+    @Deprecated("Deprecated in favor of String.plusAssign or to method", ReplaceWith("name += jObject(block)"))
+    fun jObject(name: String, block: JsonObjectBuilder.() -> Unit = {}) =
+        name to jObject(block)
+
+    @Deprecated("Deprecated in favor of String.plusAssign or to method", ReplaceWith("name += jArray(block)"))
     fun jArray(name: String, block: JsonArrayBuilder.() -> Unit = {}) =
-        map.put(name, jArray(block))
+        name to jArray(block)
 
 
     fun build() = JsonObject(map)
@@ -47,15 +73,15 @@ class JsonArrayBuilder {
     //As union types are not supported in Kotlin neither custom implicit conversions do, We need to ask for a node directly,
     //but we can still use the DSL converting supported types to nodes with simpleJson.toJson() extension functions
     fun addAll(vararg values: JsonNode) = list.addAll(values)
-    fun addObject(block: JsonObjectBuilder.() -> Unit = {}) = add(JsonObjectBuilder().apply(block).build())
-    fun addArray(block: JsonArrayBuilder.() -> Unit = {}) = add(JsonArrayBuilder().apply(block).build())
+    fun addObject(block: JsonObjectBuilder.() -> Unit = {}) = add(jObject(block))
+    fun addArray(block: JsonArrayBuilder.() -> Unit = {}) = add(jArray(block))
 
     fun build() = JsonArray(list)
 
 }
 
-fun jObject(init: JsonObjectBuilder.() -> Unit) =
-    JsonObjectBuilder().apply(init).build()
+fun jObject(init: JsonObjectBuilder.() -> Unit) = JsonObjectBuilder().apply(init).build()
 
-fun jArray(init: JsonArrayBuilder.() -> Unit) =
-    JsonArrayBuilder().apply(init).build()
+fun jArray(init: JsonArrayBuilder.() -> Unit) = JsonArrayBuilder().apply(init).build()
+
+fun jArray(vararg values: JsonNode) = jArray { addAll(*values) }
