@@ -37,7 +37,8 @@ val json = JsonReader.read(data)
 val name = json["name"].toString()
 ```
 
-After reading, you can access the data using the `get` operator which will return either the corresponding JsonType or a JsonException.
+After reading, you can access the data using the `get` operator which will return either the corresponding JsonType or a
+JsonException.
 
 ```kotlin
 val json = """
@@ -63,12 +64,14 @@ val json = """
 val name = json.getString("name").orNull() //will return null if the key is not found or the value is not a string
 val age = json.getInt("age").orNull()
 val address = json["info"]["address"].toString().orNull() ?: "unknown" // will return "unknown" if the key is not found
-val phone = json["info"]["phone"].toInt().getOrHandle { throw it } // will throw the exception if the key is not found or is not an int
-val isPublic = json["photos"][0]["name"].toString().getOrHandle { throw it } 
+val phone = json["info"]["phone"].toInt()
+    .getOrHandle { throw it } // will throw the exception if the key is not found or is not an int
+val isPublic = json["photos"][0]["name"].toString().getOrHandle { throw it }
 //Throws the exception if property photos is not an array, it is not found, the index is out of bounds, name is not a string, or it is not found
 ```
 
 ### Serialization
+
 You can serialize JsonNode to String
 
 ```kotlin
@@ -87,6 +90,7 @@ And to an output stream.
 val stream = ByteArrayOutputStream()
 JsonWriter(stream).write(json)
 ```
+
 with pretty print
 
 ```kotlin
@@ -101,16 +105,16 @@ wrong type that could cause a runtime error.
 
 ```kotlin
 val json = jObject {
-    "null" to null
-    "true" to true
-    "false" to false
-    "number" to 5.5
-    "string" to "string"
-    "array" to jArray {
+    "null" += null
+    "true" += true
+    "false" += false
+    "number" += 5.5
+    "string" += "string"
+    "array" += jArray {
         add(1.2)
         add(jObject {
-            "string" to "string"
-            "array" to jArray {
+            "string" += "string"
+            "array" += jArray {
                 add("first")
                 add("second")
             }
@@ -120,10 +124,9 @@ val json = jObject {
         add(false)
         add(null)
         addArray { add("first") }
-        addObject { "string" to "string" }
+        addObject { "string" += "string" }
     }
-    "object" to jObject {}
-    jObject("object2") {}
+    "object" += jObject {}
 }
 ```
 
