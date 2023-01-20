@@ -62,6 +62,26 @@ class JsonArrayBuilder {
 
     private val list = mutableListOf<JsonNode>()
 
+    operator fun String.unaryPlus() {
+        add(this)
+    }
+
+    operator fun Number.unaryPlus() {
+        add(this)
+    }
+
+    operator fun Boolean.unaryPlus() {
+        add(this)
+    }
+
+    operator fun Nothing?.unaryPlus() {
+        add(this)
+    }
+
+    operator fun JsonNode.unaryPlus() {
+        add(this)
+    }
+
     fun add(value: String) = list.add(JsonString(value))
     fun add(value: Number) = list.add(JsonNumber(value))
     fun add(value: Boolean) = list.add(JsonBoolean(value))

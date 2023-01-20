@@ -5,16 +5,16 @@ import simpleJson.exceptions.JsonException
 
 
 operator fun JsonNode.get(key: String): Either<JsonException, JsonNode> = when (val node = this) {
-    is JsonObject -> node[key].rightIfNotNull { JsonException("Property $key not found") }
+    is JsonObject -> node[key]?.right() ?: JsonException("Property $key not found").left()
     else -> JsonException("Property $key is a ${this::class.simpleName}, not a ${JsonObject::class.simpleName}").left()
 }
 
 operator fun JsonNode.get(index: Int): Either<JsonException, JsonNode> = when (val node = this) {
-    is JsonArray -> node.value.getOrNull(index).rightIfNotNull { JsonException("Property at index $index not found") }
+    is JsonArray -> node.value.getOrNull(index)?.right() ?: JsonException("Property at index $index not found").left()
     else -> JsonException("Property at index $index is a ${this::class.simpleName}, not a ${JsonArray::class.simpleName}").left()
 }
 
-fun JsonNode.getObject(key: String): Either<JsonException,JsonObject> = get(key).flatMap {
+fun JsonNode.getObject(key: String): Either<JsonException, JsonObject> = get(key).flatMap {
     when (it) {
         is JsonObject -> it.right()
         else -> JsonException("Property $key is a ${it::class.simpleName}, not a ${JsonObject::class.simpleName}").left()
@@ -28,7 +28,7 @@ fun JsonNode.getArray(key: String): Either<JsonException, JsonArray> = get(key).
     }
 }
 
-fun JsonNode.getString(key: String): Either<JsonException,String> = get(key).flatMap {
+fun JsonNode.getString(key: String): Either<JsonException, String> = get(key).flatMap {
     when (it) {
         is JsonString -> it.value.right()
         else -> JsonException("Property $key is a ${it::class.simpleName}, not a ${JsonString::class.simpleName}").left()
@@ -48,7 +48,7 @@ fun JsonNode.getFloat(key: String): Either<JsonException, Float> = getNumber(key
 fun JsonNode.getLong(key: String): Either<JsonException, Long> = getNumber(key).map(Number::toLong)
 
 
-fun  JsonNode.getBoolean(key: String): Either<JsonException,Boolean> = get(key).flatMap {
+fun JsonNode.getBoolean(key: String): Either<JsonException, Boolean> = get(key).flatMap {
     when (it) {
         is JsonBoolean -> it.value.right()
         else -> JsonException("Property $key is a ${it::class.simpleName}, not a ${JsonBoolean::class.simpleName}").left()
@@ -63,8 +63,8 @@ fun JsonNode.getNull(key: String): Either<JsonException, Nothing?> = get(key).fl
 }
 
 fun JsonNode.toNumber(): Either<JsonException, Number> = when (this) {
-        is JsonNumber -> value.right()
-        else -> JsonException("${this::class.simpleName} is not a ${JsonNumber::class.simpleName}").left()
+    is JsonNumber -> value.right()
+    else -> JsonException("${this::class.simpleName} is not a ${JsonNumber::class.simpleName}").left()
 }
 
 fun JsonNode.toInt(): Either<JsonException, Int> = toNumber().map(Number::toInt)
@@ -94,7 +94,7 @@ fun JsonNode.toArray() = when (this) {
 
 fun JsonNode.toObject() = when (this) {
     is JsonObject -> right()
-    else ->  JsonException("${this::class.simpleName} is not a ${JsonObject::class.simpleName}").left()
+    else -> JsonException("${this::class.simpleName} is not a ${JsonObject::class.simpleName}").left()
 }
 
 

@@ -1,11 +1,14 @@
 package simpleJson
 
 import arrow.core.Either
-import arrow.core.rightIfNotNull
+import arrow.core.left
+import arrow.core.right
 import simpleJson.exceptions.JsonException
 import java.io.BufferedReader
 import java.io.InputStream
 import java.nio.charset.Charset
+
+//TODO Use either with private methods
 
 private val WHITESPACE = arrayOf(' ', '\t', '\r', '\n')
 private val CONTROL_CHARACTERS = mapOf(
@@ -30,7 +33,7 @@ class JsonReader(inputStream: InputStream, charset: Charset = Charsets.UTF_8) {
     //After reading all json skip all whitespace and check for no more data after
     fun read(): Either<JsonException, JsonNode> = readOrNull()
         .takeIf { skipWhiteSpaces(); current == null }
-        .rightIfNotNull { JsonException("Unexpected  character $current, on line ${reader.readLine()}") }
+        ?.right() ?: JsonException("Unexpected  character $current, on line ${reader.readLine()}").left()
 
     private fun readOrNull(): JsonNode? = readObjectOrNull() ?: readArrayOrNull()
 

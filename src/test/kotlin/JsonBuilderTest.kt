@@ -26,7 +26,14 @@ internal class JsonBuilderTest {
                 add(false)
                 add(null)
                 addArray { add("first") }
-                addObject { "string" to "string" }
+                addObject { "string" += "string" }
+                +"asd"
+                +jArray { +"first" }
+                +null
+                +false
+                +jObject { "string" += "string" }
+                +(1 as Number) //or
+                +2.toJson()
             }
             "array2" to jArray {
                 add(1)
@@ -53,6 +60,14 @@ internal class JsonBuilderTest {
         assert(json["array"][5].toNull().getOrThrow() == null)
         assert(json["array"][6][0].to_String().getOrThrow() == "first")
         assert(json["array"][7].toObject().getString("string").getOrThrow() == "string")
+        assert(json["array"][8].to_String().getOrThrow() == "asd")
+        assert(json["array"][9][0].to_String().getOrThrow() == "first")
+        @Suppress("SENSELESS_COMPARISON")
+        assert(json["array"][10].toNull().getOrThrow() == null)
+        assert(!json["array"][11].toBoolean().getOrThrow())
+        assert(json["array"][12].toObject().getString("string").getOrThrow() == "string")
+        assert(json["array"][13].toDouble().getOrThrow() == 1.0)
+        assert(json["array"][14].toDouble().getOrThrow() == 2.0)
         assert(json["array2"][0].toInt().getOrThrow() == 1)
         assert(json["object"].isRightOrThrow())
         assert(json["object2"].isRightOrThrow())
