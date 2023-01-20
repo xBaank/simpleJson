@@ -1,7 +1,7 @@
 ## simpleJson [![Java CI with Gradle](https://github.com/xBaank/simpleJson/actions/workflows/gradle.yml/badge.svg)](https://github.com/xBaank/simpleJson/actions/workflows/gradle.yml) [![](https://jitpack.io/v/xBaank/simpleJson.svg)](https://jitpack.io/#xBaank/simpleJson)
 
 simpleJson is a simple json parser for the jvm made in kotlin,
-to properly use it, you need to have <a href="https://github.com/arrow-kt/arrow">Arrow</a> as a dependency.
+to properly use it you need to have <a href="https://github.com/arrow-kt/arrow">Arrow</a> as a dependency.
 
 ### Deserialization
 
