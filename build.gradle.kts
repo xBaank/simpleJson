@@ -17,6 +17,7 @@ dependencies {
     //arrow core
     implementation("io.arrow-kt:arrow-core:1.1.5")
     testImplementation("org.junit.jupiter:junit-jupiter:5.9.0")
+    implementation(kotlin("reflect:1.8.0"))
 }
 
 //publish
