@@ -2,11 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.8.0"
-    `maven-publish`
 }
-
-group = "org.bank"
-version = "7.1.0"
 
 
 repositories {
@@ -18,15 +14,7 @@ dependencies {
     implementation("io.arrow-kt:arrow-core:1.1.5")
     testImplementation("org.junit.jupiter:junit-jupiter:5.9.0")
     implementation(kotlin("reflect:1.8.0"))
-}
-
-//publish
-publishing {
-    publications {
-        create<MavenPublication>("mavenJava") {
-            from(components["java"])
-        }
-    }
+    implementation(project(":core"))
 }
 
 tasks.test {

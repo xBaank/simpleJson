@@ -1,3 +1,4 @@
+import arrow.core.getOrElse
 import org.junit.jupiter.api.Test
 import simpleJson.reflection.deserialize
 import java.time.LocalDate
@@ -46,7 +47,7 @@ class ReflectionTest {
             }
         """.trimIndent()
 
-        val instance = deserialize<Type>(json).getOrThrow()
+        val instance = deserialize<Type>(json).getOrElse { throw it }
         assert(instance.name == "null")
         assert(instance.trueBoolean)
         assert(!instance.falseBoolean)
@@ -72,7 +73,7 @@ class ReflectionTest {
             ]
         """.trimIndent()
 
-        val instance = deserialize<List<Int>>(json).getOrThrow()
+        val instance = deserialize<List<Int>>(json).getOrElse { throw it }
         assert(instance.size == 3)
         assert(instance[0] == 1)
         assert(instance[1] == 2)
