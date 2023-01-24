@@ -33,7 +33,7 @@ class JsonReader(inputStream: InputStream, charset: Charset = Charsets.UTF_8) {
     //After reading all json skip all whitespace and check for no more data after
     fun read(): Either<JsonException, JsonNode> = readOrNull()
         .takeIf { skipWhiteSpaces(); current == null }
-        ?.right() ?: JsonException("Unexpected  character $current, on line ${reader.readLine()}").left()
+        ?.right() ?: JsonException("Unexpected  character $current").left()
 
     private fun readOrNull(): JsonNode? = readObjectOrNull() ?: readArrayOrNull()
 
