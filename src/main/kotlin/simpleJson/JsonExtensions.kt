@@ -71,6 +71,8 @@ fun JsonNode.toInt(): Either<JsonException, Int> = toNumber().map(Number::toInt)
 fun JsonNode.toDouble(): Either<JsonException, Double> = toNumber().map(Number::toDouble)
 fun JsonNode.toFloat(): Either<JsonException, Float> = toNumber().map(Number::toFloat)
 fun JsonNode.toLong(): Either<JsonException, Long> = toNumber().map(Number::toLong)
+fun JsonNode.toShort(): Either<JsonException, Short> = toNumber().map(Number::toShort)
+fun JsonNode.toByte(): Either<JsonException, Byte> = toNumber().map(Number::toByte)
 
 fun JsonNode.to_String(): Either<JsonException, String> = when (this) {
     is JsonString -> value.right()
