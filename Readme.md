@@ -131,6 +131,20 @@ val json = jObject {
 }
 ```
 
+### Reflection
+There is a module to use reflection deserialize objects into data classes.
+```kotlin
+val json = """
+    [
+        1,
+        2,
+        3
+    ]
+""".trimIndent()
+
+val instance = deserialize<List<Int>>(json).getOrElse { throw it }
+```
+
 ## Gradle
 
 Add jitpack
@@ -145,9 +159,9 @@ Add dependency
 
 ```kotlin
 dependencies {
-    implementation("com.github.xBaank:simpleJson:7.1.0")
+    implementation("com.github.xBaank:simpleJson:core:8.0.0")
+    implementation("com.github.xBaank:simpleJson:reflection:8.0.0")
 }
-
 ```
 
 ## Maven
@@ -155,7 +169,6 @@ dependencies {
 Add jitpack
 
 ```xml
-
 <repositories>
     <repository>
         <id>jitpack.io</id>
@@ -167,12 +180,19 @@ Add jitpack
 Add dependency
 
 ```xml
-
-<dependency>
-    <groupId>com.github.xBaank</groupId>
-    <artifactId>simpleJson</artifactId>
-    <version>7.1.0</version>
-</dependency>
+<dependencies>
+    <dependency>
+        <groupId>com.github.xBaank.simpleJson</groupId>
+        <artifactId>core</artifactId>
+        <version>8.0.0</version>
+    </dependency>
+    
+    <dependency>
+    <groupId>com.github.xBaank.simpleJson</groupId>
+    <artifactId>reflection</artifactId>
+    <version>8.0.0</version>
+    </dependency>
+</dependencies>
 ```
 
 
