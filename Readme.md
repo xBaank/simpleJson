@@ -186,11 +186,10 @@ Add dependency
         <artifactId>core</artifactId>
         <version>8.0.0</version>
     </dependency>
-    
     <dependency>
-    <groupId>com.github.xBaank.simpleJson</groupId>
-    <artifactId>reflection</artifactId>
-    <version>8.0.0</version>
+        <groupId>com.github.xBaank.simpleJson</groupId>
+        <artifactId>reflection</artifactId>
+        <version>8.0.0</version>
     </dependency>
 </dependencies>
 ```
