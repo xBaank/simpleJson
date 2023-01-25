@@ -8,26 +8,9 @@ import java.io.InputStream
 import java.nio.charset.Charset
 import kotlin.reflect.KClass
 import kotlin.reflect.KType
-import kotlin.reflect.KTypeProjection
 import kotlin.reflect.full.*
 import kotlin.reflect.jvm.isAccessible
 
-val simpleSupportedTypes = setOf(
-    String::class.createType(nullable = true),
-    Int::class.createType(nullable = true),
-    Double::class.createType(nullable = true),
-    Float::class.createType(nullable = true),
-    Long::class.createType(nullable = true),
-    Short::class.createType(nullable = true),
-    Byte::class.createType(nullable = true),
-    Boolean::class.createType(nullable = true),
-    Nothing::class.createType(nullable = true)
-)
-val arraySupportedTypes = setOf(
-    List::class.createType(arguments = listOf(KTypeProjection.STAR), nullable = true),
-    ArrayList::class.createType(arguments = listOf(KTypeProjection.STAR), nullable = true),
-)
-val supportedTypes = simpleSupportedTypes + arraySupportedTypes
 
 inline fun <reified T : Any> deserialize(json: JsonNode): Either<JsonException, T> =
     deserialize(json, T::class)
@@ -73,16 +56,7 @@ private fun getValue(json: JsonNode, type: KType): Either<JsonException, Any?> =
     when (json) {
         is JsonString -> json.to_String().bind()
         is JsonBoolean -> json.toBoolean().bind()
-        is JsonNumber -> {
-            if (type.isSubtypeOf(Int::class.starProjectedType)) json.toInt().bind()
-            else if (type.isSubtypeOf(Byte::class.starProjectedType)) json.toByte().bind()
-            else if (type.isSubtypeOf(Double::class.starProjectedType)) json.toDouble().bind()
-            else if (type.isSubtypeOf(Float::class.starProjectedType)) json.toFloat().bind()
-            else if (type.isSubtypeOf(Long::class.starProjectedType)) json.toLong().bind()
-            else if (type.isSubtypeOf(Short::class.starProjectedType)) json.toShort().bind()
-            else json.value //If we are deserializing a list of starProjectedType, we can't know the type at run time, so we default to the JsonNumber value
-        }
-
+        is JsonNumber -> json.value
         is JsonNull -> json.toNull().bind()
         is JsonArray -> {
             val isArrayType = arraySupportedTypes.any { it.isSupertypeOf(type) }

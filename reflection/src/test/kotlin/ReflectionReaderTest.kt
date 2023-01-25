@@ -27,7 +27,7 @@ private data class LocalDateWrapper(
 private class NotDataClass
 
 
-class ReflectionTest {
+class ReflectionReaderTest {
     @Test
     fun `should read basic values`() {
         val json = """
@@ -112,6 +112,29 @@ class ReflectionTest {
         """.trimIndent()
 
         val instance = deserialize<NotDataClass>(json)
+        assert(instance.isLeft())
+    }
+
+    @Test
+    fun `should not assign null`() {
+        val json = """
+            {
+                "name": "null",
+                "trueBoolean": null,
+                "falseBoolean": false,
+                "number": 5,
+                "double": 5.5,
+                "otherType": {
+                    "name": "null2",
+                    "numbers": [1, 2, 3],
+                    "nullableString": null,
+                    "localDate": "2020-01-01" 
+                },
+                "nullable": null
+            }
+        """.trimIndent()
+
+        val instance = deserialize<Type>(json)
         assert(instance.isLeft())
     }
 }
