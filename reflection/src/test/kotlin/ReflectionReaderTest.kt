@@ -1,6 +1,6 @@
 import arrow.core.getOrElse
 import org.junit.jupiter.api.Test
-import simpleJson.reflection.deserialize
+import simpleJson.reflection.deserializeFromString
 import java.time.LocalDate
 
 private data class Type(
@@ -47,7 +47,7 @@ class ReflectionReaderTest {
             }
         """.trimIndent()
 
-        val instance = deserialize<Type>(json).getOrElse { throw it }
+        val instance = deserializeFromString<Type>(json).getOrElse { throw it }
         assert(instance.name == "null")
         assert(instance.trueBoolean)
         assert(!instance.falseBoolean)
@@ -73,7 +73,7 @@ class ReflectionReaderTest {
             ]
         """.trimIndent()
 
-        val instance = deserialize<List<Int>>(json).getOrElse { throw it }
+        val instance = deserializeFromString<List<Int>>(json).getOrElse { throw it }
         assert(instance.size == 3)
         assert(instance[0] == 1)
         assert(instance[1] == 2)
@@ -88,7 +88,7 @@ class ReflectionReaderTest {
             }
         """.trimIndent()
 
-        val instance = deserialize<LocalDateWrapper>(json)
+        val instance = deserializeFromString<LocalDateWrapper>(json)
         assert(instance.isLeft())
     }
 
@@ -100,7 +100,7 @@ class ReflectionReaderTest {
             }
         """.trimIndent()
 
-        val instance = deserialize<LocalDateWrapper>(json)
+        val instance = deserializeFromString<LocalDateWrapper>(json)
         assert(instance.isLeft())
     }
 
@@ -111,7 +111,7 @@ class ReflectionReaderTest {
             }
         """.trimIndent()
 
-        val instance = deserialize<NotDataClass>(json)
+        val instance = deserializeFromString<NotDataClass>(json)
         assert(instance.isLeft())
     }
 
@@ -134,7 +134,7 @@ class ReflectionReaderTest {
             }
         """.trimIndent()
 
-        val instance = deserialize<Type>(json)
+        val instance = deserializeFromString<Type>(json)
         assert(instance.isLeft())
     }
 }
