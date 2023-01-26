@@ -33,7 +33,7 @@ fun <T : Any> serialize(instance: T, kClass: KClass<T> ): Either<JsonException, 
         buildObject(kClass, instance).bind()
     }
     else if (arraySupportedTypes.any { it.isSupertypeOf(kClass.starProjectedType) }) {
-        buildArray(instance as Iterable<*>, kClass.starProjectedType).bind()
+        buildArray(instance as List<*>, kClass.starProjectedType).bind()
     }
     else
         shift(JsonException("$kClass is not a data class or an array type"))
@@ -53,7 +53,7 @@ private fun <T : Any> buildObject(kClass: KClass<T>, instance: T) : Either<JsonE
     }
 }
 
-private fun buildArray(value : Iterable<*>, type : KType?) : Either<JsonException, JsonNode> = either.eager {
+private fun buildArray(value : List<*>, type : KType?) : Either<JsonException, JsonNode> = either.eager {
     jArray {
         value.forEach {
             +getNode(it, type?.arguments?.firstOrNull()?.type).bind()
