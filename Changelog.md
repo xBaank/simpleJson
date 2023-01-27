@@ -1,6 +1,7 @@
 ## v8.0.0
 - Add unaryPlus for jArray ```jArray { +"hola" }```
 - Add module to use reflection to deserialize objects into data classes with simple types ```Number, String, Boolean, List, Other Data class```
+- Changed to multi module project
 ## v7.1.0
 
 - Add String.UnaryPlus operator ```"number" += 5```
