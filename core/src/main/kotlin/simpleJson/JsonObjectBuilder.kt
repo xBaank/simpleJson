@@ -45,11 +45,11 @@ class JsonObjectBuilder {
     }
 
     @Deprecated("Deprecated in favor of String.plusAssign or to method", ReplaceWith("name += jObject(block)"))
-    fun jObject(name: String, block: JsonObjectBuilder.() -> Unit = {}) =
+    inline fun jObject(name: String, block: JsonObjectBuilder.() -> Unit = {}) =
         name to jObject(block)
 
     @Deprecated("Deprecated in favor of String.plusAssign or to method", ReplaceWith("name += jArray(block)"))
-    fun jArray(name: String, block: JsonArrayBuilder.() -> Unit = {}) =
+    inline fun jArray(name: String, block: JsonArrayBuilder.() -> Unit = {}) =
         name to jArray(block)
 
 
