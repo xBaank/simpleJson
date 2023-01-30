@@ -93,15 +93,15 @@ class JsonArrayBuilder {
     //As union types are not supported in Kotlin neither custom implicit conversions do, We need to ask for a node directly,
     //but we can still use the DSL converting supported types to nodes with toJson() extension functions
     fun addAll(vararg values: JsonNode) = list.addAll(values)
-    fun addObject(block: JsonObjectBuilder.() -> Unit = {}) = add(jObject(block))
-    fun addArray(block: JsonArrayBuilder.() -> Unit = {}) = add(jArray(block))
+    inline fun addObject(block: JsonObjectBuilder.() -> Unit = {}) = add(jObject(block))
+    inline fun addArray(block: JsonArrayBuilder.() -> Unit = {}) = add(jArray(block))
 
     fun build() = JsonArray(list)
 
 }
 
-fun jObject(init: JsonObjectBuilder.() -> Unit) = JsonObjectBuilder().apply(init).build()
+inline fun jObject(init: JsonObjectBuilder.() -> Unit) = JsonObjectBuilder().apply(init).build()
 
-fun jArray(init: JsonArrayBuilder.() -> Unit) = JsonArrayBuilder().apply(init).build()
+inline fun jArray(init: JsonArrayBuilder.() -> Unit) = JsonArrayBuilder().apply(init).build()
 
 fun jArray(vararg values: JsonNode) = jArray { addAll(*values) }
