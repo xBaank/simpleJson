@@ -5,7 +5,7 @@ import simpleJson.exceptions.JsonException
 
 
 operator fun JsonNode.get(key: String): Either<JsonException, JsonNode> = when (val node = this) {
-    is JsonObject -> node[key]?.right() ?: JsonException("Property $key not found").left()
+    is JsonObject -> node.value[key]?.right() ?: JsonException("Property $key not found").left()
     else -> JsonException("Property $key is a ${this::class.simpleName}, not a ${JsonObject::class.simpleName}").left()
 }
 
@@ -13,6 +13,32 @@ operator fun JsonNode.get(index: Int): Either<JsonException, JsonNode> = when (v
     is JsonArray -> node.value.getOrNull(index)?.right() ?: JsonException("Property at index $index not found").left()
     else -> JsonException("Property at index $index is a ${this::class.simpleName}, not a ${JsonArray::class.simpleName}").left()
 }
+
+operator fun JsonNode.set(key: String, value : JsonNode): Either<JsonException, Unit> = when (val node = this) {
+    is JsonObject -> {
+        node.value[key] = value
+        Unit.right()
+    }
+    else -> JsonException("This node is not a JsonObject").left()
+}
+
+operator fun JsonNode.set(index: Int, value : JsonNode): Either<JsonException, Unit> = when (val node = this) {
+    is JsonArray -> {
+        node.value[index] = value
+        Unit.right()
+    }
+    else -> JsonException("This node is not a JsonArray").left()
+}
+
+operator fun JsonNode.set(key: String, value : String): Either<JsonException, Unit> = set(key, JsonString(value))
+operator fun JsonNode.set(key: String, value : Number): Either<JsonException, Unit> = set(key, JsonNumber(value))
+operator fun JsonNode.set(key: String, value : Boolean): Either<JsonException, Unit> = set(key, JsonBoolean(value))
+operator fun JsonNode.set(key: String, value : Nothing?): Either<JsonException, Unit> = set(key, JsonNull)
+
+operator fun JsonNode.set(index: Int, value : String): Either<JsonException, Unit> = set(index, JsonString(value))
+operator fun JsonNode.set(index: Int, value : Number): Either<JsonException, Unit> = set(index, JsonNumber(value))
+operator fun JsonNode.set(index: Int, value : Boolean): Either<JsonException, Unit> = set(index, JsonBoolean(value))
+operator fun JsonNode.set(index: Int, value : Nothing?): Either<JsonException, Unit> = set(index, JsonNull)
 
 fun JsonNode.getObject(key: String): Either<JsonException, JsonObject> = get(key).flatMap {
     when (it) {
@@ -106,8 +132,12 @@ fun Boolean.toJson(): JsonBoolean = JsonBoolean(this)
 
 @Suppress("UnusedReceiverParameter")
 fun Nothing?.toJson(): JsonNull = JsonNull
-fun List<JsonNode>.toJson(): JsonArray = JsonArray(this)
-fun Map<String, JsonNode>.toJson(): JsonObject = JsonObject(this)
+fun MutableList<JsonNode>.toJson(): JsonArray = JsonArray(this)
+fun MutableMap<String, JsonNode>.toJson(): JsonObject = JsonObject(this)
+@JvmName("toJsonList")
+fun List<JsonNode>.toJson(): JsonArray = JsonArray(toMutableList())
+@JvmName("toJsonMap")
+fun Map<String, JsonNode>.toJson(): JsonObject = JsonObject(toMutableMap())
 
 
 fun JsonNode.serialize(): String = JsonWriter.write(this)

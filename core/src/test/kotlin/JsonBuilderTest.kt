@@ -129,4 +129,14 @@ internal class JsonBuilderTest {
         assert(json[14]["a"].toInt().getOrThrow() == 1)
 
     }
+
+    @Test
+    fun `should create json and then change it`() {
+        val json = jObject {
+            "a" to 1.toJson()
+        } as JsonNode
+
+        json["a"] = 2
+        assert(json["a"].toInt().getOrThrow() == 2)
+    }
 }
