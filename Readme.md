@@ -170,8 +170,8 @@ Add dependency
 
 ```kotlin
 dependencies {
-    implementation("com.github.xBaank:simpleJson:core:8.0.1")
-    implementation("com.github.xBaank:simpleJson:reflection:8.0.0")
+    implementation("com.github.xBaank:simpleJson:core:9.0.0")
+    implementation("com.github.xBaank:simpleJson:reflection:9.0.0")
 }
 ```
 
@@ -195,12 +195,12 @@ Add dependency
     <dependency>
         <groupId>com.github.xBaank.simpleJson</groupId>
         <artifactId>core</artifactId>
-        <version>8.0.1</version>
+        <version>9.0.0</version>
     </dependency>
     <dependency>
         <groupId>com.github.xBaank.simpleJson</groupId>
         <artifactId>reflection</artifactId>
-        <version>8.0.0</version>
+        <version>9.0.0</version>
     </dependency>
 </dependencies>
 ```
