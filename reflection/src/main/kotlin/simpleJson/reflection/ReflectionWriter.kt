@@ -66,12 +66,12 @@ private fun buildArray(value : List<*>, type : KType) : Either<JsonException, Js
 
 private fun getNode(value : Any?, type: KType) : Either<JsonException, JsonNode> = either.eager {
     when (value) {
-        is String -> value.toJson()
-        is Boolean -> value.toJson()
-        is Number -> value.toJson()
-        null -> value.toJson()
+        is String -> value.asJson()
+        is Boolean -> value.asJson()
+        is Number -> value.asJson()
+        null -> value.asJson()
         is ArrayList<*> -> buildArray(value, type).bind()
         is List<*> -> buildArray(value, type).bind()
-        else -> serialize(value, type!!).bind()
+        else -> serialize(value, type).bind()
     }
 }

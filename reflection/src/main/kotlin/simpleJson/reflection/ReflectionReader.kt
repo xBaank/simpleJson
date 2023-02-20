@@ -29,7 +29,7 @@ fun <T : Any> deserialize(json: JsonNode, type: KType): Either<JsonException, T>
     }
     else if(arraySupportedTypes.any { it.isSupertypeOf(kClass.starProjectedType) }) {
         @Suppress("UNCHECKED_CAST")
-        getValuesFromList<T>(json.toArray().bind(), type.arguments.first().type!!).bind() as T
+        getValuesFromList<T>(json.asArray().bind(), type.arguments.first().type!!).bind() as T
     }
     else
         shift(JsonException("$kClass is not a data class or an array type"))
@@ -60,17 +60,17 @@ private fun <T : Any> deserializeFromDataClass( json: JsonNode, kClass: KClass<T
 
 private fun <T : Any> getValue(json: JsonNode, type: KType): Either<JsonException, Any?> = either.eager {
     when (json) {
-        is JsonString -> json.to_String().bind()
-        is JsonBoolean -> json.toBoolean().bind()
+        is JsonString -> json.asString().bind()
+        is JsonBoolean -> json.asBoolean().bind()
         is JsonNumber ->
-            if (type.isSubtypeOf(Int::class.starProjectedType)) json.toInt().bind()
-            else if (type.isSubtypeOf(Byte::class.starProjectedType)) json.toByte().bind()
-            else if (type.isSubtypeOf(Double::class.starProjectedType)) json.toDouble().bind()
-            else if (type.isSubtypeOf(Float::class.starProjectedType)) json.toFloat().bind()
-            else if (type.isSubtypeOf(Long::class.starProjectedType)) json.toLong().bind()
-            else if (type.isSubtypeOf(Short::class.starProjectedType)) json.toShort().bind()
+            if (type.isSubtypeOf(Int::class.starProjectedType)) json.asInt().bind()
+            else if (type.isSubtypeOf(Byte::class.starProjectedType)) json.asByte().bind()
+            else if (type.isSubtypeOf(Double::class.starProjectedType)) json.asDouble().bind()
+            else if (type.isSubtypeOf(Float::class.starProjectedType)) json.asFloat().bind()
+            else if (type.isSubtypeOf(Long::class.starProjectedType)) json.asLong().bind()
+            else if (type.isSubtypeOf(Short::class.starProjectedType)) json.asShort().bind()
             else json.value //If we are deserializing a list of starProjectedType, we can't know the type at run time, so we default to the JsonNumber value
-        is JsonNull -> json.toNull().bind()
+        is JsonNull -> json.asNull().bind()
         is JsonArray -> {
             val isArrayType = arraySupportedTypes.any { it.isSupertypeOf(type) }
             if (!isArrayType) shift<JsonException>(JsonException("Type mismatch: ${type.classifier} is not a supported array type"))
