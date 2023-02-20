@@ -12,16 +12,27 @@ import kotlin.reflect.full.*
 import kotlin.reflect.jvm.isAccessible
 import kotlin.reflect.typeOf
 
-
+/**
+ * Deserializes a JsonNode to the specified type
+ */
 inline fun <reified T : Any> deserializeFromNode(json: JsonNode): Either<JsonException, T> =
     deserialize(json, typeOf<T>())
 
+/**
+ * Deserializes a string to the specified type
+ */
 inline fun <reified T : Any> deserializeFromString(json: String): Either<JsonException, T> =
     either.eager { deserializeFromNode<T>(json.deserialize().bind()).bind() }
 
+/**
+ * Deserializes an input stream to the specified type
+ */
 inline fun <reified T : Any> deserializeFromStream(json: InputStream, charset: Charset = Charsets.UTF_8): Either<JsonException, T> =
     either.eager { deserializeFromNode<T>(JsonReader.read(json, charset).bind()).bind() }
 
+/**
+ * Deserializes a JsonNode to the specified type
+ */
 fun <T : Any> deserialize(json: JsonNode, type: KType): Either<JsonException, T> = either.eager {
     val kClass = type.classifier as KClass<T>
     if(kClass.isData) {

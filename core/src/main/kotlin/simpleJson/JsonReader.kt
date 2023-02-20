@@ -24,13 +24,23 @@ private val CONTROL_CHARACTERS = mapOf(
 )
 private val NUMBERS_CHARACTERS = arrayOf('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '-', '+')
 
+/**
+ * JsonReader for the specified input stream with the specified charset
+ */
 class JsonReader(inputStream: InputStream, charset: Charset = Charsets.UTF_8) {
+    /**
+     * JsonReader for the specified string
+     */
     constructor(string: String) : this(string.byteInputStream())
 
     private val reader = BufferedReader(inputStream.reader(charset))
     private var current: Char? = null
 
     //After reading all json skip all whitespace and check for no more data after
+    /**
+     * Reads the input stream and returns a JsonNode
+     * @return Either a JsonException or the JsonNode
+     */
     fun read(): Either<JsonException, JsonNode> = readOrNull()
         .takeIf { skipWhiteSpaces(); current == null }
         ?.right() ?: JsonException("Unexpected  character $current").left()

@@ -15,18 +15,30 @@ import kotlin.reflect.full.starProjectedType
 import kotlin.reflect.jvm.isAccessible
 import kotlin.reflect.typeOf
 
+/**
+ * Serializes an object of type [T] to an output stream
+ */
 inline fun <reified T : Any> serializeToStream(instance: T, stream: OutputStream, charset: Charset = Charsets.UTF_8): Either<JsonException, Unit> = either.eager {
     JsonWriter.write(serialize(instance, typeOf<T>()).bind(), stream, charset)
 }
 
+/**
+ * Serializes an object of type [T] to a string
+ */
 inline fun <reified T : Any> serializeToString(instance: T): Either<JsonException, String> = either.eager {
     JsonWriter.write(serialize(instance, typeOf<T>()).bind())
 }
 
+/**
+ * Serializes an object of type [T] to a JsonNode
+ */
 inline fun <reified T : Any> serializeToNode(instance: T): Either<JsonException, JsonNode> = either.eager {
     serialize(instance, typeOf<T>()).bind()
 }
 
+/**
+ * Serializes an object of type [T] to a JsonNode
+ */
 fun <T : Any> serialize(instance: T, kType: KType ): Either<JsonException, JsonNode> = either.eager {
     val kClass = kType.classifier as KClass<T>
 

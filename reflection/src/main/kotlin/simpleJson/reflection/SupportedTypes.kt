@@ -3,7 +3,7 @@ package simpleJson.reflection
 import kotlin.reflect.KTypeProjection
 import kotlin.reflect.full.createType
 
-val simpleSupportedTypes = setOf(
+internal val simpleSupportedTypes = setOf(
     String::class.createType(nullable = true),
     Int::class.createType(nullable = true),
     Double::class.createType(nullable = true),
@@ -14,8 +14,8 @@ val simpleSupportedTypes = setOf(
     Boolean::class.createType(nullable = true),
     Nothing::class.createType(nullable = true)
 )
-val arraySupportedTypes = setOf(
+internal val arraySupportedTypes = setOf(
     List::class.createType(arguments = listOf(KTypeProjection.STAR), nullable = true),
     ArrayList::class.createType(arguments = listOf(KTypeProjection.STAR), nullable = true),
 )
-val supportedTypes = simpleSupportedTypes + arraySupportedTypes
+internal val supportedTypes = simpleSupportedTypes + arraySupportedTypes

@@ -17,6 +17,9 @@ private val CONTROL_CHARACTERS_ESCAPED = mapOf(
     '/' to "/"
 )
 
+/**
+ * Interface for writing JsonNodes
+ */
 interface IJsonWriter {
     val writer: BufferedWriter
     fun writeArray(node: JsonArray)
@@ -27,6 +30,10 @@ interface IJsonWriter {
     fun writeNull()
 }
 
+/**
+ * Writes the specified node to the writer
+ * @param node The node to write
+ */
 fun IJsonWriter.write(node: JsonNode) = when (node) {
     is JsonArray -> writeArray(node)
     is JsonObject -> writeObject(node)
@@ -36,6 +43,9 @@ fun IJsonWriter.write(node: JsonNode) = when (node) {
     JsonNull -> writeNull()
 }.also { writer.flush() }
 
+/**
+ * Implementation of IJsonWriter for writing to an output stream
+ */
 class JsonWriter(stream: OutputStream, charset: Charset = Charsets.UTF_8) : IJsonWriter {
     override val writer = stream.bufferedWriter(charset)
 
@@ -89,6 +99,9 @@ class JsonWriter(stream: OutputStream, charset: Charset = Charsets.UTF_8) : IJso
     }
 }
 
+/**
+ * Implementation of IJsonWriter for writing to an output stream with pretty printing
+ */
 class PrettyJsonWriter(private val jsonWriter: JsonWriter, val indent: String = "  ") : IJsonWriter by jsonWriter {
     private var indentLevel = 0
     override val writer = jsonWriter.writer
@@ -153,7 +166,7 @@ class PrettyJsonWriter(private val jsonWriter: JsonWriter, val indent: String = 
     }
 }
 
-fun BufferedWriter.writeEscaped(value: String) = value.forEach { char ->
+private fun BufferedWriter.writeEscaped(value: String) = value.forEach { char ->
     val escaped = CONTROL_CHARACTERS_ESCAPED.getOrDefault(char, null)
     if (escaped != null) write(escaped) else write(char.code)
 }
