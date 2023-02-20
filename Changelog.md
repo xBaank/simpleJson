@@ -1,5 +1,5 @@
 ## v9.0.0
-- Add get and set operators for JsonNode, now you can do ```json["key"] = "value"``` to set or create a value and ```val value = json["key"]``` to get a value
+- Add set operators for JsonNode, now you can do ```json["key"] = "value"``` to set or create a value
 - Rename methods from to.. to as.. (asInt, asString, asBoolean, asDouble, asLong, asFloat...)
 - Add serialization in reflection module
 - Fix type erasure in reflection module when using generic types
