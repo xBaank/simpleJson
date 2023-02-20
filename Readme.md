@@ -62,12 +62,13 @@ val json = """
     ]
 }
 """.deserialize()
+
 val name = json.getString("name").orNull() //will return null if the key is not found or the value is not a string
 val age = json.getInt("age").orNull()
-val address = json["info"]["address"].toString().orNull() ?: "unknown" // will return "unknown" if the key is not found
-val phone = json["info"]["phone"].toInt()
+val address = json["info"]["address"].asString().getOrNull() ?: "unknown" // will return "unknown" if the key is not found
+val phone = json["info"]["phone"].asInt()
     .getOrHandle { throw it } // will throw the exception if the key is not found or is not an int
-val isPublic = json["photos"][0]["name"].toString().getOrHandle { throw it }
+val isPublic = json["photos"][0]["name"].asString().getOrHandle { throw it }
 //Throws the exception if property photos is not an array, it is not found, the index is out of bounds, name is not a string, or it is not found
 ```
 
