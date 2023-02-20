@@ -122,38 +122,38 @@ internal class JsonReaderTest {
     fun `should read array`() {
         val data = " [ 1 , 2 , 3,4.4,\"a\",{}, [[[]]], true, false, null ] "
         val json = JsonReader.read(data)
-        assert(json.toArray().map(JsonArray::size).getOrThrow() == 10)
-        assert(json[0].toInt().getOrThrow() == 1)
-        assert(json[1].toInt().getOrThrow() == 2)
-        assert(json[2].toInt().getOrThrow() == 3)
-        assert(json[3].toDouble().getOrThrow() == 4.4)
-        assert(json[4].to_String().getOrThrow() == "a")
-        assert(json[5].toObject().map(JsonObject::size).getOrThrow() == 0)
-        assert(json[6].toArray().map(JsonArray::size).getOrThrow() == 1)
-        assert(json[7].toBoolean().getOrThrow())
-        assert(!json[8].toBoolean().getOrThrow())
+        assert(json.asArray().map(JsonArray::size).getOrThrow() == 10)
+        assert(json[0].asInt().getOrThrow() == 1)
+        assert(json[1].asInt().getOrThrow() == 2)
+        assert(json[2].asInt().getOrThrow() == 3)
+        assert(json[3].asDouble().getOrThrow() == 4.4)
+        assert(json[4].asString().getOrThrow() == "a")
+        assert(json[5].asObject().map(JsonObject::size).getOrThrow() == 0)
+        assert(json[6].asArray().map(JsonArray::size).getOrThrow() == 1)
+        assert(json[7].asBoolean().getOrThrow())
+        assert(!json[8].asBoolean().getOrThrow())
         @Suppress("SENSELESS_COMPARISON")
-        assert(json[9].toNull().getOrThrow() == null)
+        assert(json[9].asNull().getOrThrow() == null)
     }
 
     @Test
     fun `should read array with all types`() {
         val data = " [ 1 , 2 , 3, \"a\", true, false, null, {\"a\": 1}, [1, 2, 3] ] "
         val json = JsonReader.read(data)
-        val array = json.toArray()
+        val array = json.asArray()
         assert(array.map(JsonArray::size).getOrThrow() == 9)
-        assert(array[0].toInt().getOrThrow() == 1)
-        assert(array[1].toInt().getOrThrow() == 2)
-        assert(array[2].toInt().getOrThrow() == 3)
-        assert(array[3].to_String().getOrThrow() == "a")
-        assert(array[4].toBoolean().getOrThrow())
-        assert(!array[5].toBoolean().getOrThrow())
+        assert(array[0].asInt().getOrThrow() == 1)
+        assert(array[1].asInt().getOrThrow() == 2)
+        assert(array[2].asInt().getOrThrow() == 3)
+        assert(array[3].asString().getOrThrow() == "a")
+        assert(array[4].asBoolean().getOrThrow())
+        assert(!array[5].asBoolean().getOrThrow())
         @Suppress("SENSELESS_COMPARISON")
-        assert(array[6].toNull().getOrThrow() == null)
+        assert(array[6].asNull().getOrThrow() == null)
         assert(array[7].getInt("a").getOrThrow() == 1)
-        assert(array[8].toArray()[0].toInt().getOrThrow() == 1)
-        assert(array[8].toArray()[1].toInt().getOrThrow() == 2)
-        assert(array[8].toArray()[2].toInt().getOrThrow() == 3)
+        assert(array[8].asArray()[0].asInt().getOrThrow() == 1)
+        assert(array[8].asArray()[1].asInt().getOrThrow() == 2)
+        assert(array[8].asArray()[2].asInt().getOrThrow() == 3)
     }
 
     @Test
@@ -162,9 +162,9 @@ internal class JsonReaderTest {
         val json = JsonReader.read(data)
         val array = json.getArray("a")
         assert(array.map(JsonArray::size).getOrThrow() == 3)
-        assert(array[0].toInt().getOrThrow() == 1)
-        assert(array[1].toInt().getOrThrow() == 2)
-        assert(array[2].toInt().getOrThrow() == 3)
+        assert(array[0].asInt().getOrThrow() == 1)
+        assert(array[1].asInt().getOrThrow() == 2)
+        assert(array[2].asInt().getOrThrow() == 3)
     }
 
     @Test
@@ -319,7 +319,7 @@ internal class JsonReaderTest {
     @Test
     fun `should json read from stream`() {
         val data = File("src/test/resources/photos.json").inputStream()
-        val json = JsonReader.read(data).flatMap(JsonNode::toArray)
+        val json = JsonReader.read(data).flatMap(JsonNode::asArray)
         assert(json.map(JsonArray::size).getOrThrow() == 5000)
         assert(json.getOrThrow().all { it["albumId"].isRightOrThrow() })
         assert(json.getOrThrow().all { it["id"].isRightOrThrow() })
@@ -402,7 +402,7 @@ internal class JsonReaderTest {
         assert(json.getNull("e").getOrThrow() == null)
         assert(json.getArray("f").map(JsonArray::size).getOrThrow() == 3)
         assert(json["g"].getInt("h").getOrThrow() == 1)
-        assert(json["g"]["i"]["j"].toInt().getOrThrow() == 1)
+        assert(json["g"]["i"]["j"].asInt().getOrThrow() == 1)
     }
 
     @Test

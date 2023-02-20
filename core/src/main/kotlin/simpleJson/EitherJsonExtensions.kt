@@ -5,6 +5,26 @@ import arrow.core.flatMap
 import simpleJson.exceptions.JsonException
 
 //same as json extensions but for Either
+operator fun Either<JsonException, JsonNode>.set(key: String, value: JsonNode): Either<JsonException, Unit> =
+    flatMap { it.set(key,value) }
+operator fun Either<JsonException, JsonNode>.set(index: Int, value: JsonNode): Either<JsonException, Unit> =
+    flatMap { it.set(index,value) }
+operator fun Either<JsonException, JsonNode>.set(key: String, value: String): Either<JsonException, Unit> =
+    flatMap { it.set(key,value) }
+operator fun Either<JsonException, JsonNode>.set(key: String, value: Number): Either<JsonException, Unit> =
+    flatMap { it.set(key,value) }
+operator fun Either<JsonException, JsonNode>.set(key: String, value: Boolean): Either<JsonException, Unit> =
+    flatMap { it.set(key,value) }
+operator fun Either<JsonException, JsonNode>.set(key: String, value: Nothing?): Either<JsonException, Unit> =
+    flatMap { it.set(key,value) }
+operator fun Either<JsonException, JsonNode>.set(index: Int, value: String): Either<JsonException, Unit> =
+    flatMap { it.set(index,value) }
+operator fun Either<JsonException, JsonNode>.set(index: Int, value: Number): Either<JsonException, Unit> =
+    flatMap { it.set(index,value) }
+operator fun Either<JsonException, JsonNode>.set(index: Int, value: Boolean): Either<JsonException, Unit> =
+    flatMap { it.set(index,value) }
+operator fun Either<JsonException, JsonNode>.set(index: Int, value: Nothing?): Either<JsonException, Unit> =
+    flatMap { it.set(index,value) }
 operator fun Either<JsonException, JsonNode>.get(key: String): Either<JsonException, JsonNode> = flatMap { it[key] }
 
 operator fun Either<JsonException, JsonNode>.get(index: Int): Either<JsonException, JsonNode> = flatMap { it[index] }
@@ -33,24 +53,24 @@ fun Either<JsonException, JsonNode>.getBoolean(key: String): Either<JsonExceptio
 
 fun Either<JsonException, JsonNode>.getNull(key: String): Either<JsonException, Nothing?> = flatMap { it.getNull(key) }
 
-fun Either<JsonException, JsonNode>.toNumber(): Either<JsonException, Number> = flatMap { it.toNumber() }
+fun Either<JsonException, JsonNode>.asNumber(): Either<JsonException, Number> = flatMap { it.asNumber() }
 
-fun Either<JsonException, JsonNode>.toInt(): Either<JsonException, Int> = flatMap { it.toInt() }
-fun Either<JsonException, JsonNode>.toDouble(): Either<JsonException, Double> = flatMap { it.toDouble() }
-fun Either<JsonException, JsonNode>.toFloat(): Either<JsonException, Float> = flatMap { it.toFloat() }
-fun Either<JsonException, JsonNode>.toLong(): Either<JsonException, Long> = flatMap { it.toLong() }
-fun Either<JsonException, JsonNode>.toShort(): Either<JsonException, Short> = flatMap { it.toShort() }
-fun Either<JsonException, JsonNode>.toByte(): Either<JsonException, Byte> = flatMap { it.toByte() }
+fun Either<JsonException, JsonNode>.asInt(): Either<JsonException, Int> = flatMap { it.asInt() }
+fun Either<JsonException, JsonNode>.asDouble(): Either<JsonException, Double> = flatMap { it.asDouble() }
+fun Either<JsonException, JsonNode>.asFloat(): Either<JsonException, Float> = flatMap { it.asFloat() }
+fun Either<JsonException, JsonNode>.asLong(): Either<JsonException, Long> = flatMap { it.asLong() }
+fun Either<JsonException, JsonNode>.asShort(): Either<JsonException, Short> = flatMap { it.asShort() }
+fun Either<JsonException, JsonNode>.asByte(): Either<JsonException, Byte> = flatMap { it.asByte() }
 
-fun Either<JsonException, JsonNode>.toBoolean(): Either<JsonException, Boolean> = flatMap { it.toBoolean() }
+fun Either<JsonException, JsonNode>.asBoolean(): Either<JsonException, Boolean> = flatMap { it.asBoolean() }
 
-fun Either<JsonException, JsonNode>.toNull(): Either<JsonException, Nothing?> = flatMap { it.toNull() }
+fun Either<JsonException, JsonNode>.asNull(): Either<JsonException, Nothing?> = flatMap { it.asNull() }
 
-fun Either<JsonException, JsonNode>.to_String(): Either<JsonException, String> = flatMap { it.to_String() }
+fun Either<JsonException, JsonNode>.asString(): Either<JsonException, String> = flatMap { it.asString() }
 
-fun Either<JsonException, JsonNode>.toObject(): Either<JsonException, JsonObject> = flatMap { it.toObject() }
+fun Either<JsonException, JsonNode>.asObject(): Either<JsonException, JsonObject> = flatMap { it.asObject() }
 
-fun Either<JsonException, JsonNode>.toArray(): Either<JsonException, JsonArray> = flatMap { it.toArray() }
+fun Either<JsonException, JsonNode>.asArray(): Either<JsonException, JsonArray> = flatMap { it.asArray() }
 
 
 
