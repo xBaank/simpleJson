@@ -11,8 +11,7 @@ class JsonObjectBuilder {
     infix fun String.to(value: String) = map.put(this, JsonString(value))
     infix fun String.to(value: Number) = map.put(this, JsonNumber(value))
     infix fun String.to(value: Boolean) = map.put(this, JsonBoolean(value))
-    infix fun String.to(value: JsonArray) = map.put(this, value)
-    infix fun String.to(value: JsonObject) = map.put(this, value)
+    infix fun String.to(value: JsonNode) = map.put(this, value)
 
     @Suppress("UNUSED_PARAMETER")
     infix fun String.to(value: Nothing?) = map.put(
@@ -32,11 +31,7 @@ class JsonObjectBuilder {
         this to value
     }
 
-    operator fun String.plusAssign(value: JsonArray) {
-        this to value
-    }
-
-    operator fun String.plusAssign(value: JsonObject) {
+    operator fun String.plusAssign(value: JsonNode) {
         this to value
     }
 
