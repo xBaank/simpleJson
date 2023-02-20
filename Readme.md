@@ -146,6 +146,16 @@ val json = """
 val instance = deserialize<List<Int>>(json).getOrElse { throw it }
 ```
 
+And to serialize objects into json.
+
+```kotlin
+val json = serialize(listOf(1, 2, 3))
+//json is "[1,2,3]"
+```
+
+> **Warning** 
+> Only primitive types, lists, and data classes are supported.
+
 ## Gradle
 
 Add jitpack
