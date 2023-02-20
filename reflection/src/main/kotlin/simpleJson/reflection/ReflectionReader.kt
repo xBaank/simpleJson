@@ -10,10 +10,11 @@ import kotlin.reflect.KClass
 import kotlin.reflect.KType
 import kotlin.reflect.full.*
 import kotlin.reflect.jvm.isAccessible
+import kotlin.reflect.typeOf
 
 
 inline fun <reified T : Any> deserializeFromNode(json: JsonNode): Either<JsonException, T> =
-    deserialize(json, T::class)
+    deserialize(json, typeOf<T>())
 
 inline fun <reified T : Any> deserializeFromString(json: String): Either<JsonException, T> =
     either.eager { deserializeFromNode<T>(json.deserialize().bind()).bind() }
@@ -21,13 +22,14 @@ inline fun <reified T : Any> deserializeFromString(json: String): Either<JsonExc
 inline fun <reified T : Any> deserializeFromStream(json: InputStream, charset: Charset = Charsets.UTF_8): Either<JsonException, T> =
     either.eager { deserializeFromNode<T>(JsonReader.read(json, charset).bind()).bind() }
 
-fun <T : Any> deserialize(json: JsonNode, kClass: KClass<T>): Either<JsonException, T> = either.eager {
+fun <T : Any> deserialize(json: JsonNode, type: KType): Either<JsonException, T> = either.eager {
+    val kClass = type.classifier as KClass<T>
     if(kClass.isData) {
         deserializeFromDataClass(json, kClass).bind()
     }
     else if(arraySupportedTypes.any { it.isSupertypeOf(kClass.starProjectedType) }) {
         @Suppress("UNCHECKED_CAST")
-        getValuesFromList(json.toArray().bind(), Any::class.starProjectedType).bind() as T
+        getValuesFromList<T>(json.toArray().bind(), type.arguments.first().type!!).bind() as T
     }
     else
         shift(JsonException("$kClass is not a data class or an array type"))
@@ -41,7 +43,7 @@ private fun <T : Any> deserializeFromDataClass( json: JsonNode, kClass: KClass<T
         if (kParameter.name == null)
             shift<T>(JsonException("No name found for parameter $kParameter"))
 
-        val value = getValueFromObject(json, kParameter.type, kParameter.name!!).bind()
+        val value = getValueFromObject<T>(json, kParameter.type, kParameter.name!!).bind()
 
         if (value == null && !kParameter.type.isMarkedNullable) //check if type was not nullable at compile time, it can come as null
             shift<T>(JsonException("Null value for non-nullable parameter $kParameter"))
@@ -56,7 +58,7 @@ private fun <T : Any> deserializeFromDataClass( json: JsonNode, kClass: KClass<T
     constructor.callBy(constructorMap)
 }
 
-private fun getValue(json: JsonNode, type: KType): Either<JsonException, Any?> = either.eager {
+private fun <T : Any> getValue(json: JsonNode, type: KType): Either<JsonException, Any?> = either.eager {
     when (json) {
         is JsonString -> json.to_String().bind()
         is JsonBoolean -> json.toBoolean().bind()
@@ -72,20 +74,20 @@ private fun getValue(json: JsonNode, type: KType): Either<JsonException, Any?> =
         is JsonArray -> {
             val isArrayType = arraySupportedTypes.any { it.isSupertypeOf(type) }
             if (!isArrayType) shift<JsonException>(JsonException("Type mismatch: ${type.classifier} is not a supported array type"))
-            getValuesFromList(json, type.arguments.first().type!!).bind()
+            getValuesFromList<T>(json, type.arguments.first().type!!).bind()
         }
-        is JsonObject -> deserialize(json, type.classifier as KClass<*>).bind()
+        is JsonObject -> deserialize<T>(json, type).bind()
     }
 }
 
 
-private fun getValueFromObject(json: JsonNode, type: KType, name: String): Either<JsonException, Any?> = either.eager {
-  getValue(json[name].bind(), type).bind()
+private fun <T : Any> getValueFromObject(json: JsonNode, type: KType, name: String): Either<JsonException, Any?> = either.eager {
+  getValue<T>(json[name].bind(), type).bind()
 }
 
-private fun getValuesFromList(json: JsonArray, type: KType): Either<JsonException, List<Any?>> = either.eager {
+private fun <T : Any> getValuesFromList(json: JsonArray, type: KType): Either<JsonException, List<Any?>> = either.eager {
     json.map { value ->
-        val returnValue = getValue(value,type).bind() ?: shift(JsonException("Null value found in list"))
+        val returnValue = getValue<T>(value,type).bind() ?: shift(JsonException("Null value found in list"))
         if (returnValue::class.starProjectedType.isSubtypeOf(type)) returnValue
         else shift(JsonException("Type mismatch: ${returnValue::class.starProjectedType} is not a subtype of $type"))
     }

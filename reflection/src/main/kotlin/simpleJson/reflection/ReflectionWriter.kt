@@ -13,27 +13,30 @@ import kotlin.reflect.full.memberProperties
 import kotlin.reflect.full.primaryConstructor
 import kotlin.reflect.full.starProjectedType
 import kotlin.reflect.jvm.isAccessible
+import kotlin.reflect.typeOf
 
 inline fun <reified T : Any> serializeToStream(instance: T, stream: OutputStream, charset: Charset = Charsets.UTF_8): Either<JsonException, Unit> = either.eager {
-    JsonWriter.write(serialize(instance, T::class).bind(), stream, charset)
+    JsonWriter.write(serialize(instance, typeOf<T>()).bind(), stream, charset)
 }
 
 inline fun <reified T : Any> serializeToString(instance: T): Either<JsonException, String> = either.eager {
-    JsonWriter.write(serialize(instance, T::class).bind())
+    JsonWriter.write(serialize(instance, typeOf<T>()).bind())
 }
 
 inline fun <reified T : Any> serializeToNode(instance: T): Either<JsonException, JsonNode> = either.eager {
-    serialize(instance, T::class).bind()
+    serialize(instance, typeOf<T>()).bind()
 }
 
-fun <T : Any> serialize(instance: T, kClass: KClass<T> ): Either<JsonException, JsonNode> = either.eager {
+fun <T : Any> serialize(instance: T, kType: KType ): Either<JsonException, JsonNode> = either.eager {
+    val kClass = kType.classifier as KClass<T>
+
     if(kClass.isData) {
         val constructor = kClass.primaryConstructor ?: shift(JsonException("No primary constructor found for $kClass"))
         constructor.isAccessible = true // allow private constructors
         buildObject(kClass, instance).bind()
     }
     else if (arraySupportedTypes.any { it.isSupertypeOf(kClass.starProjectedType) }) {
-        buildArray(instance as List<*>, kClass.starProjectedType).bind()
+        buildArray(instance as List<*>, kType.arguments.first().type!!).bind()
     }
     else
         shift(JsonException("$kClass is not a data class or an array type"))
@@ -53,15 +56,15 @@ private fun <T : Any> buildObject(kClass: KClass<T>, instance: T) : Either<JsonE
     }
 }
 
-private fun buildArray(value : List<*>, type : KType?) : Either<JsonException, JsonNode> = either.eager {
+private fun buildArray(value : List<*>, type : KType) : Either<JsonException, JsonNode> = either.eager {
     jArray {
         value.forEach {
-            +getNode(it, type?.arguments?.firstOrNull()?.type).bind()
+            +getNode(it, type).bind()
         }
     }
 }
 
-private fun getNode(value : Any?, type: KType?) : Either<JsonException, JsonNode> = either.eager {
+private fun getNode(value : Any?, type: KType) : Either<JsonException, JsonNode> = either.eager {
     when (value) {
         is String -> value.toJson()
         is Boolean -> value.toJson()
@@ -69,6 +72,6 @@ private fun getNode(value : Any?, type: KType?) : Either<JsonException, JsonNode
         null -> value.toJson()
         is ArrayList<*> -> buildArray(value, type).bind()
         is List<*> -> buildArray(value, type).bind()
-        else -> serialize(value, type?.classifier as KClass<Any>).bind()
+        else -> serialize(value, type!!).bind()
     }
 }
