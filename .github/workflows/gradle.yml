@@ -38,3 +38,15 @@ jobs:
       uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
       with:
         arguments: build
+        
+    - name: Build Docs
+      with:
+        arguments: dokkaHtml
+        
+    - name: GitHub Pages action
+      uses: peaceiris/actions-gh-pages@v3.9.2
+      with:
+        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        BRANCH: gh-pages
+        FOLDER: build/dokka/html
+
