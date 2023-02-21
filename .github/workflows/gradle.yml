@@ -16,7 +16,7 @@ on:
       - '*'
 
 permissions:
-  contents: read,write
+  contents: read|write
 
 jobs:
   build:
