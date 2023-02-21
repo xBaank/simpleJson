@@ -7,10 +7,10 @@
 
 name: Pages
 
-on:
+on:  
   push:
-    branches: 
-      - master
+    tags:
+      - '*'
 
 permissions:
   contents: write
