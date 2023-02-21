@@ -43,9 +43,9 @@ jobs:
       run: ./gradlew dokkaHtml
         
     - name: GitHub Pages action
-      uses: peaceiris/actions-gh-pages@v3.9.2
+      uses: JamesIves/github-pages-deploy-action@3.7.1
       with:
-        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         BRANCH: gh-pages
         FOLDER: build/dokka/html
 
