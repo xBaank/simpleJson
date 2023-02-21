@@ -42,8 +42,8 @@ jobs:
     - name: Build Docs
       run: ./gradlew dokkaHtml
         
-    - name: GitHub Pages action
-      uses: JamesIves/github-pages-deploy-action@4.4.1
+    - name: Deploy to GitHub Pages
+      uses: JamesIves/github-pages-deploy-action@v4.4.1
       with:
         GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         BRANCH: gh-pages
