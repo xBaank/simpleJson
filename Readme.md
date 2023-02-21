@@ -35,7 +35,7 @@ You can also use the `to` methods to cast to a type which will return either the
 
 ```kotlin
 val json = JsonReader.read(data)
-val name = json["name"].toString()
+val name = json["name"].asString()
 ```
 
 After reading, you can access the data using the `get` operator which will return either the corresponding JsonType or a
