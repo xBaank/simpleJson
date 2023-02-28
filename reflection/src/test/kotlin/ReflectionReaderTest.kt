@@ -1,7 +1,9 @@
 import arrow.core.getOrElse
 import org.junit.jupiter.api.Test
+import simpleJson.reflection.JsonName
 import simpleJson.reflection.deserializeFromString
 import java.time.LocalDate
+
 
 private data class Type(
     val name: String,
@@ -25,6 +27,13 @@ private data class LocalDateWrapper(
 )
 
 private class NotDataClass
+
+private data class AnnotationTest(
+    @JsonName("name")
+    val nameasdasd: String,
+    @JsonName("number")
+    val numberasdasd: Int
+)
 
 
 class ReflectionReaderTest {
@@ -174,5 +183,19 @@ class ReflectionReaderTest {
 
         val instance = deserializeFromString<Type>(json)
         assert(instance.isLeft())
+    }
+
+    @Test
+    fun `should read with annotation`() {
+        val json = """
+            {
+                "name": "null",
+                "number": 5
+            }
+        """.trimIndent()
+
+        val instance = deserializeFromString<AnnotationTest>(json).getOrElse { throw it }
+        assert(instance.nameasdasd == "null")
+        assert(instance.numberasdasd == 5)
     }
 }

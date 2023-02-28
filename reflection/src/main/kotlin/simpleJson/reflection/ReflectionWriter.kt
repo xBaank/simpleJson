@@ -8,10 +8,7 @@ import java.io.OutputStream
 import java.nio.charset.Charset
 import kotlin.reflect.KClass
 import kotlin.reflect.KType
-import kotlin.reflect.full.isSupertypeOf
-import kotlin.reflect.full.memberProperties
-import kotlin.reflect.full.primaryConstructor
-import kotlin.reflect.full.starProjectedType
+import kotlin.reflect.full.*
 import kotlin.reflect.jvm.isAccessible
 import kotlin.reflect.typeOf
 
@@ -63,7 +60,7 @@ private fun <T : Any> buildObject(kClass: KClass<T>, instance: T) : Either<JsonE
         if (!it.returnType.isMarkedNullable && value == null)
             shift<JsonNode>(JsonException("Null value for non-nullable property ${it.name} in $kClass"))
 
-        it.name += getNode(value, it.returnType).bind()
+        it.findAnnotation<JsonName>()?.name ?: it.name += getNode(value, it.returnType).bind()
         }
     }
 }

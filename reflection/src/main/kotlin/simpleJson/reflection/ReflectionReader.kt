@@ -51,10 +51,13 @@ private fun <T : Any> deserializeFromDataClass( json: JsonNode, kClass: KClass<T
         kClass.primaryConstructor ?: shift(JsonException("No primary constructor found for $kClass"))
 
     val constructorMap = constructor.parameters.associateWith { kParameter ->
-        if (kParameter.name == null)
-            shift<T>(JsonException("No name found for parameter $kParameter"))
 
-        val value = getValueFromObject<T>(json, kParameter.type, kParameter.name!!).bind()
+        val property = kClass.memberProperties.firstOrNull() { it.name == kParameter.name }
+        val name = property?.findAnnotation<JsonName>()?.name ?: kParameter.name
+
+        if(name == null) shift<T>(JsonException("No name found for parameter $kParameter in $kClass"))
+
+        val value = getValueFromObject<T>(json, kParameter.type, name!!).bind()
 
         if (value == null && !kParameter.type.isMarkedNullable) //check if type was not nullable at compile time, it can come as null
             shift<T>(JsonException("Null value for non-nullable parameter $kParameter"))

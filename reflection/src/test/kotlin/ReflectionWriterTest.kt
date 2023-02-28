@@ -2,12 +2,14 @@ import arrow.core.Either
 import arrow.core.getOrElse
 import org.junit.jupiter.api.Test
 import simpleJson.exceptions.JsonException
+import simpleJson.reflection.JsonName
 import simpleJson.reflection.serializeToNode
 import simpleJson.reflection.serializeToString
 import java.time.LocalDate
 
 private data class BasicTypes(val string: String, val number: Number,val boolean: Boolean, val nullable : String?, val list: List<Int>, val subType: SubType)
 private data class SubType(val localDate: String, val list: MutableList<String>)
+private data class AnnotationWriter(@JsonName("name") val nameasdasd: String, @JsonName("number") val numberasdasd: Int)
 class ReflectionWriterTest {
     @Test
     fun `should write data class`() {
@@ -35,5 +37,12 @@ class ReflectionWriterTest {
         val instance = LocalDate.now()
         val result = serializeToNode(instance)
         assert(result is Either.Left<JsonException>)
+    }
+
+    @Test
+    fun `should write data class with annotation`() {
+        val instance = AnnotationWriter("name", 5)
+        val json = serializeToString(instance).getOrElse { throw it }
+        assert(json == """{"name":"name","number":5}""")
     }
 }
