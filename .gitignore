@@ -41,5 +41,5 @@ bin/
 ### Mac OS ###
 .DS_Store
 
-./local.properties
-./secring.gpg
+local.properties
+secring.gpg
