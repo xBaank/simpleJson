@@ -315,18 +315,6 @@ internal class JsonReaderTest {
 
     }
 
-/*    @Test
-    fun should_json_read_from_stream() {
-        val data = FileSystem.S "src/test/resources/photos.json".toPath()
-        val json = JsonReader.read(data).flatMap(JsonNode::asArray)
-        assert(json.map(JsonArray::size).getOrThrow() == 5000)
-        assert(json.getOrThrow().all { it["albumId"].isRightOrThrow() })
-        assert(json.getOrThrow().all { it["id"].isRightOrThrow() })
-        assert(json.getOrThrow().all { it["title"].isRightOrThrow() })
-        assert(json.getOrThrow().all { it["url"].isRightOrThrow() })
-        assert(json.getOrThrow().all { it["thumbnailUrl"].isRightOrThrow() })
-    }*/
-
     @Test
     fun should_try_parse_json() {
         val data = """
