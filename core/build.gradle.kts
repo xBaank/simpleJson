@@ -42,7 +42,7 @@ kotlin {
         publications {
             matching { it.name in publicationsFromMainHost }.all {
                 val targetPublication = this@all
-                tasks.withType<AbstractPublishToMaven>()
+                tasks.withType<PublishToMavenLocal>()
                     .matching { it.publication == targetPublication }
                     .configureEach { onlyIf { findProperty("isMainHost") == "true" } }
             }
