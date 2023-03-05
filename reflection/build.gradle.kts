@@ -1,6 +1,7 @@
 plugins {
     kotlin("multiplatform")
     id("org.jetbrains.dokka") version "1.7.20"
+    `maven-publish`
 }
 
 val kotlin_version: String by project
@@ -31,6 +32,15 @@ kotlin {
             dependencies {
                 implementation(kotlin("test"))
             }
+        }
+    }
+}
+
+//publishing
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            from(components["kotlin"])
         }
     }
 }
