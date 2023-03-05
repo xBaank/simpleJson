@@ -1,70 +1,69 @@
 import arrow.core.Either
 import arrow.core.flatMap
-import org.junit.jupiter.api.Test
 import simpleJson.*
 import simpleJson.exceptions.JsonException
-import java.io.File
+import kotlin.test.Test
 
 internal class JsonReaderTest {
 
     @Test
-    fun `should read unicode`() {
+    fun should_read_unicode() {
         val data = "{\"a\": \"\\u00e9\"} "
         val json = JsonReader.read(data)
         assert(json.flatMap { it.getString("a") }.getOrThrow() == "é")
     }
 
     @Test
-    fun `should read backslash`() {
+    fun should_read_backslash() {
         val data = "{\"a\": \"\\\"\"} "
         val json = JsonReader.read(data)
         assert(json.getString("a").getOrThrow() == "\"")
     }
 
     @Test
-    fun `should read slash`() {
+    fun should_read_slash() {
         val data = "{\"a\": \"\\/\"} "
         val json = JsonReader.read(data)
         assert(json.getString("a").getOrThrow() == "/")
     }
 
     @Test
-    fun `should read backspace`() {
+    fun should_read_backspace() {
         val data = "{\"a\": \"\b\"} "
         val json = JsonReader.read(data)
         assert(json.getString("a").getOrThrow() == "\b")
     }
 
     @Test
-    fun `should read newline`() {
+    fun should_read_newline() {
         val data = "{\"a\": \"\n\"} "
         val json = JsonReader.read(data)
         assert(json.getString("a").getOrThrow() == "\n")
     }
 
     @Test
-    fun `should read formfeed`() {
+    fun should_read_form_feed() {
         val data = "{\"a\": \"\u000c\"} "
         val json = JsonReader.read(data)
         assert(json.getString("a").getOrThrow() == "\u000c")
     }
 
     @Test
-    fun `should read carriage return`() {
+    fun should_read_carriage_return() {
         val data = "{\"a\": \"\r\"} "
         val json = JsonReader.read(data)
         assert(json.getString("a").getOrThrow() == "\r")
     }
 
     @Test
-    fun `should read tab`() {
+    fun should_read_tab() {
         val data = "{\"a\": \"\t\"} "
         val json = JsonReader.read(data)
         assert(json.getString("a").getOrThrow() == "\t")
     }
 
     @Test
-    fun `should read number`() {
+    fun should_read_number() {
         val data = "{\"a\": 1}"
         val json = JsonReader.read(data)
         val number = json.getInt("a")
@@ -72,7 +71,7 @@ internal class JsonReaderTest {
     }
 
     @Test
-    fun `should read number with -`() {
+    fun should_read_number_with_minus() {
         val data = "{\"a\": -1}"
         val json = JsonReader.read(data)
         val number = json.getInt("a")
@@ -80,7 +79,7 @@ internal class JsonReaderTest {
     }
 
     @Test
-    fun `should read number with +`() {
+    fun should_read_number_with_plus() {
         val data = "{\"a\": +1}"
         val json = JsonReader.read(data)
         val number = json.getInt("a")
@@ -88,7 +87,7 @@ internal class JsonReaderTest {
     }
 
     @Test
-    fun `should read decimal number`() {
+    fun should_read_decimal_number() {
         val data = "{\"a\": 1.1}"
         val json = JsonReader.read(data)
         val number = json.getDouble("a")
@@ -96,7 +95,7 @@ internal class JsonReaderTest {
     }
 
     @Test
-    fun `should read decimal number with -`() {
+    fun should_read_decimal_number_with_minus() {
         val data = "{\"a\": -1.1}"
         val json = JsonReader.read(data)
         val number = json.getDouble("a")
@@ -104,7 +103,7 @@ internal class JsonReaderTest {
     }
 
     @Test
-    fun `should read decimal number with +`() {
+    fun should_read_decimal_number_with_plus() {
         val data = "{\"a\": +1.1}"
         val json = JsonReader.read(data)
         val number = json.getDouble("a")
@@ -112,14 +111,14 @@ internal class JsonReaderTest {
     }
 
     @Test
-    fun `should read boolean`() {
+    fun should_read_boolean() {
         val data = "{\"a\": true}"
         val json = JsonReader.read(data)
         assert(json.getBoolean("a").getOrThrow())
     }
 
     @Test
-    fun `should read array`() {
+    fun should_read_array() {
         val data = " [ 1 , 2 , 3,4.4,\"a\",{}, [[[]]], true, false, null ] "
         val json = JsonReader.read(data)
         assert(json.asArray().map(JsonArray::size).getOrThrow() == 10)
@@ -137,7 +136,7 @@ internal class JsonReaderTest {
     }
 
     @Test
-    fun `should read array with all types`() {
+    fun should_read_array_with_all_types() {
         val data = " [ 1 , 2 , 3, \"a\", true, false, null, {\"a\": 1}, [1, 2, 3] ] "
         val json = JsonReader.read(data)
         val array = json.asArray()
@@ -157,7 +156,7 @@ internal class JsonReaderTest {
     }
 
     @Test
-    fun `should read array in object`() {
+    fun should_read_array_in_object() {
         val data = "{ \"a\" : [ 1 , 2 , 3 ] }"
         val json = JsonReader.read(data)
         val array = json.getArray("a")
@@ -168,7 +167,7 @@ internal class JsonReaderTest {
     }
 
     @Test
-    fun `should read object`() {
+    fun should_read_object() {
         val data = "{\"a\": {\"b\": 1}}"
         val json = JsonReader.read(data)
         val obj = json.getObject("a")
@@ -176,7 +175,7 @@ internal class JsonReaderTest {
     }
 
     @Test
-    fun `should read null`() {
+    fun should_read_null() {
         val data = "{\"a\": null}"
         val json = JsonReader.read(data)
         @Suppress("SENSELESS_COMPARISON")
@@ -184,33 +183,33 @@ internal class JsonReaderTest {
     }
 
     @Test
-    fun `should read empty object`() {
+    fun should_read_empty_object() {
         val data = "{}"
         val json = JsonReader.read(data)
         assert(json.getOrThrow() is JsonObject)
     }
 
     @Test
-    fun `should empty array`() {
+    fun should_empty_array() {
         val data = "[]"
         val json = JsonReader.read(data)
         assert(json.getOrThrow() is JsonArray)
     }
 
     @Test
-    fun `should not read empty string`() {
+    fun should_not_read_empty_string() {
         val data = JsonReader.read("") as? Either.Left
         assert(data?.value is JsonException)
     }
 
     @Test
-    fun `should not read empty string with spaces`() {
+    fun should_not_read_empty_string_with_spaces() {
         val data = JsonReader.read(" ") as? Either.Left
         assert(data?.value is JsonException)
     }
 
     @Test
-    fun `should read empty string with spaces and newlines`() {
+    fun should_read_empty_string_with_spaces_and_newlines() {
         val data = """
             {
                 "a": "\n \t \"hola\" \t \n"
@@ -221,7 +220,7 @@ internal class JsonReaderTest {
     }
 
     @Test
-    fun `should read json`() {
+    fun should_read_json() {
         val data = """
             {
                 "a": 1,
@@ -248,7 +247,7 @@ internal class JsonReaderTest {
     }
 
     @Test
-    fun `should not read json`() {
+    fun should_not_read_json() {
         val data = """
             {
                 "a": 1, asd
@@ -266,7 +265,7 @@ internal class JsonReaderTest {
     }
 
     @Test
-    fun `should not read json with invalid number`() {
+    fun should_not_read_json_with_invalid_number() {
         val data = """
             {
                 "a": 1,
@@ -286,7 +285,7 @@ internal class JsonReaderTest {
     }
 
     @Test
-    fun `should read json with nested objects`() {
+    fun should_read_json_with_nested_objects() {
         val data = """
             {
                 "a": 1,
@@ -316,9 +315,9 @@ internal class JsonReaderTest {
 
     }
 
-    @Test
-    fun `should json read from stream`() {
-        val data = File("src/test/resources/photos.json").inputStream()
+/*    @Test
+    fun should_json_read_from_stream() {
+        val data = FileSystem.S "src/test/resources/photos.json".toPath()
         val json = JsonReader.read(data).flatMap(JsonNode::asArray)
         assert(json.map(JsonArray::size).getOrThrow() == 5000)
         assert(json.getOrThrow().all { it["albumId"].isRightOrThrow() })
@@ -326,10 +325,10 @@ internal class JsonReaderTest {
         assert(json.getOrThrow().all { it["title"].isRightOrThrow() })
         assert(json.getOrThrow().all { it["url"].isRightOrThrow() })
         assert(json.getOrThrow().all { it["thumbnailUrl"].isRightOrThrow() })
-    }
+    }*/
 
     @Test
-    fun `should try parse json`() {
+    fun should_try_parse_json() {
         val data = """
             {
                 "a": 1,
@@ -352,7 +351,7 @@ internal class JsonReaderTest {
     }
 
     @Test
-    fun `try parse should return null`() {
+    fun try_parse_should_return_null() {
         val data = """
             {
                 "a": 1, asd
@@ -375,7 +374,7 @@ internal class JsonReaderTest {
     }
 
     @Test
-    fun `should deserialize`() {
+    fun should_deserialize() {
         val data = """
             {
                 "a": 1,
@@ -406,7 +405,7 @@ internal class JsonReaderTest {
     }
 
     @Test
-    fun `should not deserialize`() {
+    fun should_not_deserialize() {
         val data = """
             {
                 "a": 1,

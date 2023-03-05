@@ -1,5 +1,7 @@
 package simpleJson
 
+import kotlin.jvm.JvmInline
+
 /**
  * Base type to represent a JSON node.
  */

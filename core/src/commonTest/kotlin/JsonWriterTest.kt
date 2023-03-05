@@ -1,9 +1,9 @@
-import org.junit.jupiter.api.Test
 import simpleJson.*
+import kotlin.test.Test
 
 class JsonWriterTest {
     @Test
-    fun `should write json`() {
+    fun should_write_json() {
         val json = jObject {
             "null" to null
             "true" to true
@@ -34,7 +34,7 @@ class JsonWriterTest {
     }
 
     @Test
-    fun `should write json and read it again`() {
+    fun should_write_json_and_read_it_again() {
         val json = jObject {
             "null" to null
             "true" to true
@@ -66,7 +66,7 @@ class JsonWriterTest {
     }
 
     @Test
-    fun `should write json with indent and read it again`() {
+    fun should_write_json_with_indent_and_read_it_again() {
         val json = jObject {
             "null" to null
             "true" to true
@@ -98,7 +98,7 @@ class JsonWriterTest {
     }
 
     @Test
-    fun `should write json with escaped characters`() {
+    fun should_write_json_with_escaped_characters() {
         val json = jObject {
             "string" to " \" \\ / \b \u000c \n \r \t \n "
         }

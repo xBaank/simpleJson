@@ -1,9 +1,9 @@
-import org.junit.jupiter.api.Test
 import simpleJson.*
+import kotlin.test.Test
 
 class OperatorTests {
     @Test
-    fun `should create json and then change it`() {
+    fun should_create_json_and_then_change_it() {
         val json = jObject {
             "a" += 1
         } as JsonNode
@@ -12,7 +12,7 @@ class OperatorTests {
         assert(json["a"].asInt().getOrThrow() == 2)
     }
     @Test
-    fun `should create json and then change object in it`() {
+    fun should_create_json_and_then_change_object_in_it() {
         val json = jObject {
             "a" += jObject {
                 "b" += 1
@@ -26,7 +26,7 @@ class OperatorTests {
     }
 
     @Test
-    fun `should create json and then add object in it`() {
+    fun should_create_json_and_then_add_object_in_it() {
         val json = jObject {
             "a" += 1
         } as JsonNode

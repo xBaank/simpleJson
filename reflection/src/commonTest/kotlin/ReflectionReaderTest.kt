@@ -1,8 +1,7 @@
 import arrow.core.getOrElse
-import org.junit.jupiter.api.Test
 import simpleJson.reflection.JsonName
 import simpleJson.reflection.deserializeFromString
-import java.time.LocalDate
+import kotlin.test.Test
 
 
 private data class Type(
@@ -22,8 +21,8 @@ private data class OtherType(
     val localDate: String
 )
 
-private data class LocalDateWrapper(
-    val localDate: LocalDate
+private data class MapWrapper(
+    val map: Map<String, String>
 )
 
 private class NotDataClass
@@ -38,7 +37,7 @@ private data class AnnotationTest(
 
 class ReflectionReaderTest {
     @Test
-    fun `should read basic values`() {
+    fun should_read_basic_values() {
         val json = """
             {
                 "name": "null",
@@ -73,7 +72,7 @@ class ReflectionReaderTest {
     }
 
     @Test
-    fun `should read array`() {
+    fun should_read_array() {
         val json = """
             [
                 1,
@@ -90,7 +89,7 @@ class ReflectionReaderTest {
     }
 
     @Test
-    fun `should read array of class`() {
+    fun should_read_array_of_class() {
         val json = """
             [
                 {
@@ -128,31 +127,31 @@ class ReflectionReaderTest {
     }
 
     @Test
-    fun `should not read not data class neither array`() {
+    fun should_not_read_not_data_class_neither_array() {
         val json = """
             {
             "localDate": "2020-01-01"
             }
         """.trimIndent()
 
-        val instance = deserializeFromString<LocalDateWrapper>(json)
+        val instance = deserializeFromString<MapWrapper>(json)
         assert(instance.isLeft())
     }
 
     @Test
-    fun `should not deserialize value with incorrect properties`() {
+    fun should_not_deserialize_value_with_incorrect_properties() {
         val json = """
             {
                 "localDateee": "2020-01-01"
             }
         """.trimIndent()
 
-        val instance = deserializeFromString<LocalDateWrapper>(json)
+        val instance = deserializeFromString<MapWrapper>(json)
         assert(instance.isLeft())
     }
 
     @Test
-    fun `should not read not data class`() {
+    fun should_not_read_not_data_class() {
         val json = """
             {
             }
@@ -163,7 +162,7 @@ class ReflectionReaderTest {
     }
 
     @Test
-    fun `should not assign null`() {
+    fun should_not_assign_null() {
         val json = """
             {
                 "name": "null",
@@ -186,7 +185,7 @@ class ReflectionReaderTest {
     }
 
     @Test
-    fun `should read with annotation`() {
+    fun should_read_with_annotation() {
         val json = """
             {
                 "name": "null",

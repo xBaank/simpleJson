@@ -2,10 +2,9 @@ package simpleJson.reflection
 
 import arrow.core.Either
 import arrow.core.continuations.either
+import okio.BufferedSink
 import simpleJson.*
 import simpleJson.exceptions.JsonException
-import java.io.OutputStream
-import java.nio.charset.Charset
 import kotlin.reflect.KClass
 import kotlin.reflect.KType
 import kotlin.reflect.full.*
@@ -15,8 +14,8 @@ import kotlin.reflect.typeOf
 /**
  * Serializes an object of type [T] to an output stream
  */
-inline fun <reified T : Any> serializeToStream(instance: T, stream: OutputStream, charset: Charset = Charsets.UTF_8): Either<JsonException, Unit> = either.eager {
-    JsonWriter.write(serialize(instance, typeOf<T>()).bind(), stream, charset)
+inline fun <reified T : Any> serializeToBuffer(instance: T, buffer : BufferedSink): Either<JsonException, Unit> = either.eager {
+    JsonWriter.write(serialize(instance, typeOf<T>()).bind(), buffer)
 }
 
 /**

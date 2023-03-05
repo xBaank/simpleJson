@@ -1,10 +1,10 @@
-import org.junit.jupiter.api.Test
 import simpleJson.*
+import kotlin.test.Test
 
 internal class JsonBuilderTest {
 
     @Test
-    fun `should build json`() {
+    fun should_build_json() {
 
         val json = jObject {
             "null" += null
@@ -79,7 +79,7 @@ internal class JsonBuilderTest {
     }
 
     @Test
-    fun `should build json from array`() {
+    fun should_build_json_from_array() {
 
         val json = jArray {
             add(1.2)

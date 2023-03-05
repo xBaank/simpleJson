@@ -1,9 +1,8 @@
 package simpleJson
 
-import java.io.BufferedWriter
-import java.io.ByteArrayOutputStream
-import java.io.OutputStream
-import java.nio.charset.Charset
+import arrow.core.getOrNone
+import okio.Buffer
+import okio.BufferedSink
 
 //Inverse map of CONTROL_CHARACTERS version in JsonReader
 private val CONTROL_CHARACTERS_ESCAPED = mapOf(
@@ -21,7 +20,7 @@ private val CONTROL_CHARACTERS_ESCAPED = mapOf(
  * Interface for writing JsonNodes
  */
 interface IJsonWriter {
-    val writer: BufferedWriter
+    val writer: BufferedSink
     fun writeArray(node: JsonArray)
     fun writeObject(node: JsonObject)
     fun writeString(node: JsonString)
@@ -46,56 +45,55 @@ fun IJsonWriter.write(node: JsonNode) = when (node) {
 /**
  * Implementation of IJsonWriter for writing to an output stream
  */
-class JsonWriter(stream: OutputStream, charset: Charset = Charsets.UTF_8) : IJsonWriter {
-    override val writer = stream.bufferedWriter(charset)
+class JsonWriter(override val writer: BufferedSink) : IJsonWriter {
 
     override fun writeArray(node: JsonArray) {
-        writer.write("[")
+        writer.writeUtf8("[")
         node.value.forEachIndexed { index, jsonNode ->
-            if (index != 0) writer.write(",")
+            if (index != 0) writer.writeUtf8(",")
             write(jsonNode)
         }
-        writer.write("]")
+        writer.writeUtf8("]")
     }
 
     override fun writeObject(node: JsonObject) {
-        writer.write("{")
+        writer.writeUtf8("{")
         node.value.entries.forEachIndexed { index, (key, value) ->
-            if (index != 0) writer.write(",")
+            if (index != 0) writer.writeUtf8(",")
             writeString(JsonString(key))
-            writer.write(":")
+            writer.writeUtf8(":")
             write(value)
         }
-        writer.write("}")
+        writer.writeUtf8("}")
     }
 
     override fun writeString(node: JsonString) {
-        writer.write("\"")
+        writer.writeUtf8("\"")
         writer.writeEscaped(node.value)
-        writer.write("\"")
+        writer.writeUtf8("\"")
     }
 
     override fun writeNumber(node: JsonNumber) {
-        writer.write(node.value.toString())
+        writer.writeUtf8(node.value.toString())
     }
 
     override fun writeBoolean(node: JsonBoolean) {
-        writer.write(node.value.toString())
+        writer.writeUtf8(node.value.toString())
     }
 
     override fun writeNull() {
-        writer.write("null")
+        writer.writeUtf8("null")
     }
 
     companion object {
         fun write(node: JsonNode): String {
-            val stream = ByteArrayOutputStream()
+            val stream = Buffer()
             JsonWriter(stream).write(node)
-            return stream.toString()
+            return stream.readUtf8()
         }
 
-        fun write(node: JsonNode, stream: OutputStream, charset: Charset) =
-            JsonWriter(stream, charset).write(node)
+        fun write(node: JsonNode, sink : BufferedSink) =
+            JsonWriter(sink).write(node)
     }
 }
 
@@ -107,13 +105,13 @@ class PrettyJsonWriter(private val jsonWriter: JsonWriter, val indent: String = 
     override val writer = jsonWriter.writer
 
     override fun writeArray(node: JsonArray) {
-        writer.write("[")
+        writer.writeUtf8("[")
         if (node.value.isNotEmpty()) {
             writer.newLine()
             indentLevel++
             node.value.forEachIndexed { index, jsonNode ->
                 if (index != 0) {
-                    writer.write(",")
+                    writer.writeUtf8(",")
                     writer.newLine()
                 }
                 writeIndent()
@@ -123,50 +121,51 @@ class PrettyJsonWriter(private val jsonWriter: JsonWriter, val indent: String = 
             indentLevel--
             writeIndent()
         }
-        writer.write("]")
+        writer.writeUtf8("]")
     }
 
     override fun writeObject(node: JsonObject) {
-        writer.write("{")
+        writer.writeUtf8("{")
         if (node.value.isNotEmpty()) {
             writer.newLine()
             indentLevel++
             node.value.entries.forEachIndexed { index, (key, value) ->
                 if (index != 0) {
-                    writer.write(",")
+                    writer.writeUtf8(",")
                     writer.newLine()
                 }
                 writeIndent()
                 writeString(JsonString(key))
-                writer.write(": ")
+                writer.writeUtf8(": ")
                 write(value)
             }
             writer.newLine()
             indentLevel--
             writeIndent()
         }
-        writer.write("}")
+        writer.writeUtf8("}")
     }
 
     private fun writeIndent() {
         repeat(indentLevel) {
-            writer.write(indent)
+            writer.writeUtf8(indent)
         }
     }
 
     companion object {
         fun write(node: JsonNode): String {
-            val stream = ByteArrayOutputStream()
+            val stream = Buffer()
             JsonWriter(stream).prettyPrint().write(node)
-            return stream.toString()
+            return stream.readUtf8()
         }
 
-        fun write(node: JsonNode, stream: OutputStream, charset: Charset = Charsets.UTF_8) =
-            JsonWriter(stream, charset).prettyPrint().write(node)
+        fun write(node: JsonNode, sink : BufferedSink) =
+            JsonWriter(sink).prettyPrint().write(node)
     }
 }
 
-private fun BufferedWriter.writeEscaped(value: String) = value.forEach { char ->
-    val escaped = CONTROL_CHARACTERS_ESCAPED.getOrDefault(char, null)
-    if (escaped != null) write(escaped) else write(char.code)
+private fun BufferedSink.writeEscaped(value: String) = value.forEach { char ->
+    val escaped = CONTROL_CHARACTERS_ESCAPED.getOrNone(char).orNull()
+    if (escaped != null) writeUtf8(escaped) else writeUtf8CodePoint(char.code)
 }
+private fun BufferedSink.newLine() = writeUtf8("\n")

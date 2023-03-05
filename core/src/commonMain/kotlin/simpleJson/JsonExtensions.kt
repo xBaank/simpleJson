@@ -2,6 +2,7 @@ package simpleJson
 
 import arrow.core.*
 import simpleJson.exceptions.JsonException
+import kotlin.jvm.JvmName
 
 
 /**
@@ -60,6 +61,7 @@ operator fun JsonNode.set(key: String, value : Boolean): Either<JsonException, U
 /**
  * Set a property in a [JsonObject] or return a [JsonException] if the node is not a [JsonObject]
  */
+@Suppress("UNUSED_PARAMETER")
 operator fun JsonNode.set(key: String, value : Nothing?): Either<JsonException, Unit> = set(key, JsonNull)
 
 /**
@@ -80,6 +82,7 @@ operator fun JsonNode.set(index: Int, value : Boolean): Either<JsonException, Un
 /**
  * Set a property in a [JsonArray] or return a [JsonException] if the node is not a [JsonArray]
  */
+@Suppress("UNUSED_PARAMETER")
 operator fun JsonNode.set(index: Int, value : Nothing?): Either<JsonException, Unit> = set(index, JsonNull)
 
 /**

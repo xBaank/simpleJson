@@ -3,10 +3,9 @@ package simpleJson
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
+import okio.Buffer
+import okio.BufferedSource
 import simpleJson.exceptions.JsonException
-import java.io.BufferedReader
-import java.io.InputStream
-import java.nio.charset.Charset
 
 //TODO Use either with private methods
 
@@ -27,13 +26,12 @@ private val NUMBERS_CHARACTERS = arrayOf('0', '1', '2', '3', '4', '5', '6', '7',
 /**
  * JsonReader for the specified input stream with the specified charset
  */
-class JsonReader(inputStream: InputStream, charset: Charset = Charsets.UTF_8) {
+class JsonReader(val reader: BufferedSource) {
     /**
      * JsonReader for the specified string
      */
-    constructor(string: String) : this(string.byteInputStream())
+    constructor(string: String) : this(Buffer().writeUtf8(string))
 
-    private val reader = BufferedReader(inputStream.reader(charset))
     private var current: Char? = null
 
     //After reading all json skip all whitespace and check for no more data after
@@ -48,24 +46,29 @@ class JsonReader(inputStream: InputStream, charset: Charset = Charsets.UTF_8) {
     private fun readOrNull(): JsonNode? = readObjectOrNull() ?: readArrayOrNull()
 
     private fun readNext() {
-        current = readOrEof()
+        current = reader.readOrEof()
     }
 
-    private fun readOrEof(): Char? = reader.read().takeIf { it != -1 }?.toChar()
+    private fun BufferedSource.readOrEof(): Char? {
+        val canRead = request(1)
+        if (!canRead) return null
+        return readByte().toInt().toChar()
+    }
 
     private inline fun readLength(length: Int, predicate: (String) -> Boolean): String? = with(reader) {
-        mark(length)
+        val canPeek = request(length.toLong())
+        if (!canPeek) return null
+        val peeked = peek()
         val result = StringBuilder().append(current)
 
         repeat(length) {
-            result.append(readOrEof())
+            result.append(peeked.readOrEof())
         }
         val resultString = result.toString()
         if (!predicate(resultString)) {
-            reset()
             return null
         }
-
+        skip(length.toLong())
         readNext()
         return resultString
     }
@@ -87,16 +90,16 @@ class JsonReader(inputStream: InputStream, charset: Charset = Charsets.UTF_8) {
         while (current != JSON_DOUBLE_QUOTE) {
 
             if (current == '\\') {
-                current = readOrEof().takeIf { it in CONTROL_CHARACTERS } ?: return null
+                current = reader.readOrEof().takeIf { it in CONTROL_CHARACTERS } ?: return null
 
                 if (current == 'u') {
+                    val canRead = reader.request(4)
+                    if (!canRead) return null
+                    val read = reader.readByteString(4)
 
-                    val charArray = CharArray(4)
-                    val read = reader.read(charArray)
+                    if (read.size != 4) return null
 
-                    if (read != 4) return null
-
-                    val unicode = String(charArray).toInt(16)
+                    val unicode = read.utf8().toInt(16)
                     result.append(unicode.toChar())
 
                 } else result.append(CONTROL_CHARACTERS[current])
@@ -198,8 +201,8 @@ class JsonReader(inputStream: InputStream, charset: Charset = Charsets.UTF_8) {
 
     companion object {
         fun read(string: String): Either<JsonException, JsonNode> = JsonReader(string).read()
-        fun read(inputStream: InputStream, charset: Charset = Charsets.UTF_8): Either<JsonException, JsonNode> =
-            JsonReader(inputStream, charset).read()
+        fun read(source: BufferedSource): Either<JsonException, JsonNode> =
+            JsonReader(source).read()
     }
 }
 
