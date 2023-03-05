@@ -34,15 +34,18 @@ kotlin {
             }
         }
     }
-}
+    val publicationsFromMainHost =
+        listOf(jvm()).map { it.name } + "kotlinMultiplatform"
 
-//publishing
-publishing {
-    publications {
-        create<MavenPublication>("maven") {
-            from(components["kotlin"])
+    publishing {
+        publications {
+            matching { it.name in publicationsFromMainHost }.all {
+                val targetPublication = this@all
+                tasks.withType<AbstractPublishToMaven>()
+                    .matching { it.publication == targetPublication }
+                    .configureEach { onlyIf { findProperty("isMainHost") == "true" } }
+            }
         }
     }
 }
-
 
