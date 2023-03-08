@@ -19,6 +19,7 @@ if (secretPropsFile.exists()) {
     ext["signing.secretKeyRingFile"] = System.getenv("SIGNING_SECRET_KEY_RING_FILE")
     ext["ossrhUsername"] = System.getenv("OSSRH_USERNAME")
     ext["ossrhPassword"] = System.getenv("OSSRH_PASSWORD")
+
 }
 
 fun getExtraString(name: String) = ext[name]?.toString()
@@ -37,7 +38,7 @@ publishing {
 
             val snapshotUrl = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
             val releaseUrl = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
-            url = snapshotUrl
+            url = uri(System.getenv("REPOSITORY_URL") ?: releaseUrl)
         }
     }
 
