@@ -20,9 +20,9 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/publish-simpleJson" />
-            <option value="$PROJECT_DIR$/reflection" />
+            <option value="$PROJECT_DIR$/simpleJson-core" />
+            <option value="$PROJECT_DIR$/simpleJson-reflection" />
           </set>
         </option>
       </GradleProjectSettings>

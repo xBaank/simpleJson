@@ -1,7 +1,7 @@
 plugins {
     kotlin("multiplatform")
     id("org.jetbrains.dokka") version "1.7.20"
-    id("publish-simpleJson") apply true
+    id("publish-simpleJson")
 }
 
 val arrow_version: String by project

@@ -37,7 +37,7 @@ publishing {
             }
 
             val snapshotUrl = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
-            val releaseUrl = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+            val releaseUrl = uri("https://s01.oss.sonatype.org/content/repositories/releases/")
             url = uri(System.getenv("REPOSITORY_URL") ?: releaseUrl)
         }
     }
