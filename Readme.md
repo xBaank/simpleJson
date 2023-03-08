@@ -183,7 +183,7 @@ val json = jObject {
 
 ## Serialization
 
-With the json created via dsl, you can serialize it to a string.
+With the json created via DSL, you can serialize it to a string.
 
 You can serialize JsonNode to String
 
