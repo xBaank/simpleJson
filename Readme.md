@@ -90,7 +90,7 @@ val json = """
 val address = json["info"]["address"].asString().getOrNull() ?: "unknown"
 ```
 
-As you can see, it's much simpler and easier to use and allows you to focus on the more on the 
+As you can see, it's much simpler and easier to use and allows you to focus more on the 
 data received rather than the types or DTOs that need to be created.
 
 You can still deserialize the json into a JsonElement with kotlinx.serialization.
