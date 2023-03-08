@@ -216,7 +216,7 @@ return stream.readUtf8()
 
 
 ## Reflection
-There is a module to use reflection deserialize objects into data classes.
+There is a module to use reflection deserialize and serialize objects into data classes.
 
 It is only available for JVM and supports only primitive types, lists, and data classes.
 ```kotlin
@@ -231,7 +231,6 @@ val json = """
 val instance = deserialize<List<Int>>(json).getOrElse { throw it }
 ```
 
-And to serialize objects into json.
 
 ```kotlin
 val json = serialize(listOf(1, 2, 3))
