@@ -1,10 +1,13 @@
-
 rootProject.name = "simpleJson"
-include("reflection")
-include("core")
+include(":simpleJson-reflection")
+include(":simpleJson-core")
+includeBuild("publish-simpleJson")
 pluginManagement {
     val kotlin_version: String by settings
     plugins {
-        kotlin("jvm") version kotlin_version
+        kotlin("multiplatform") version kotlin_version
     }
 }
+
+
+

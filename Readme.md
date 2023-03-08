@@ -1,45 +1,66 @@
-## simpleJson [![Java CI with Gradle](https://github.com/xBaank/simpleJson/actions/workflows/gradle.yml/badge.svg)](https://github.com/xBaank/simpleJson/actions/workflows/gradle.yml) [![](https://jitpack.io/v/xBaank/simpleJson.svg)](https://jitpack.io/#xBaank/simpleJson)
+# simpleJson [![Java CI with Gradle](https://github.com/xBaank/simpleJson/actions/workflows/gradle.yml/badge.svg)](https://github.com/xBaank/simpleJson/actions/workflows/gradle.yml) 
 
-simpleJson is a simple json parser for the jvm made in kotlin,
-to properly use it you need to have <a href="https://github.com/arrow-kt/arrow">Arrow</a> as a dependency.
+simpleJson is a lightweight and versatile JSON parser designed specifically for Kotlin multiplatform applications. Unlike other JSON parsers that can be overly complex and difficult to work with, SimpleJson provides a simple and intuitive API that allows developers to quickly and easily parse JSON data into strongly typed nodes.
 
-### Deserialization
+To properly use it you need to have <a href="https://github.com/arrow-kt/arrow">Arrow</a> and <a href="https://github.com/square/okio">Okio</a> as a dependency.
 
-You can read using.
 
-```kotlin
-val json = JsonReader.read(""" { a : "a", b : [1 , "1"] } """) //will return either a JsonNode or a JsonException
-```
+| Module                | Version                                                                                                                                                                  |
+|-----------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| simpleJson-core       | [![](https://img.shields.io/maven-central/v/io.github.xbaank/simpleJson-core)](https://central.sonatype.com/artifact/io.github.xbaank/simpleJson-core/1.0.0)             |
+| simpleJson-reflection | [![](https://img.shields.io/maven-central/v/io.github.xbaank/simpleJson-reflection)](https://central.sonatype.com/artifact/io.github.xbaank/simpleJson-reflection/1.0.0) |
 
-or using the extension methods
 
-```kotlin
-val json = """ { a : "a", b : [1 , "1"] } """.deserialize() //will return either a JsonNode or a JsonException
-```
+## Comparison with kotlinx.serialization
+Let's start with a simple example. Imagine you want to access data from a json. 
+The common way would be to create a data class and deserialize the json into it.
 
-You can also read from a stream such as a file.
+But creating a data class for every json is not a good idea, It's even worse if you just access a few properties.
 
-```kotlin
-val data = File("src/test/resources/photos.json").inputStream()
-val json = JsonReader.read(data)
-```
+So, instead of creating a data class, you can use the JsonNode class to access the data dynamically.
 
-And specify the encoding too.
+Let's see how to do it with Kotlinx.serialization.
 
 ```kotlin
-val data = File("src/test/resources/photos.json").inputStream()
-val json = JsonReader.read(data, Charsets.UTF_32LE)
+@Serializable
+data class Info(val address: String, val phone: Int)
+@Serializable
+data class Photo(val name: String, val size: Int)
+@Serializable
+data class User(val name: String, val age: Int, val info: Info, val photos: List<Photo>)
+
+val json = """
+{
+    "name" : "Juan",
+    "age" : 20,
+    "info": {
+        "address" : "Mexico",
+        "phone" : 1234567890
+    }
+    "photos" : [
+        {
+            "name" : "photo1",
+            "size" : 100
+        },
+        {
+            "name" : "photo2",
+            "size" : 200
+        }
+    ]
+}
+"""
+
+val address = try {
+    Json.decodeFromString<User>(json).info.address
+}
+catch (ex : Exception) {
+    "unknown"
+}
 ```
 
-You can also use the `to` methods to cast to a type which will return either the type or a JsonException.
+This would be the "common way" to do it, but there are other ways to do it.
 
-```kotlin
-val json = JsonReader.read(data)
-val name = json["name"].asString()
-```
-
-After reading, you can access the data using the `get` operator which will return either the corresponding JsonType or a
-JsonException.
+Now let's see how to do it with simpleJson.
 
 ```kotlin
 val json = """
@@ -63,46 +84,74 @@ val json = """
 }
 """.deserialize()
 
-val name = json.getString("name").orNull() //will return null if the key is not found or the value is not a string
-val age = json.getInt("age").orNull()
-val address = json["info"]["address"].asString().getOrNull() ?: "unknown" // will return "unknown" if the key is not found
-val phone = json["info"]["phone"].asInt()
-    .getOrHandle { throw it } // will throw the exception if the key is not found or is not an int
-val isPublic = json["photos"][0]["name"].asString().getOrHandle { throw it }
-//Throws the exception if property photos is not an array, it is not found, the index is out of bounds, name is not a string, or it is not found
+// will return "unknown" if the key is not found or the value is not a string
+// And you can still know why it failed because it returns an Either<JsonException, String>
+// So it is completely safe.
+val address = json["info"]["address"].asString().getOrNull() ?: "unknown"
 ```
 
-### Serialization
+As you can see, it's much simpler and easier to use and allows you to focus more on the 
+data received rather than the types or DTOs that need to be created.
 
-You can serialize JsonNode to String
+You can still deserialize the json into a JsonElement with kotlinx.serialization.
+
+But it won't be as easy to access the data because kotlinx.serialization deserializes the json into a JsonObject, JsonArray and JsonPrimitive,
+making no distinction (at the time it is being parsed) between a string, a number, a boolean or a null (The main reason is that this improves speed when deserializing).
 
 ```kotlin
-val jsonString = json.serialize()
+val json = """
+{
+    "name" : "Juan",
+    "age" : 20,
+    "info": {
+        "address" : "Mexico",
+        "phone" : 1234567890
+    }
+    "photos" : [
+        {
+            "name" : "photo1",
+            "size" : 100
+        },
+        {
+            "name" : "photo2",
+            "size" : 200
+        }
+    ]
+}
+"""
+
+val address = try {
+    //Here jsonObject can throw and jsonPrimitive can throw, 
+    //and you don't know what type is jsonPrimitive, it can be null, it can be bool, it can be a number, it can be a string.
+    Json.decodeFromString<JsonElement>(json).jsonObject["info"]?.jsonObject["address"]?.jsonPrimitive?.content
+}
+catch (ex : Exception) {
+    "unknown"
+}
 ```
 
-or with a pretty print
+## Deserialization
+You can deserialize a json string into a JsonNode with the deserialize function.
 
 ```kotlin
-val jsonString = json.serializePretty()
+    val json = """
+    {
+        "key" : "value"
+    }
+    """.deserialize()
 ```
 
-And to an output stream.
-
+Or you can read it from a BufferedSource with the JsonReader function.
 ```kotlin
-val stream = ByteArrayOutputStream()
-JsonWriter(stream).write(json)
+    val path = "src/jvmTest/resources/photos.json"
+    val source: BufferedSource = FileSystem.SYSTEM.source(path.toPath()).buffer()
+    val json = JsonReader.read(source).asArray()
 ```
 
-with pretty print
 
-```kotlin
-val stream = ByteArrayOutputStream()
-JsonWriter(stream).prettyPrint().write(json)
-```
+## DSL
 
-### Dsl
-
-The dsl/builder provides a safe way to create the json without the problem of adding a
+The DSL provides a safe way to create the json without the problem of adding a
 wrong type that could cause a runtime error.
 
 ```kotlin
@@ -128,12 +177,48 @@ val json = jObject {
         addArray { add("first") }
         addObject { "string" += "string" }
     }
-    "object" += jObject {}
+    "object" += jObject {} //empty object
 }
 ```
 
-### Reflection
-There is a module to use reflection deserialize objects into data classes.
+## Serialization
+
+With the json created via DSL, you can serialize it to a string.
+
+You can serialize JsonNode to String
+
+```kotlin
+val jsonString = json.serialize()
+```
+
+With a pretty print
+
+```kotlin
+val jsonString = json.serializePretty()
+```
+
+And to an BufferedSink.
+
+```kotlin
+val stream = Buffer()
+JsonWriter(stream).write(node)
+return stream.readUtf8()
+```
+
+With pretty print
+
+```kotlin
+val stream = Buffer()
+JsonWriter(stream).prettyPrint().write(node)
+return stream.readUtf8()
+```
+
+
+
+## Reflection
+There is a module to use reflection deserialize and serialize objects into data classes.
+
+It is only available for JVM and supports only primitive types, lists, and data classes.
 ```kotlin
 val json = """
     [
@@ -146,63 +231,10 @@ val json = """
 val instance = deserialize<List<Int>>(json).getOrElse { throw it }
 ```
 
-And to serialize objects into json.
 
 ```kotlin
 val json = serialize(listOf(1, 2, 3))
 //json is "[1,2,3]"
-```
-
-> **Warning** 
-> Only primitive types, lists, and data classes are supported.
-
-## Gradle
-
-Add jitpack
-
-```kotlin
-repositories {
-    maven("https://jitpack.io")
-}
-```
-
-Add dependency
-
-```kotlin
-dependencies {
-    implementation("com.github.xBaank:simpleJson:core:9.0.0")
-    implementation("com.github.xBaank:simpleJson:reflection:9.0.0")
-}
-```
-
-## Maven
-
-Add jitpack
-
-```xml
-<repositories>
-    <repository>
-        <id>jitpack.io</id>
-        <url>https://jitpack.io</url>
-    </repository>
-</repositories>
-```
-
-Add dependency
-
-```xml
-<dependencies>
-    <dependency>
-        <groupId>com.github.xBaank.simpleJson</groupId>
-        <artifactId>core</artifactId>
-        <version>9.0.0</version>
-    </dependency>
-    <dependency>
-        <groupId>com.github.xBaank.simpleJson</groupId>
-        <artifactId>reflection</artifactId>
-        <version>9.0.0</version>
-    </dependency>
-</dependencies>
 ```
 
 
