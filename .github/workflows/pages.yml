@@ -22,12 +22,12 @@ jobs:
 
     steps:        
     - name: Build Docs
-      run: gradle dokkaHtml
+      run: ./gradlew dokkaHtml
         
     - name: Deploy to GitHub Pages
       uses: JamesIves/github-pages-deploy-action@v4.4.1
       with:
         GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         BRANCH: gh-pages
-        FOLDER: core/build/dokka/html
+        FOLDER: simpleJson-core/build/dokka/html
 
