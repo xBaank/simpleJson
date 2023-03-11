@@ -351,6 +351,18 @@ internal class JsonReaderTest {
     }
 
     @Test
+    fun should_try_parse_json_with_exponent_negative() {
+        val data = """
+            {
+                "number": 1e-1
+            }
+        """.trimIndent()
+
+        val json = JsonReader.read(data)
+        assert(json["number"].asDouble().getOrThrow() == 0.1)
+    }
+
+    @Test
     fun try_parse_should_return_null() {
         val data = """
             {
