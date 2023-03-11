@@ -339,6 +339,18 @@ internal class JsonReaderTest {
     }
 
     @Test
+    fun should_try_parse_json_with_exponent() {
+        val data = """
+            {
+                "number": 5e-324
+            }
+        """.trimIndent()
+
+        val json = JsonReader.read(data)
+        assert(json["number"].asDouble().getOrThrow() == 5E-324)
+    }
+
+    @Test
     fun try_parse_should_return_null() {
         val data = """
             {

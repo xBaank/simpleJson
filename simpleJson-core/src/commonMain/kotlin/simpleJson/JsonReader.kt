@@ -21,7 +21,7 @@ private val CONTROL_CHARACTERS = mapOf(
     'r' to "\r",
     't' to "\t"
 )
-private val NUMBERS_CHARACTERS = arrayOf('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '-', '+')
+private val NUMBERS_CHARACTERS = arrayOf('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '-', '+','e','E')
 
 /**
  * JsonReader for the specified input stream with the specified charset
@@ -115,7 +115,6 @@ class JsonReader(val reader: BufferedSource) {
         return JsonString(result.toString())
     }
 
-    //TODO add support for exponential numbers
     private fun readNumberOrNull(): JsonNumber? {
         val resultBuilder = StringBuilder()
 
