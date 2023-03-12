@@ -7,8 +7,8 @@ To properly use it you need to have <a href="https://github.com/arrow-kt/arrow">
 
 | Module                | Version                                                                                                                                                                  |
 |-----------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| simpleJson-core       | [![](https://img.shields.io/maven-central/v/io.github.xbaank/simpleJson-core)](https://central.sonatype.com/artifact/io.github.xbaank/simpleJson-core/1.0.0)             |
-| simpleJson-reflection | [![](https://img.shields.io/maven-central/v/io.github.xbaank/simpleJson-reflection)](https://central.sonatype.com/artifact/io.github.xbaank/simpleJson-reflection/1.0.0) |
+| simpleJson-core       | [![](https://img.shields.io/maven-central/v/io.github.xbaank/simpleJson-core)](https://central.sonatype.com/artifact/io.github.xbaank/simpleJson-core/1.0.1)             |
+| simpleJson-reflection | [![](https://img.shields.io/maven-central/v/io.github.xbaank/simpleJson-reflection)](https://central.sonatype.com/artifact/io.github.xbaank/simpleJson-reflection/1.0.1) |
 
 
 ## Comparison with kotlinx.serialization
