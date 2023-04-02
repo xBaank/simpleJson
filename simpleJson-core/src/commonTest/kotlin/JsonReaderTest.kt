@@ -1,7 +1,8 @@
 import arrow.core.Either
 import arrow.core.flatMap
 import simpleJson.*
-import simpleJson.exceptions.JsonException
+import simpleJson.exceptions.JsonEOFException
+import simpleJson.exceptions.JsonParseException
 import kotlin.test.Test
 
 internal class JsonReaderTest {
@@ -199,13 +200,13 @@ internal class JsonReaderTest {
     @Test
     fun should_not_read_empty_string() {
         val data = JsonReader.read("") as? Either.Left
-        assert(data?.value is JsonException)
+        assert(data?.value is JsonEOFException)
     }
 
     @Test
     fun should_not_read_empty_string_with_spaces() {
         val data = JsonReader.read(" ") as? Either.Left
-        assert(data?.value is JsonException)
+        assert(data?.value is JsonEOFException)
     }
 
     @Test
@@ -261,7 +262,7 @@ internal class JsonReaderTest {
                 }
         """.trimIndent()
         val result = JsonReader.read(data) as? Either.Left
-        assert(result?.value is JsonException)
+        assert(result?.value is JsonParseException)
     }
 
     @Test
@@ -281,7 +282,7 @@ internal class JsonReaderTest {
             }
         """.trimIndent()
         val result = JsonReader.read(data) as? Either.Left
-        assert(result?.value is JsonException)
+        assert(result?.value is JsonParseException)
     }
 
     @Test
@@ -382,7 +383,7 @@ internal class JsonReaderTest {
         """.trimIndent()
 
         val json = JsonReader.read(data) as? Either.Left
-        assert(json?.value is JsonException)
+        assert(json?.value is JsonParseException)
     }
 
     @Test
@@ -436,6 +437,17 @@ internal class JsonReaderTest {
         """.trimIndent()
 
         val json = data.deserialize() as? Either.Left
-        assert(json?.value is JsonException)
+        assert(json?.value is JsonParseException)
+    }
+
+    @Test
+    fun should_encounter_eof() {
+        val data = """
+            {
+                "a": 1
+        """.trimIndent()
+
+        val json = data.deserialize() as? Either.Left
+        assert(json?.value is JsonEOFException)
     }
 }
