@@ -450,4 +450,21 @@ internal class JsonReaderTest {
         val json = data.deserialize() as? Either.Left
         assert(json?.value is JsonEOFException)
     }
+
+    @Test
+    fun should_not_throw_stackOverflow() {
+        val startingJsonArray = JsonArray(mutableListOf())
+        var currentJsonArray = startingJsonArray
+
+        repeat(1_000_000) {
+            val newJsonArray = JsonArray(mutableListOf())
+            currentJsonArray.value.add(newJsonArray)
+            currentJsonArray = newJsonArray
+        }
+
+        val serialized = startingJsonArray.serialize()
+
+        val json = serialized.deserialize()
+        assert(json.isRightOrThrow())
+    }
 }
