@@ -2,6 +2,8 @@ package simpleJson
 
 import arrow.core.Either
 import arrow.core.continuations.either
+import arrow.core.left
+import arrow.core.right
 import okio.Buffer
 import okio.BufferedSource
 import simpleJson.exceptions.JsonEOFException
@@ -77,7 +79,7 @@ class JsonReader(val reader: BufferedSource) {
             .also { list.add(it) }
             .also { skipWhiteSpaces() }
             .let { if (current == JSON_RIGHT_BRACKET) null else Unit }
-            ?.also { if (current != JSON_COMMA) shift<JsonException>(JsonParseException("Expected ',' but found $current")) }
+            ?.also { if (current != JSON_COMMA) shift<JsonException>(JsonParseException("Expected ',' or ']' but found $current")) }
             ?.also { readNextSkippingWhiteSpaces() }
         while (current != JSON_RIGHT_BRACKET)
 
@@ -103,7 +105,7 @@ class JsonReader(val reader: BufferedSource) {
             .also { readNextSkippingWhiteSpaces() }
             .let { map[it.value] = readNode().bind() }
             .let { if (current == JSON_RIGHT_BRACE) null else Unit }
-            ?.also { if (current != JSON_COMMA) shift<JsonException>(JsonParseException("Expected ',' but found $current")) }
+            ?.also { if (current != JSON_COMMA) shift<JsonException>(JsonParseException("Expected ',' or '}' but found $current")) }
             ?.also { readNextSkippingWhiteSpaces() }
         while (current != JSON_RIGHT_BRACE)
 
@@ -121,28 +123,28 @@ class JsonReader(val reader: BufferedSource) {
 
         val result = resultBuilder.toString()
         val parsed = result.toLongOrNull() ?: result.toDoubleOrNull()
-        ?: shift(JsonParseException("Expected number but found $current"))
+        ?: shift(JsonParseException("Expected number but found $result"))
 
         JsonNumber(parsed)
     }
 
     private fun readBooleanTrue(): Either<JsonException, JsonBoolean> = either.eager {
-        readLength("true".length - 1) { it == "true" }
-            ?: shift<JsonException>(JsonParseException("Expected true but found $current"))
+        val exceptionFunc: (String) -> JsonException = { JsonParseException("Expected true but found $it") }
+        readOrThrow("true".length - 1, exceptionFunc) { it == "true" }.bind()
 
         JsonBoolean(true)
     }
 
     private fun readBooleanFalse(): Either<JsonException, JsonBoolean> = either.eager {
-        readLength("false".length - 1) { it == "false" }
-            ?: shift<JsonException>(JsonParseException("Expected false but found $current"))
+        val exceptionFunc: (String) -> JsonException = { JsonParseException("Expected false but found $it") }
+        readOrThrow("false".length - 1, exceptionFunc) { it == "false" }.bind()
 
         JsonBoolean(false)
     }
 
     private fun readNull(): Either<JsonException, JsonNull> = either.eager {
-        readLength("null".length - 1) { it == "null" }
-            ?: shift<JsonException>(JsonParseException("Expected null but found $current"))
+        val exceptionFunc: (String) -> JsonException = { JsonParseException("Expected null but found $it") }
+        readOrThrow("null".length - 1, exceptionFunc) { it == "null" }.bind()
 
         JsonNull
     }
@@ -172,7 +174,7 @@ class JsonReader(val reader: BufferedSource) {
         readNext()
         return when (val escaped = current) {
             'u' -> readUnicodeSequence()
-            else -> CONTROL_CHARACTERS[escaped].also { current = null }
+            else -> CONTROL_CHARACTERS[escaped].also { current = null } //This is a hack, current can be " here
         }
     }
 
@@ -209,7 +211,11 @@ class JsonReader(val reader: BufferedSource) {
         skipWhiteSpaces()
     }
 
-    private inline fun readLength(length: Int, predicate: (String) -> Boolean): String? = with(reader) {
+    private inline fun readOrThrow(
+        length: Int,
+        exception: (String) -> JsonException,
+        predicate: (String) -> Boolean
+    ): Either<JsonException, String> = with(reader) {
         val result = StringBuilder().append(current)
 
         repeat(length) {
@@ -219,11 +225,11 @@ class JsonReader(val reader: BufferedSource) {
 
         val resultString = result.toString()
         if (!predicate(resultString)) {
-            return null
+            return exception(resultString).left()
         }
 
         readNextSkippingWhiteSpaces()
-        return resultString
+        return resultString.right()
     }
 
 
