@@ -131,15 +131,16 @@ class JsonWriter(override val writer: BufferedSink) : IJsonWriter {
 class PrettyJsonWriter(private val jsonWriter: JsonWriter, val indent: String = "  ") : IJsonWriter by jsonWriter {
     private var indentLevel = 0
 
-    private val deepFunction = DeepRecursiveFunction { nodeToWrite: JsonNode ->
+    @PublishedApi
+    internal val deepFunction = DeepRecursiveFunction { nodeToWrite: JsonNode ->
         jsonWriter.writeNode(
             nodeToWrite,
             { writeArray(it) { callRecursive(it) } },
             { writeObject(it) { callRecursive(it) } })
     }
 
-
-    private val normalFunction = { nodeToWrite: JsonNode ->
+    @PublishedApi
+    internal val normalFunction = { nodeToWrite: JsonNode ->
         jsonWriter.writeNode(
             nodeToWrite,
             { writeArray(it) { write(it) } },
