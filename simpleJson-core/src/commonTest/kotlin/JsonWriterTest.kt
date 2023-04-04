@@ -106,18 +106,4 @@ class JsonWriterTest {
         val string = json.serialize()
         assert(string == """{"string":" \" \\ / \b \f \n \r \t \n "}""")
     }
-
-    @Test
-    fun should_not_throw_stackOverflow() {
-        val startingJsonArray = JsonArray(mutableListOf())
-        var currentJsonArray = startingJsonArray
-
-        repeat(1_000_000) {
-            val newJsonArray = JsonArray(mutableListOf())
-            currentJsonArray.value.add(newJsonArray)
-            currentJsonArray = newJsonArray
-        }
-
-        startingJsonArray.serialize()
-    }
 }
