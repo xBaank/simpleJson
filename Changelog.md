@@ -1,3 +1,11 @@
+## core v1.1.1
+
+- More specific exceptions
+
+## reflection v2.0.1
+
+- Updated dependencies
+
 ## core v1.1.0
 
 - Rewritten reader to be more specific
