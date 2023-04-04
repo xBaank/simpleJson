@@ -16,101 +16,73 @@ private val CONTROL_CHARACTERS_ESCAPED = mapOf(
     '/' to "/"
 )
 
+/**
+ * Interface for writing JsonNodes
+ */
 interface IJsonWriter {
     val writer: BufferedSink
-    fun write(node: JsonNode)
+    fun writeArray(node: JsonArray)
+    fun writeObject(node: JsonObject)
+    fun writeString(node: JsonString)
+    fun writeNumber(node: JsonNumber)
+    fun writeBoolean(node: JsonBoolean)
+    fun writeNull()
 }
+
+/**
+ * Writes the specified node to the writer
+ * @param node The node to write
+ */
+fun IJsonWriter.write(node: JsonNode) = when (node) {
+    is JsonArray -> writeArray(node)
+    is JsonObject -> writeObject(node)
+    is JsonString -> writeString(node)
+    is JsonNumber -> writeNumber(node)
+    is JsonBoolean -> writeBoolean(node)
+    JsonNull -> writeNull()
+}.also { writer.flush() }
 
 /**
  * Implementation of IJsonWriter for writing to an output stream
  */
 class JsonWriter(override val writer: BufferedSink) : IJsonWriter {
-    @PublishedApi
-    internal var deepness = 0
 
-    private val deepFunction = DeepRecursiveFunction { nodeToWrite: JsonNode ->
-        writeNode(
-            nodeToWrite,
-            { writeArray(it) { callRecursive(it) } },
-            { writeObject(it) { callRecursive(it) } })
-    }
-
-    private val normalFunction = { nodeToWrite: JsonNode ->
-        writeNode(
-            nodeToWrite,
-            { writeArray(it) { write(it) } },
-            { writeObject(it) { write(it) } })
-    }
-
-    override fun write(node: JsonNode) {
-        if (deepness > 200) deepFunction(node)
-        else normalFunction(node)
-    }
-
-    @PublishedApi
-    internal inline fun writeNode(
-        node: JsonNode,
-        writeArrayF: (JsonArray) -> Unit,
-        writeObjectF: (JsonObject) -> Unit
-    ) {
-        when (node) {
-            is JsonArray -> withDeepness { writeArrayF(node) }
-            is JsonObject -> withDeepness { writeObjectF(node) }
-            is JsonString -> writeString(node)
-            is JsonNumber -> writeNumber(node)
-            is JsonBoolean -> writeBoolean(node)
-            JsonNull -> writeNull()
-        }.also { writer.flush() }
-    }
-
-
-    private inline fun writeArray(node: JsonArray, writeFunction: (JsonNode) -> Unit) {
+    override fun writeArray(node: JsonArray) {
         writer.writeUtf8("[")
         node.value.forEachIndexed { index, jsonNode ->
             if (index != 0) writer.writeUtf8(",")
-            writeFunction(jsonNode)
+            write(jsonNode)
         }
         writer.writeUtf8("]")
     }
 
-    private inline fun writeObject(node: JsonObject, writeFunction: (JsonNode) -> Unit) {
+    override fun writeObject(node: JsonObject) {
         writer.writeUtf8("{")
         node.value.entries.forEachIndexed { index, (key, value) ->
             if (index != 0) writer.writeUtf8(",")
             writeString(JsonString(key))
             writer.writeUtf8(":")
-            writeFunction(value)
+            write(value)
         }
         writer.writeUtf8("}")
     }
 
-    @PublishedApi
-    internal fun writeString(node: JsonString) {
+    override fun writeString(node: JsonString) {
         writer.writeUtf8("\"")
         writer.writeEscaped(node.value)
         writer.writeUtf8("\"")
     }
 
-    @PublishedApi
-    internal fun writeNumber(node: JsonNumber) {
+    override fun writeNumber(node: JsonNumber) {
         writer.writeUtf8(node.value.toString())
     }
 
-    @PublishedApi
-    internal fun writeBoolean(node: JsonBoolean) {
+    override fun writeBoolean(node: JsonBoolean) {
         writer.writeUtf8(node.value.toString())
     }
 
-    @PublishedApi
-    internal fun writeNull() {
+    override fun writeNull() {
         writer.writeUtf8("null")
-    }
-
-    @PublishedApi
-    internal inline fun withDeepness(f: () -> Unit) {
-        ++deepness
-        f()
-        deepness -= 1
     }
 
     companion object {
@@ -120,7 +92,7 @@ class JsonWriter(override val writer: BufferedSink) : IJsonWriter {
             return stream.readUtf8()
         }
 
-        fun write(node: JsonNode, sink: BufferedSink) =
+        fun write(node: JsonNode, sink : BufferedSink) =
             JsonWriter(sink).write(node)
     }
 }
@@ -130,30 +102,9 @@ class JsonWriter(override val writer: BufferedSink) : IJsonWriter {
  */
 class PrettyJsonWriter(private val jsonWriter: JsonWriter, val indent: String = "  ") : IJsonWriter by jsonWriter {
     private var indentLevel = 0
+    override val writer = jsonWriter.writer
 
-    @PublishedApi
-    internal val deepFunction = DeepRecursiveFunction { nodeToWrite: JsonNode ->
-        jsonWriter.writeNode(
-            nodeToWrite,
-            { writeArray(it) { callRecursive(it) } },
-            { writeObject(it) { callRecursive(it) } })
-    }
-
-    @PublishedApi
-    internal val normalFunction = { nodeToWrite: JsonNode ->
-        jsonWriter.writeNode(
-            nodeToWrite,
-            { writeArray(it) { write(it) } },
-            { writeObject(it) { write(it) } })
-    }
-
-
-    override fun write(node: JsonNode) {
-        if (jsonWriter.deepness > 200) deepFunction(node)
-        else normalFunction(node)
-    }
-
-    private inline fun writeArray(node: JsonArray, writeFunction: (JsonNode) -> Unit) {
+    override fun writeArray(node: JsonArray) {
         writer.writeUtf8("[")
         if (node.value.isNotEmpty()) {
             writer.newLine()
@@ -164,7 +115,7 @@ class PrettyJsonWriter(private val jsonWriter: JsonWriter, val indent: String = 
                     writer.newLine()
                 }
                 writeIndent()
-                writeFunction(jsonNode)
+                write(jsonNode)
             }
             writer.newLine()
             indentLevel--
@@ -173,7 +124,7 @@ class PrettyJsonWriter(private val jsonWriter: JsonWriter, val indent: String = 
         writer.writeUtf8("]")
     }
 
-    private inline fun writeObject(node: JsonObject, writeFunction: (JsonNode) -> Unit) {
+    override fun writeObject(node: JsonObject) {
         writer.writeUtf8("{")
         if (node.value.isNotEmpty()) {
             writer.newLine()
@@ -184,9 +135,9 @@ class PrettyJsonWriter(private val jsonWriter: JsonWriter, val indent: String = 
                     writer.newLine()
                 }
                 writeIndent()
-                jsonWriter.writeString(JsonString(key))
+                writeString(JsonString(key))
                 writer.writeUtf8(": ")
-                writeFunction(value)
+                write(value)
             }
             writer.newLine()
             indentLevel--
@@ -194,7 +145,6 @@ class PrettyJsonWriter(private val jsonWriter: JsonWriter, val indent: String = 
         }
         writer.writeUtf8("}")
     }
-
 
     private fun writeIndent() {
         repeat(indentLevel) {
@@ -209,7 +159,7 @@ class PrettyJsonWriter(private val jsonWriter: JsonWriter, val indent: String = 
             return stream.readUtf8()
         }
 
-        fun write(node: JsonNode, sink: BufferedSink) =
+        fun write(node: JsonNode, sink : BufferedSink) =
             JsonWriter(sink).prettyPrint().write(node)
     }
 }
@@ -218,5 +168,4 @@ private fun BufferedSink.writeEscaped(value: String) = value.forEach { char ->
     val escaped = CONTROL_CHARACTERS_ESCAPED.getOrNone(char).orNull()
     if (escaped != null) writeUtf8(escaped) else writeUtf8CodePoint(char.code)
 }
-
 private fun BufferedSink.newLine() = writeUtf8("\n")
