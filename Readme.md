@@ -1,6 +1,6 @@
 # simpleJson [![Java CI with Gradle](https://github.com/xBaank/simpleJson/actions/workflows/gradle.yml/badge.svg)](https://github.com/xBaank/simpleJson/actions/workflows/gradle.yml) 
 
-simpleJson is a lightweight and versatile JSON parser designed specifically for Kotlin multiplatform applications. Unlike other JSON parsers that can be overly complex and difficult to work with, SimpleJson provides a simple and intuitive API that allows developers to quickly and easily parse JSON data into strongly typed nodes.
+simpleJson is a data oriented JSON parser designed specifically for Kotlin multiplatform applications. Unlike other JSON parsers that can be overly complex and difficult to work with, SimpleJson provides a simple and intuitive API that allows developers to quickly and easily parse JSON data into strongly typed nodes.
 
 To properly use it you need to have <a href="https://github.com/arrow-kt/arrow">Arrow</a> and <a href="https://github.com/square/okio">Okio</a> as a dependency.
 
