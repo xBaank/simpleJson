@@ -1,3 +1,21 @@
+## core v2.0.0
+
+- Updated kotlin to 1.8.20
+- Changed JsonReader and JsonWriter visibility to internal
+- New way to serialize is with extension methods
+    - JsonNode.serialized()
+    - JsonNode.serializedPretty(indent: String)
+    - JsonNode.serializedTo(sink: BufferedSink)
+    - JsonNode.serializedPrettyTo(sink: BufferedSink, indent: String)
+- New way to deserialize is with extension methods
+    - String.deserialized()
+    - BufferedSource.deserialized()
+
+## reflection v2.0.2
+
+- Updated kotlin to 1.8.20
+- Updated dependencies
+
 ## core v1.1.1
 
 - More specific exceptions
