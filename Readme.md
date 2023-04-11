@@ -175,11 +175,7 @@ It is only available for JVM and supports only primitive types, lists, and data 
 
 ```kotlin
 val json = """
-    [
-        1,
-        2,
-        3
-    ]
+    [1,2,3]
 """.trimIndent()
 
 val instance = deserialize<List<Int>>(json).getOrElse { throw it }
