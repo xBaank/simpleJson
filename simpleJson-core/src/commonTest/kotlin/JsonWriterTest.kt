@@ -29,7 +29,7 @@ class JsonWriterTest {
             "object" to jObject {}
         }
 
-        val string = json.serialize()
+        val string = json.serialized()
         assert(string == """{"null":null,"true":true,"false":false,"number":5.5,"string":"string","array":[1.2,{"string":"string","array":["first","second"]},"string",true,false,null,["first"],{"string":"string"}],"object":{}}""")
     }
 
@@ -60,8 +60,8 @@ class JsonWriterTest {
             "object" to jObject {}
         }
 
-        val string = json.serialize()
-        val jsonAgain = string.deserialize().getOrThrow()
+        val string = json.serialized()
+        val jsonAgain = string.deserialized().getOrThrow()
         assert(json == jsonAgain)
     }
 
@@ -92,8 +92,8 @@ class JsonWriterTest {
             "object" to jObject {}
         }
 
-        val string = json.serializePretty()
-        val jsonAgain = string.deserialize().getOrThrow()
+        val string = json.serializedPretty()
+        val jsonAgain = string.deserialized().getOrThrow()
         assert(json == jsonAgain)
     }
 
@@ -103,7 +103,7 @@ class JsonWriterTest {
             "string" to " \" \\ / \b \u000c \n \r \t \n "
         }
 
-        val string = json.serialize()
+        val string = json.serialized()
         assert(string == """{"string":" \" \\ / \b \f \n \r \t \n "}""")
     }
 }

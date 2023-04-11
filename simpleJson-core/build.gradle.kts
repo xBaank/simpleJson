@@ -27,6 +27,7 @@ kotlin {
             dependencies {
                 implementation("io.arrow-kt:arrow-core:$arrow_version")
                 implementation("com.squareup.okio:okio:$okio_version")
+                implementation("io.github.reactivecircus.cache4k:cache4k:0.9.0")
             }
         }
         val commonTest by getting {

@@ -17,14 +17,14 @@ inline fun <reified T : Any> serializeToBuffer(
     instance: T,
     buffer: BufferedSink
 ): Either<JsonSerializationException, Unit> = either.eager {
-    JsonWriter.write(serialize(instance, typeOf<T>()).bind(), buffer)
+    serialize(instance, typeOf<T>()).bind().serializeTo(buffer)
 }
 
 /**
  * Serializes an object of type [T] to a string
  */
 inline fun <reified T : Any> serializeToString(instance: T): Either<JsonSerializationException, String> = either.eager {
-    JsonWriter.write(serialize(instance, typeOf<T>()).bind())
+    serialize(instance, typeOf<T>()).bind().serialized()
 }
 
 /**

@@ -1,7 +1,6 @@
 package simpleJson
 
 import arrow.core.getOrNone
-import okio.Buffer
 import okio.BufferedSink
 
 //Inverse map of CONTROL_CHARACTERS version in JsonReader
@@ -19,7 +18,7 @@ private val CONTROL_CHARACTERS_ESCAPED = mapOf(
 /**
  * Interface for writing JsonNodes
  */
-interface IJsonWriter {
+internal interface IJsonWriter {
     val writer: BufferedSink
     fun writeArray(node: JsonArray)
     fun writeObject(node: JsonObject)
@@ -33,7 +32,7 @@ interface IJsonWriter {
  * Writes the specified node to the writer
  * @param node The node to write
  */
-fun IJsonWriter.write(node: JsonNode) = when (node) {
+internal fun IJsonWriter.write(node: JsonNode) = when (node) {
     is JsonArray -> writeArray(node)
     is JsonObject -> writeObject(node)
     is JsonString -> writeString(node)
@@ -45,7 +44,7 @@ fun IJsonWriter.write(node: JsonNode) = when (node) {
 /**
  * Implementation of IJsonWriter for writing to an output stream
  */
-class JsonWriter(override val writer: BufferedSink) : IJsonWriter {
+internal class JsonWriter(override val writer: BufferedSink) : IJsonWriter {
 
     override fun writeArray(node: JsonArray) {
         writer.writeUtf8("[")
@@ -84,23 +83,13 @@ class JsonWriter(override val writer: BufferedSink) : IJsonWriter {
     override fun writeNull() {
         writer.writeUtf8("null")
     }
-
-    companion object {
-        fun write(node: JsonNode): String {
-            val stream = Buffer()
-            JsonWriter(stream).write(node)
-            return stream.readUtf8()
-        }
-
-        fun write(node: JsonNode, sink : BufferedSink) =
-            JsonWriter(sink).write(node)
-    }
 }
 
 /**
  * Implementation of IJsonWriter for writing to an output stream with pretty printing
  */
-class PrettyJsonWriter(private val jsonWriter: JsonWriter, val indent: String = "  ") : IJsonWriter by jsonWriter {
+internal class PrettyJsonWriter(private val jsonWriter: JsonWriter, val indent: String = "  ") :
+    IJsonWriter by jsonWriter {
     private var indentLevel = 0
     override val writer = jsonWriter.writer
 
@@ -151,21 +140,11 @@ class PrettyJsonWriter(private val jsonWriter: JsonWriter, val indent: String = 
             writer.writeUtf8(indent)
         }
     }
-
-    companion object {
-        fun write(node: JsonNode): String {
-            val stream = Buffer()
-            JsonWriter(stream).prettyPrint().write(node)
-            return stream.readUtf8()
-        }
-
-        fun write(node: JsonNode, sink : BufferedSink) =
-            JsonWriter(sink).prettyPrint().write(node)
-    }
 }
 
 private fun BufferedSink.writeEscaped(value: String) = value.forEach { char ->
     val escaped = CONTROL_CHARACTERS_ESCAPED.getOrNone(char).orNull()
     if (escaped != null) writeUtf8(escaped) else writeUtf8CodePoint(char.code)
 }
+
 private fun BufferedSink.newLine() = writeUtf8("\n")

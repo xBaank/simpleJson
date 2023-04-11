@@ -28,7 +28,7 @@ private val NUMBERS_CHARACTERS = STARTING_NUMBERS_CHARACTERS + arrayOf('.', 'e',
 /**
  * JsonReader for the specified input stream with the specified charset
  */
-class JsonReader(val reader: BufferedSource) {
+internal class JsonReader(val reader: BufferedSource) {
     /**
      * JsonReader for the specified string
      */
@@ -230,13 +230,6 @@ class JsonReader(val reader: BufferedSource) {
 
         readNextSkippingWhiteSpaces()
         return resultString.right()
-    }
-
-
-    companion object {
-        fun read(string: String): Either<JsonException, JsonNode> = JsonReader(string).read()
-        fun read(source: BufferedSource): Either<JsonException, JsonNode> =
-            JsonReader(source).read()
     }
 }
 
