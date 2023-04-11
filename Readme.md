@@ -174,9 +174,7 @@ There is a module to use reflection to deserialize and serialize into DTOs
 It is only available for JVM and supports only primitive types, lists, and data classes.
 
 ```kotlin
-val json = """
-    [1,2,3]
-""".trimIndent()
+val json = "[1,2,3]"
 
 val instance = deserialize<List<Int>>(json).getOrElse { throw it }
 ```
