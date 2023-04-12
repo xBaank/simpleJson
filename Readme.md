@@ -9,8 +9,8 @@ and <a href="https://github.com/square/okio">Okio</a> as a dependency.
 
 | Module                | Version                                                                                                                                                                  |
 |-----------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| simpleJson-core       | [![](https://img.shields.io/maven-central/v/io.github.xbaank/simpleJson-core)](https://central.sonatype.com/artifact/io.github.xbaank/simpleJson-core/2.0.0)             |
-| simpleJson-reflection | [![](https://img.shields.io/maven-central/v/io.github.xbaank/simpleJson-reflection)](https://central.sonatype.com/artifact/io.github.xbaank/simpleJson-reflection/2.0.2) |
+| simpleJson-core       | [![](https://img.shields.io/maven-central/v/io.github.xbaank/simpleJson-core)](https://central.sonatype.com/artifact/io.github.xbaank/simpleJson-core)             |
+| simpleJson-reflection | [![](https://img.shields.io/maven-central/v/io.github.xbaank/simpleJson-reflection)](https://central.sonatype.com/artifact/io.github.xbaank/simpleJson-reflection) |
 
 ## API
 
