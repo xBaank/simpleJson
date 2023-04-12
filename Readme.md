@@ -9,8 +9,8 @@ and <a href="https://github.com/square/okio">Okio</a> as a dependency.
 
 | Module                | Version                                                                                                                                                                  |
 |-----------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| simpleJson-core       | [![](https://img.shields.io/maven-central/v/io.github.xbaank/simpleJson-core)](https://central.sonatype.com/artifact/io.github.xbaank/simpleJson-core/2.0.0)             |
-| simpleJson-reflection | [![](https://img.shields.io/maven-central/v/io.github.xbaank/simpleJson-reflection)](https://central.sonatype.com/artifact/io.github.xbaank/simpleJson-reflection/2.0.2) |
+| simpleJson-core       | [![](https://img.shields.io/maven-central/v/io.github.xbaank/simpleJson-core)](https://central.sonatype.com/artifact/io.github.xbaank/simpleJson-core)             |
+| simpleJson-reflection | [![](https://img.shields.io/maven-central/v/io.github.xbaank/simpleJson-reflection)](https://central.sonatype.com/artifact/io.github.xbaank/simpleJson-reflection) |
 
 ## API
 
@@ -22,13 +22,13 @@ way.
 To deserialize a json string into a JsonNode you can use the deserialized function.
 
 ```kotlin
-    val json = """ { "key" : "value" } """.deserialized()
+val json = """ { "key" : "value" } """.deserialized()
 ```
 
 You can also read it from a BufferedSource with the JsonReader function.
 
 ```kotlin
-    val path = "src/jvmTest/resources/photos.json"
+val path = "src/jvmTest/resources/photos.json"
 val source: BufferedSource = FileSystem.SYSTEM.source(path.toPath()).buffer()
 val json = source.deserialized()
 ```
@@ -38,7 +38,7 @@ val json = source.deserialized()
 To serialize a JsonNode into a json string you can use the serialized function.
 
 ```kotlin
-    val json = JsonArray(listOf(JsonString("value")))
+val json = JsonArray(listOf(JsonString("value")))
 val serialized = json.serialized()
 val prettySerialized = json.serializedPretty(indent = "  ") 
 ```
@@ -46,7 +46,7 @@ val prettySerialized = json.serializedPretty(indent = "  ")
 You can also write it to a BufferedSink with the JsonWriter function.
 
 ```kotlin
-    val path = "src/jvmTest/resources/photos.json"
+val path = "src/jvmTest/resources/photos.json"
 val source: BufferedSource = FileSystem.SYSTEM.source(path.toPath()).buffer()
 val json = source.deserialized()
 val sink: BufferedSink = FileSystem.SYSTEM.sink(path.toPath()).buffer()
@@ -60,9 +60,9 @@ To access the data you can use the get operator and the extension functions.
 
 ```kotlin
     val json = """ { "key" : "value" } """.deserialized()
-val value = json["key"].asString().getOrElse { "unknown" }
-//Gets the value of the key "key" and converts it to a string or a JsonException if it fails deserializing or finding the property.
-//If it fails it returns "unknown"
+    val value = json["key"].asString().getOrElse { "unknown" }
+    //Gets the value of the key "key" and converts it to a string or a JsonException if it fails deserializing or finding the property.
+    //If it fails it returns "unknown"
 ```
 
 ### Creating a json
@@ -70,7 +70,7 @@ val value = json["key"].asString().getOrElse { "unknown" }
 To create a json you can use the DSL.
 
 ```kotlin
-    val json = jObject {
+val json = jObject {
     "key" += "value"
     "key2" += 123
     "key3" += true
@@ -82,7 +82,7 @@ To create a json you can use the DSL.
 }
 ```
 
-With all of these functions you can create a work with json in a simple way.
+With all of these functions you can create and work with json in a simple way.
 
 ## Comparison with kotlinx.serialization
 
@@ -174,13 +174,7 @@ There is a module to use reflection to deserialize and serialize into DTOs
 It is only available for JVM and supports only primitive types, lists, and data classes.
 
 ```kotlin
-val json = """
-    [
-        1,
-        2,
-        3
-    ]
-""".trimIndent()
+val json = "[1,2,3]"
 
 val instance = deserialize<List<Int>>(json).getOrElse { throw it }
 ```
