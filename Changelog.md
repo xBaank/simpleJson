@@ -1,3 +1,11 @@
+## core v2.0.1
+
+- Removed watchosX64 target
+
+## reflection v2.0.3
+
+- Updated dependencies
+
 ## core v2.0.0
 
 - Updated kotlin to 1.8.20

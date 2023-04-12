@@ -3,7 +3,7 @@ plugins {
     id("publish-simpleJson")
 }
 
-version = "2.0.0"
+version = "2.0.1"
 
 val arrow_version: String by project
 val okio_version: String by project
@@ -19,7 +19,6 @@ kotlin {
     macosX64()
     linuxX64()
     mingwX64()
-    watchos()
     ios()
     tvos()
     sourceSets {

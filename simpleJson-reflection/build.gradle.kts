@@ -3,7 +3,7 @@ plugins {
     id("publish-simpleJson")
 }
 
-version = "2.0.2"
+version = "2.0.3"
 
 val kotlin_version: String by project
 val arrow_version: String by project
