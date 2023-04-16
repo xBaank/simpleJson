@@ -3,7 +3,7 @@ plugins {
     id("publish-simpleJson")
 }
 
-version = "2.0.1"
+version = "2.1.0"
 
 val arrow_version: String by project
 val okio_version: String by project
@@ -19,17 +19,18 @@ kotlin {
     macosX64()
     linuxX64()
     mingwX64()
+    watchos()
     ios()
     tvos()
     sourceSets {
-        val commonMain by getting {
+        commonMain {
             dependencies {
                 implementation("io.arrow-kt:arrow-core:$arrow_version")
                 implementation("com.squareup.okio:okio:$okio_version")
-                implementation("io.github.reactivecircus.cache4k:cache4k:0.9.0")
+                implementation("io.github.reactivecircus.cache4k:cache4k:0.10.0")
             }
         }
-        val commonTest by getting {
+        commonTest {
             dependencies {
                 implementation(kotlin("test"))
             }
