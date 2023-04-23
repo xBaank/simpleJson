@@ -15,6 +15,13 @@ internal class JsonReaderTest {
     }
 
     @Test
+    fun should_read_accent() {
+        val data = """{"a": "ó"}"""
+        val json = data.deserialized()
+        assert(json.flatMap { it.getString("a") }.getOrThrow() == "ó")
+    }
+
+    @Test
     fun should_read_backslash() {
         val data = "{\"a\": \"\\\"\"} "
         val json = data.deserialized()

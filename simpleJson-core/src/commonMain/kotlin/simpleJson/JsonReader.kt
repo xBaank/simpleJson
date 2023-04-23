@@ -195,7 +195,7 @@ internal class JsonReader(val reader: BufferedSource) {
             current = null
             return
         }
-        current = reader.readByte().toInt().toChar()
+        current = reader.readUtf8CodePoint().toChar()
         index++
     }
 
