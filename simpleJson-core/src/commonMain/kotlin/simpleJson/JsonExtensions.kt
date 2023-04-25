@@ -4,14 +4,13 @@ import arrow.core.Either
 import arrow.core.flatMap
 import arrow.core.left
 import arrow.core.right
-import io.github.reactivecircus.cache4k.Cache
 import okio.Buffer
 import okio.BufferedSink
 import okio.BufferedSource
+import okio.use
 import simpleJson.exceptions.JsonException
 import simpleJson.exceptions.JsonPropertyNotFoundException
 import kotlin.jvm.JvmName
-import kotlin.time.Duration.Companion.hours
 
 
 /**
@@ -313,29 +312,17 @@ fun Map<String, JsonNode>.asJson(): JsonObject = JsonObject(toMutableMap())
 /**
  * Serialize a [JsonNode] to a [String]
  */
-fun JsonNode.serialized(): String {
-    val cached = serializedCache.get(this)
-    if (cached != null) return cached
-
-    val buffer = Buffer()
-    JsonWriter(buffer).write(this)
-    val result = buffer.readUtf8()
-    serializedCache.put(this, result)
-    return result
+fun JsonNode.serialized(): String = Buffer().use {
+    JsonWriter(it).write(this)
+    return it.readUtf8()
 }
 
 /**
  * Serialize a [JsonNode] to a [String] with pretty printing
  */
-fun JsonNode.serializedPretty(indent: String = "  "): String {
-    val cached = prettySerializedCache.get(this to indent)
-    if (cached != null) return cached
-
-    val buffer = Buffer()
-    PrettyJsonWriter(JsonWriter(buffer), indent).write(this)
-    val result = buffer.readUtf8()
-    prettySerializedCache.put(this to indent, result)
-    return result
+fun JsonNode.serializedPretty(indent: String = "  "): String = Buffer().use {
+    PrettyJsonWriter(JsonWriter(it), indent).write(this)
+    return it.readUtf8()
 }
 
 /**
@@ -352,19 +339,9 @@ fun JsonNode.serializePrettyTo(buffer: BufferedSink, indent: String = "  "): Uni
 /**
  * Deserialize a [String] to a [JsonNode] or return a [JsonException] if the string is not valid JSON
  */
-fun String.deserialized(): Either<JsonException, JsonNode> =
-    deserializedCache.get(this) ?: JsonReader(this).read().also { deserializedCache.put(this, it) }
+fun String.deserialized(): Either<JsonException, JsonNode> = JsonReader(this).read()
 
 /**
  * Deserialize a [String] to a [JsonNode] or return a [JsonException] if the string is not valid JSON
  */
 fun BufferedSource.deserialized(): Either<JsonException, JsonNode> = JsonReader(this).read()
-
-private val serializedCache =
-    Cache.Builder().expireAfterWrite(1.hours).build<JsonNode, String>()
-
-private val prettySerializedCache =
-    Cache.Builder().expireAfterWrite(1.hours).build<Pair<JsonNode, String>, String>()
-
-private val deserializedCache =
-    Cache.Builder().expireAfterWrite(1.hours).build<String, Either<JsonException, JsonNode>>()

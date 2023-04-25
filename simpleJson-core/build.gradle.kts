@@ -3,7 +3,7 @@ plugins {
     id("publish-simpleJson")
 }
 
-version = "2.1.1"
+version = "2.1.2"
 
 val arrow_version: String by project
 val okio_version: String by project
@@ -14,7 +14,17 @@ repositories {
 }
 
 kotlin {
-    jvm()
+    jvm {
+        compilations.all {
+            kotlinOptions {
+                jvmTarget = JavaVersion.VERSION_1_8.toString()
+            }
+            java {
+                sourceCompatibility = JavaVersion.VERSION_1_8
+                targetCompatibility = JavaVersion.VERSION_1_8
+            }
+        }
+    }
     js(IR)
     macosX64()
     linuxX64()
@@ -27,7 +37,6 @@ kotlin {
             dependencies {
                 implementation("io.arrow-kt:arrow-core:$arrow_version")
                 implementation("com.squareup.okio:okio:$okio_version")
-                implementation("io.github.reactivecircus.cache4k:cache4k:0.10.0")
             }
         }
         commonTest {
