@@ -14,17 +14,20 @@ class JsonObjectBuilder {
     /**
      * Adds the [value] to the object with [String] as its key.
      */
-    infix fun String.to(value: String) = map.put(this, JsonString(value))
+    infix fun String.to(value: String?) =
+        if (value == null) map.put(this, JsonNull) else map.put(this, JsonString(value))
 
     /**
      * Adds the [value] to the object with [String] as its key.
      */
-    infix fun String.to(value: Number) = map.put(this, JsonNumber(value))
+    infix fun String.to(value: Number?) =
+        if (value == null) map.put(this, JsonNull) else map.put(this, JsonNumber(value))
 
     /**
      * Adds the [value] to the object with [String] as its key.
      */
-    infix fun String.to(value: Boolean) = map.put(this, JsonBoolean(value))
+    infix fun String.to(value: Boolean?) =
+        if (value == null) map.put(this, JsonNull) else map.put(this, JsonBoolean(value))
 
     /**
      * Adds the [value] to the object with [String] as its key.
@@ -43,21 +46,21 @@ class JsonObjectBuilder {
     /**
      * Adds the [value] to the object with [String] as its key.
      */
-    operator fun String.plusAssign(value: String) {
+    operator fun String.plusAssign(value: String?) {
         this to value
     }
 
     /**
      * Adds the [value] to the object with [String] as its key.
      */
-    operator fun String.plusAssign(value: Number) {
+    operator fun String.plusAssign(value: Number?) {
         this to value
     }
 
     /**
      * Adds the [value] to the object with [String] as its key.
      */
-    operator fun String.plusAssign(value: Boolean) {
+    operator fun String.plusAssign(value: Boolean?) {
         this to value
     }
 
@@ -98,21 +101,21 @@ class JsonArrayBuilder {
     /**
      * Adds the [String] to the array.
      */
-    operator fun String.unaryPlus() {
+    operator fun String?.unaryPlus() {
         add(this)
     }
 
     /**
      * Adds the [Number] to the array.
      */
-    operator fun Number.unaryPlus() {
+    operator fun Number?.unaryPlus() {
         add(this)
     }
 
     /**
      * Adds the [Boolean] to the array.
      */
-    operator fun Boolean.unaryPlus() {
+    operator fun Boolean?.unaryPlus() {
         add(this)
     }
 
@@ -133,17 +136,17 @@ class JsonArrayBuilder {
     /**
      * Adds the [value] to the array.
      */
-    fun add(value: String) = list.add(JsonString(value))
+    fun add(value: String?) = if (value != null) list.add(JsonString(value)) else list.add(JsonNull)
 
     /**
      * Adds the [value] to the array.
      */
-    fun add(value: Number) = list.add(JsonNumber(value))
+    fun add(value: Number?) = if (value != null) list.add(JsonNumber(value)) else list.add(JsonNull)
 
     /**
      * Adds the [value] to the array.
      */
-    fun add(value: Boolean) = list.add(JsonBoolean(value))
+    fun add(value: Boolean?) = if (value != null) list.add(JsonBoolean(value)) else list.add(JsonNull)
 
     /**
      * Adds the [value] to the array.
