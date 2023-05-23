@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="simpleJson-core-jvm-2.0.1">
+    <output-path>$PROJECT_DIR$/simpleJson-core/build/libs</output-path>
+    <root id="archive" name="simpleJson-core-jvm-2.0.1.jar">
+      <element id="module-output" name="simpleJson.simpleJson-core.jvmMain" />
+    </root>
+  </artifact>
+</component>

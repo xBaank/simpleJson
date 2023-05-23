@@ -1,3 +1,7 @@
+## v2.1.3
+
+- Added nullable parameters in methods
+
 ## core v2.0.1
 
 - Removed watchosX64 target
