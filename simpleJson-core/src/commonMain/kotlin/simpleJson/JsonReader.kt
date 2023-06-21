@@ -1,11 +1,6 @@
 package simpleJson
 
 import arrow.core.Either
-import arrow.core.continuations.either
-import arrow.core.left
-import arrow.core.right
-import okio.Buffer
-import okio.BufferedSource
 import simpleJson.exceptions.JsonEOFException
 import simpleJson.exceptions.JsonException
 import simpleJson.exceptions.JsonParseException
@@ -28,153 +23,181 @@ private val NUMBERS_CHARACTERS = STARTING_NUMBERS_CHARACTERS + arrayOf('.', 'e',
 /**
  * JsonReader for the specified input stream with the specified charset
  */
-internal class JsonReader(val reader: BufferedSource) {
-    /**
-     * JsonReader for the specified string
-     */
-    constructor(string: String) : this(Buffer().writeUtf8(string))
-
-    private var current: Char? = null
+internal class JsonReader(private val data: String) {
     private var index = 0
+    private inline val current get() = data[index]
+    private inline val exhausted get() = index >= data.length
 
-    //After reading all json skip all whitespace and check for no more data after
+    
     /**
      * Reads the input stream and returns a JsonNode
      * @return Either a JsonException or the JsonNode
      */
-    fun read(): Either<JsonException, JsonNode> = run {
-        readNextSkippingWhiteSpaces()
+    fun read(): Either<JsonException, JsonNode> = Either.catch {
+        skipWhiteSpaces()
         readNode()
-    }
-        .mapLeft { JsonParseException("${it.message} at index ${index - 1}", it) }
-        .mapLeft { if (current == null) JsonEOFException("Unexpected EOF at index ${index - 1}") else it }
-
-    private fun readNode(): Either<JsonException, JsonNode> = either.eager {
-        when (current) {
-            JSON_LEFT_BRACKET -> readJsonArray().bind()
-            JSON_LEFT_BRACE -> readJsonObject().bind()
-            JSON_DOUBLE_QUOTE -> readString().bind()
-            JSON_TRUE -> readBooleanTrue().bind()
-            JSON_FALSE -> readBooleanFalse().bind()
-            JSON_NULL -> readNull().bind()
-            in STARTING_NUMBERS_CHARACTERS -> readNumber().bind()
-            else -> shift(JsonParseException("Unexpected character $current"))
+    }.mapLeft {
+        when (it) {
+            is JsonException -> it
+            is IndexOutOfBoundsException -> JsonEOFException("Unexpected EOF at index ${index - 1}")
+            else -> JsonParseException(it.message ?: "Unknown error", it)
         }
     }
 
-    private fun readJsonArray(): Either<JsonException, JsonArray> = either.eager {
+    private fun readNode() = when (current) {
+        JSON_LEFT_BRACKET -> readJsonArray()
+        JSON_LEFT_BRACE -> readJsonObject()
+        JSON_DOUBLE_QUOTE -> readString()
+        JSON_TRUE -> readBooleanTrue()
+        JSON_FALSE -> readBooleanFalse()
+        JSON_NULL -> readNull()
+        in STARTING_NUMBERS_CHARACTERS -> readNumber()
+        else -> throw JsonParseException("Unexpected character $current")
+    }
+
+
+    private fun readJsonArray(): JsonArray {
         skipWhiteSpaces()
 
-        if (current != JSON_LEFT_BRACKET) shift<JsonException>(JsonParseException("Expected '[' but found $current"))
+        if (current != JSON_LEFT_BRACKET) throw JsonParseException("Expected '[' but found $current")
 
         val list = mutableListOf<JsonNode>()
 
-        readNextSkippingWhiteSpaces()
-        if (current == JSON_RIGHT_BRACKET) {
-            readNextSkippingWhiteSpaces()
-            return@eager list
-        }
-
-        do readNode().bind()
-            .also { list.add(it) }
-            .also { skipWhiteSpaces() }
-            .let { if (current == JSON_RIGHT_BRACKET) null else Unit }
-            ?.also { if (current != JSON_COMMA) shift<JsonException>(JsonParseException("Expected ',' or ']' but found $current")) }
-            ?.also { readNextSkippingWhiteSpaces() }
-        while (current != JSON_RIGHT_BRACKET)
-
-        readNextSkippingWhiteSpaces()
-        list
-    }.map(::JsonArray)
-
-    private fun readJsonObject(): Either<JsonException, JsonObject> = either.eager {
+        moveNext()
         skipWhiteSpaces()
 
-        if (current != JSON_LEFT_BRACE) shift<JsonException>(JsonParseException("Expected '{' but found $current"))
+        if (current == JSON_RIGHT_BRACKET) {
+            moveNext()
+            skipWhiteSpaces()
+            return JsonArray(list)
+        }
+
+        do {
+            readNode()
+                .also { list.add(it) }
+                .also { skipWhiteSpaces() }
+
+            if (current == JSON_RIGHT_BRACKET) break
+            if (current == JSON_COMMA) {
+                moveNext()
+                skipWhiteSpaces()
+                continue
+            }
+            throw JsonParseException("Expected ',' or ']' but found $current")
+
+        } while (current != JSON_RIGHT_BRACKET)
+
+        moveNext()
+        skipWhiteSpaces()
+        return JsonArray(list)
+    }
+
+    private fun readJsonObject(): JsonObject {
+        skipWhiteSpaces()
+
+        if (current != JSON_LEFT_BRACE) throw JsonParseException("Expected '{' but found $current")
 
         val map = mutableMapOf<String, JsonNode>()
 
-        readNextSkippingWhiteSpaces()
+        moveNext()
+        skipWhiteSpaces()
+
         if (current == JSON_RIGHT_BRACE) {
-            readNextSkippingWhiteSpaces()
-            return@eager map
+            moveNext()
+            skipWhiteSpaces()
+            return JsonObject(map)
         }
 
-        do readString().bind()
-            .also { if (current != JSON_COLON) shift<JsonException>(JsonParseException("Expected ':' but found $current")) }
-            .also { readNextSkippingWhiteSpaces() }
-            .let { map[it.value] = readNode().bind() }
-            .let { if (current == JSON_RIGHT_BRACE) null else Unit }
-            ?.also { if (current != JSON_COMMA) shift<JsonException>(JsonParseException("Expected ',' or '}' but found $current")) }
-            ?.also { readNextSkippingWhiteSpaces() }
-        while (current != JSON_RIGHT_BRACE)
+        do {
+            readString()
+                .also { skipWhiteSpaces() }
+                .also { if (current != JSON_COLON) throw JsonParseException("Expected ':' but found $current") }
+                .also { moveNext() }
+                .also { skipWhiteSpaces() }
+                .let { map[it.value] = readNode() }
+                .also { skipWhiteSpaces() }
 
-        readNextSkippingWhiteSpaces()
-        map
-    }.map(::JsonObject)
+            if (current == JSON_RIGHT_BRACE) break
+            if (current == JSON_COMMA) {
+                moveNext()
+                skipWhiteSpaces()
+                continue
+            }
+            throw JsonParseException("Expected ',' or '}' but found $current")
 
-    private fun readNumber(): Either<JsonException, JsonNumber> = either.eager {
+        } while (current != JSON_RIGHT_BRACE)
+
+        moveNext()
+        skipWhiteSpaces()
+        return JsonObject(map)
+    }
+
+    private fun readNumber(): JsonNumber {
         val resultBuilder = StringBuilder()
 
         while (current in NUMBERS_CHARACTERS) {
             resultBuilder.append(current)
-            readNextSkippingWhiteSpaces()
+            moveNext()
         }
 
         val result = resultBuilder.toString()
         val parsed = result.toLongOrNull() ?: result.toDoubleOrNull()
-        ?: shift(JsonParseException("Expected number but found $result"))
+        ?: throw JsonParseException("Expected number but found $result")
 
-        JsonNumber(parsed)
+        return JsonNumber(parsed)
     }
 
-    private fun readBooleanTrue(): Either<JsonException, JsonBoolean> = either.eager {
-        val exceptionFunc: (String) -> JsonException = { JsonParseException("Expected true but found $it") }
-        readOrThrow("true".length - 1, exceptionFunc) { it == "true" }.bind()
+    private fun readBooleanTrue(): JsonBoolean {
+        val exceptionFunc: (String) -> Nothing = { throw JsonParseException("Expected true but found $it") }
+        readOrThrow("true".length - 1, exceptionFunc) { it == "true" }
+        moveNext()
 
-        JsonBoolean(true)
+        return JsonBoolean(true)
     }
 
-    private fun readBooleanFalse(): Either<JsonException, JsonBoolean> = either.eager {
-        val exceptionFunc: (String) -> JsonException = { JsonParseException("Expected false but found $it") }
-        readOrThrow("false".length - 1, exceptionFunc) { it == "false" }.bind()
+    private fun readBooleanFalse(): JsonBoolean {
+        val exceptionFunc: (String) -> Nothing = { throw JsonParseException("Expected false but found $it") }
+        readOrThrow("false".length - 1, exceptionFunc) { it == "false" }
+        moveNext()
 
-        JsonBoolean(false)
+        return JsonBoolean(false)
     }
 
-    private fun readNull(): Either<JsonException, JsonNull> = either.eager {
-        val exceptionFunc: (String) -> JsonException = { JsonParseException("Expected null but found $it") }
-        readOrThrow("null".length - 1, exceptionFunc) { it == "null" }.bind()
+    private fun readNull(): JsonNull {
+        val exceptionFunc: (String) -> Nothing = { throw JsonParseException("Expected null but found $it") }
+        readOrThrow("null".length - 1, exceptionFunc) { it == "null" }
+        moveNext()
 
-        JsonNull
+        return JsonNull
     }
 
-    private fun readString(): Either<JsonException, JsonString> = either.eager {
+    private fun readString(): JsonString {
         val builder = StringBuilder()
 
-        if (current != JSON_DOUBLE_QUOTE) shift<JsonException>(JsonParseException("Expected '\"' but found $current"))
+        if (current != JSON_DOUBLE_QUOTE) throw JsonParseException("Expected '\"' but found $current")
 
-        fun readChar() = either.eager {
+        fun readChar() =
             if (current == '\\') {
-                readEscapeSequence() ?: shift<JsonException>(JsonParseException("Invalid escape sequence"))
-            } else current!!
-        }
+                readEscapeSequence() ?: throw JsonParseException("Invalid escape sequence")
+            } else current
 
-        do readNext()
-            .let { if (current == JSON_DOUBLE_QUOTE) null else it }
-            ?.let { readChar().bind() }
-            ?.also { builder.append(it) }
-        while (current != JSON_DOUBLE_QUOTE)
 
-        readNextSkippingWhiteSpaces()
-        JsonString(builder.toString())
+        moveNext()
+        do {
+            if (current == JSON_DOUBLE_QUOTE) break
+            builder.append(readChar())
+            moveNext()
+        } while (current != JSON_DOUBLE_QUOTE)
+
+        moveNext()
+        return JsonString(builder.toString())
     }
 
     private fun readEscapeSequence(): String? {
-        readNext()
+        moveNext()
         return when (val escaped = current) {
             'u' -> readUnicodeSequence()
-            else -> CONTROL_CHARACTERS[escaped].also { current = null } //This is a hack, current can be " here
+            else -> CONTROL_CHARACTERS[escaped] //This is a hack, current can be " here
         }
     }
 
@@ -182,7 +205,7 @@ internal class JsonReader(val reader: BufferedSource) {
         val unicode = run {
             val builder = StringBuilder()
             repeat(4) {
-                readNext()
+                moveNext()
                 builder.append(current)
             }
             builder.toString()
@@ -190,46 +213,36 @@ internal class JsonReader(val reader: BufferedSource) {
         return unicode.toIntOrNull(16)?.toChar()?.toString()
     }
 
-    private fun readNext() {
-        if (reader.exhausted()) {
-            current = null
-            return
-        }
-        current = reader.readUtf8CodePoint().toChar()
+    private fun moveNext() {
         index++
     }
 
     private tailrec fun skipWhiteSpaces() {
-        if (current != null && current !in WHITESPACE) return
-        readNext()
-        if (current == null) return
-        skipWhiteSpaces()
-    }
-
-    private fun readNextSkippingWhiteSpaces() {
-        readNext()
+        if (!exhausted && current !in WHITESPACE) return
+        moveNext()
+        if (exhausted) return
         skipWhiteSpaces()
     }
 
     private inline fun readOrThrow(
         length: Int,
-        exception: (String) -> JsonException,
+        exception: (String) -> Nothing,
         predicate: (String) -> Boolean
-    ): Either<JsonException, String> = with(reader) {
+    ): String {
         val result = StringBuilder().append(current)
 
         repeat(length) {
-            readNext()
+            moveNext()
             result.append(current)
         }
 
         val resultString = result.toString()
         if (!predicate(resultString)) {
-            return exception(resultString).left()
+            exception(resultString)
         }
 
-        readNextSkippingWhiteSpaces()
-        return resultString.right()
+        skipWhiteSpaces()
+        return resultString
     }
 }
 

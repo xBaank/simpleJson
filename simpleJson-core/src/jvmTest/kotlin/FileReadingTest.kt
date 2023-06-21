@@ -1,4 +1,3 @@
-import okio.BufferedSource
 import okio.FileSystem
 import okio.Path.Companion.toPath
 import okio.buffer
@@ -11,7 +10,7 @@ class FileReadingTest {
     @Test
     fun should_read_json_from_file() {
         val path = "src/jvmTest/resources/photos.json"
-        val source: BufferedSource = FileSystem.SYSTEM.source(path.toPath()).buffer()
+        val source = FileSystem.SYSTEM.source(path.toPath()).buffer().readUtf8()
         val json = source.deserialized().asArray()
         assert(json.getOrThrow().size == 5000)
         assert(json.getOrThrow().all { it["albumId"].isRightOrThrow() })
