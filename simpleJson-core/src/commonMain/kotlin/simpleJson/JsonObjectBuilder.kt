@@ -32,7 +32,8 @@ class JsonObjectBuilder {
     /**
      * Adds the [value] to the object with [String] as its key.
      */
-    infix fun String.to(value: JsonNode) = map.put(this, value)
+    infix fun String.to(value: JsonNode?) =
+        if (value == null) map.put(this, JsonNull) else map.put(this, value)
 
     /**
      * Adds the [value] to the object with [String] as its key.
@@ -67,7 +68,7 @@ class JsonObjectBuilder {
     /**
      * Adds the [value] to the object with [String] as its key.
      */
-    operator fun String.plusAssign(value: JsonNode) {
+    operator fun String.plusAssign(value: JsonNode?) {
         this to value
     }
 
