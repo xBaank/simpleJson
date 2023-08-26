@@ -1,3 +1,8 @@
+## 3.0.0
+
+- Improve performance
+- Added nullable parameter to `JsonNode` methods
+
 ## v2.1.3
 
 - Added nullable parameters in methods
