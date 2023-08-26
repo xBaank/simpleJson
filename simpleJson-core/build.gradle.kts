@@ -3,7 +3,7 @@ plugins {
     id("publish-simpleJson")
 }
 
-version = "2.1.3"
+version = "3.0.0"
 
 val arrow_version: String by project
 val okio_version: String by project
