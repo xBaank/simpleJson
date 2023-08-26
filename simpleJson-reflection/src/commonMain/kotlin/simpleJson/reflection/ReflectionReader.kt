@@ -2,7 +2,6 @@ package simpleJson.reflection
 
 import arrow.core.Either
 import arrow.core.continuations.either
-import okio.BufferedSource
 import simpleJson.*
 import simpleJson.exceptions.JsonException
 import kotlin.reflect.KClass
@@ -23,11 +22,6 @@ inline fun <reified T : Any> deserializeFromNode(json: JsonNode): Either<JsonDes
 inline fun <reified T : Any> deserializeFromString(json: String): Either<JsonDeserializationException, T> =
     either.eager { deserializeFromNode<T>(json.deserialized().mapException().bind()).bind() }
 
-/**
- * Deserializes an input stream to the specified type
- */
-inline fun <reified T : Any> deserializeFromBuffer(buffer: BufferedSource): Either<JsonDeserializationException, T> =
-    either.eager { deserializeFromNode<T>(buffer.deserialized().mapException().bind()).bind() }
 
 /**
  * Deserializes a JsonNode to the specified type

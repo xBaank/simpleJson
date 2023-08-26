@@ -6,7 +6,6 @@ import arrow.core.left
 import arrow.core.right
 import okio.Buffer
 import okio.BufferedSink
-import okio.BufferedSource
 import okio.use
 import simpleJson.exceptions.JsonException
 import simpleJson.exceptions.JsonPropertyNotFoundException
@@ -340,8 +339,3 @@ fun JsonNode.serializePrettyTo(buffer: BufferedSink, indent: String = "  "): Uni
  * Deserialize a [String] to a [JsonNode] or return a [JsonException] if the string is not valid JSON
  */
 fun String.deserialized(): Either<JsonException, JsonNode> = JsonReader(this).read()
-
-/**
- * Deserialize a [String] to a [JsonNode] or return a [JsonException] if the string is not valid JSON
- */
-fun BufferedSource.deserialized(): Either<JsonException, JsonNode> = JsonReader(this).read()
