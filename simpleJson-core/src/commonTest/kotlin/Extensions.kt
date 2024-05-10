@@ -7,4 +7,4 @@ fun <B, A : Throwable> Either<A, B>.getOrThrow(): B = getOrElse { throw it }
 @Suppress("USELESS_IS_CHECK")
 inline fun <reified B, A : Throwable> Either<A, B>.isRightOrThrow(): Boolean = getOrElse { throw it } is B
 
-inline fun assert(isRight: Boolean) = assertTrue { isRight }
+fun assert(isRight: Boolean) = assertTrue { isRight }

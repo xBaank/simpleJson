@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="reflection-js-9.0.0">
-    <output-path>$PROJECT_DIR$/reflection/build/libs</output-path>
-    <root id="archive" name="reflection-js-9.0.0.jar">
-      <element id="module-output" name="simpleJson.reflection.jsMain" />
-    </root>
-  </artifact>
-</component>

@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="simpleJson-reflection-jvm-2.0.3">
-    <output-path>$PROJECT_DIR$/simpleJson-reflection/build/libs</output-path>
-    <root id="archive" name="simpleJson-reflection-jvm-2.0.3.jar">
-      <element id="module-output" name="simpleJson.simpleJson-reflection.jvmMain" />
-    </root>
-  </artifact>
-</component>

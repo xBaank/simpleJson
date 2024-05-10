@@ -1,9 +1,17 @@
-plugins {
-    kotlin("multiplatform")
-    id("publish-simpleJson")
+import com.vanniktech.maven.publish.SonatypeHost
+
+object Meta {
+    const val groupId = "io.github.xbaank"
+    const val artifactId = "simpleJson-core"
+    const val version = "3.0.1-SNAPSHOT1"
 }
 
-version = "3.0.0"
+plugins {
+    kotlin("multiplatform")
+    id("com.vanniktech.maven.publish") version "0.28.0"
+}
+
+version = Meta.version
 
 val arrow_version: String by project
 val okio_version: String by project
@@ -26,12 +34,9 @@ kotlin {
         }
     }
     js(IR)
-    macosX64()
     linuxX64()
     mingwX64()
-    watchos()
-    ios()
-    tvos()
+    applyDefaultHierarchyTemplate()
     sourceSets {
         commonMain {
             dependencies {
@@ -43,6 +48,27 @@ kotlin {
             dependencies {
                 implementation(kotlin("test"))
             }
+        }
+    }
+}
+
+mavenPublishing {
+    coordinates(Meta.groupId, Meta.artifactId, Meta.version)
+    publishToMavenCentral(SonatypeHost.S01)
+    signAllPublications()
+    pom {
+        name.set("simpleJson")
+        description.set("simpleJson is a library for parsing and generating JSON in Kotlin Multiplatform")
+        url.set("https://github.com/xBaank/simpleJson")
+
+        licenses {
+            license {
+                name.set("GNU General Public License v3.0")
+                url.set("https://github.com/xBaank/simpleJson/blob/master/License")
+            }
+        }
+        scm {
+            url.set("https://github.com/xBaank/simpleJson")
         }
     }
 }
