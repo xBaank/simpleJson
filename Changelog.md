@@ -1,3 +1,8 @@
+## 3.0.1
+
+- Updated dependencies
+- Removed serialization module
+
 ## 3.0.0
 
 - Improve performance
