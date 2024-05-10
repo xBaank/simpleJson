@@ -11,8 +11,6 @@ on:
   push:
     tags:
       - '*'
-    branches:
-      - "3.0.1"
 
 permissions:
   contents: write
@@ -38,7 +36,7 @@ jobs:
         with:
           arguments: build
       - name: Publish
-        run: ./gradlew publishAllPublicationsToMavenCentralRepository --no-configuration-cache --stacktrace
+        run: ./gradlew publishToMavenCentral --no-configuration-cache --stacktrace
         env:
           SONATYPE_CONNECT_TIMEOUT_SECONDS: 180
           SONATYPE_CLOSE_TIMEOUT_SECONDS: 900
