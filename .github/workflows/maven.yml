@@ -11,8 +11,6 @@ on:
   push:
     tags:
       - '*'
-    branches:
-      - '3.0.1'
 
 permissions:
   contents: write
@@ -38,9 +36,7 @@ jobs:
         with:
           arguments: build
       - name: Publish
-        run: |
-          ./gradlew publishAllPublicationsToMavenCentralRepository --no-configuration-cache --stacktrace
-          ./gradlew closeAndReleaseRepository
+        run: ./gradlew publishAllPublicationsToMavenCentralRepository --no-configuration-cache --stacktrace
         env:
           SONATYPE_CONNECT_TIMEOUT_SECONDS: 180
           SONATYPE_CLOSE_TIMEOUT_SECONDS: 900
@@ -49,5 +45,3 @@ jobs:
           ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_SECRET_KEY }}
           ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_KEY_PASSWORD }}
           ORG_GRADLE_PROJECT_signingInMemoryKeyId: ${{ secrets.SIGNING_KEY_ID }}
-
-
