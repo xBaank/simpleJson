@@ -11,6 +11,8 @@ on:
   push:
     tags:
       - '*'
+    branches:
+      - "3.0.1"
 
 permissions:
   contents: write
