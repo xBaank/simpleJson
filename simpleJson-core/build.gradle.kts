@@ -4,6 +4,13 @@ object Meta {
     const val groupId = "io.github.xbaank"
     const val artifactId = "simpleJson-core"
     const val version = "3.0.1-SNAPSHOT1"
+    const val name = "simpleJson"
+    const val description = "simpleJson is a library for parsing and generating JSON in Kotlin Multiplatform"
+    const val licenseName = "GNU General Public License v3.0"
+    const val licenseUrl = "https://github.com/xBaank/simpleJson/blob/master/License"
+    const val scmUrl = "https://github.com/xBaank/simpleJson"
+    const val developerName = "xBaank"
+    const val developerUrl = "https://github.com/xBaank"
 }
 
 plugins {
@@ -57,18 +64,25 @@ mavenPublishing {
     publishToMavenCentral(SonatypeHost.S01)
     signAllPublications()
     pom {
-        name.set("simpleJson")
-        description.set("simpleJson is a library for parsing and generating JSON in Kotlin Multiplatform")
-        url.set("https://github.com/xBaank/simpleJson")
+        name.set(Meta.name)
+        description.set(Meta.description)
+        url.set(Meta.scmUrl)
 
         licenses {
             license {
-                name.set("GNU General Public License v3.0")
-                url.set("https://github.com/xBaank/simpleJson/blob/master/License")
+                name.set(Meta.licenseName)
+                url.set(Meta.licenseUrl)
             }
         }
         scm {
-            url.set("https://github.com/xBaank/simpleJson")
+            url.set(Meta.scmUrl)
+        }
+        developers {
+            developer {
+                id.set(Meta.developerName)
+                name.set(Meta.developerName)
+                url.set(Meta.developerUrl)
+            }
         }
     }
 }

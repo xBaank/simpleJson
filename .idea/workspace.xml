@@ -6,6 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="391f2e25-1daa-43e8-bac0-269e08dc01e2" name="Changes" comment="Try CI publishing">
       <change beforePath="$PROJECT_DIR$/.github/workflows/maven.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/maven.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/simpleJson-core/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/simpleJson-core/build.gradle.kts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -662,7 +664,7 @@
       <option name="project" value="LOCAL" />
       <updated>1687354599871</updated>
     </task>
-    <option name="localTasksCounter" value="106" />
+    <option name="localTasksCounter" value="107" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
