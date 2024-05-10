@@ -1,0 +1,749 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="391f2e25-1daa-43e8-bac0-269e08dc01e2" name="Changes" comment="Try CI publishing">
+      <change beforePath="$PROJECT_DIR$/.github/workflows/maven.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/maven.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/simpleJson-core/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/simpleJson-core/build.gradle.kts" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$/reflection">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$/core">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$/simpleJson-core">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$/simpleJson-reflection">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="simpleJson" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="simpleJson" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="simpleJson" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="publishing" type="c8890929:TasksNode$1" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="simpleJson" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="release" type="c8890929:TasksNode$1" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="simpleJson" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="run" type="c8890929:TasksNode$1" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="simpleJson" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="verification" type="c8890929:TasksNode$1" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JUnit5 Test Class" />
+        <option value="Kotlin File" />
+        <option value="Kotlin Class" />
+      </list>
+    </option>
+  </component>
+  <component name="FormatOnSaveOptions">
+    <option name="myRunOnSave" value="true" />
+  </component>
+  <component name="Git.Settings">
+    <option name="PUSH_TAGS">
+      <GitPushTagMode>
+        <option name="argument" value="--tags" />
+        <option name="title" value="All" />
+      </GitPushTagMode>
+    </option>
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/simpleJson-core/src/commonMain/kotlin/simpleJson/JsonReader.kt" root0="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="KotlinScriptingSettings">
+    <scriptDefinition className="org.jetbrains.kotlin.scripting.resolve.KotlinScriptDefinitionFromAnnotatedTemplate" definitionName="KotlinBuildScript">
+      <order>2147483647</order>
+      <autoReloadConfigurations>true</autoReloadConfigurations>
+    </scriptDefinition>
+  </component>
+  <component name="MacroExpansionManager">
+    <option name="directoryName" value="32xpp8pf" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="OptimizeOnSaveOptions">
+    <option name="myRunOnSave" value="true" />
+  </component>
+  <component name="ProjectCodeStyleSettingsMigration">
+    <option name="version" value="2" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 0
+}</component>
+  <component name="ProjectId" id="2Gr7W7np1CqLxgEJoyWRsudnBZ9" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;Gradle.simpleJson [build].executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit5&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;Liberica 17 LTS Full&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_directory_selection&quot;: &quot;C:/Users/Roberto/IdeaProjects/simpleJson/src/test/kotlin&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Roberto/IdeaProjects/simpleJson/.github/workflows&quot;,
+    &quot;notification.kotlin.js.compiler.ignored&quot;: &quot;true&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;rearrange.code.on.save&quot;: &quot;true&quot;,
+    &quot;settings.build.tools.auto.reload&quot;: &quot;SELECTIVE&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.gradle&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;kotlin-gradle-user-dirs&quot;: [
+      &quot;C:\\Users\\Roberto\\.gradle&quot;
+    ]
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Roberto\IdeaProjects\simpleJson\.github\workflows" />
+      <recent name="C:\Users\Roberto\IdeaProjects\simpleJson" />
+      <recent name="C:\Users\Roberto\IdeaProjects\simpleJson\.gradle" />
+      <recent name="C:\Users\Roberto\IdeaProjects\simpleJson\core\src\jvmTest" />
+      <recent name="C:\Users\Roberto\IdeaProjects\simpleJson\reflection" />
+    </key>
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Roberto\IdeaProjects\simpleJson" />
+      <recent name="C:\Users\Roberto\IdeaProjects\simpleJson\.gradle" />
+      <recent name="C:\Users\Roberto\IdeaProjects\simpleJson\core\src\test\resources" />
+      <recent name="C:\Users\Roberto\IdeaProjects\simpleJson\reflection\src\test\kotlin" />
+      <recent name="C:\Users\Roberto\IdeaProjects\simpleJson\reflection\src\main\kotlin\simpleJson" />
+    </key>
+    <key name="MoveKotlinTopLevelDeclarationsDialog.RECENTS_KEY">
+      <recent name="okio" />
+      <recent name="" />
+    </key>
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="" />
+    </key>
+    <key name="CopyKotlinDeclarationDialog.RECENTS_KEY">
+      <recent name="simpleJson" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Gradle.simpleJson [build]">
+    <configuration name="simpleJson [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="build" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="simpleJson [publishToMavenLocal]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="publishToMavenLocal" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="simpleJson [publish]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="publish" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="simpleJson:simpleJson-core [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/simpleJson-core" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="build" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="simpleJson:simpleJson-reflection [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/simpleJson-reflection" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="build" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Gradle.simpleJson [build]" />
+        <item itemvalue="Gradle.simpleJson [publish]" />
+        <item itemvalue="Gradle.simpleJson [publishToMavenLocal]" />
+        <item itemvalue="Gradle.simpleJson:simpleJson-reflection [build]" />
+        <item itemvalue="Gradle.simpleJson:simpleJson-core [build]" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="StandaloneScriptsStorage">
+    <option name="files">
+      <set>
+        <option value="$PROJECT_DIR$/simpleJson-benchmarks/build.gradle.kts" />
+      </set>
+    </option>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="391f2e25-1daa-43e8-bac0-269e08dc01e2" name="Changes" comment="" />
+      <created>1667134882462</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1667134882462</updated>
+    </task>
+    <task id="LOCAL-00053" summary="Add setters and rename functions">
+      <created>1676884568251</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1676884568253</updated>
+    </task>
+    <task id="LOCAL-00054" summary="Change Readme.md">
+      <created>1676884772631</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1676884772631</updated>
+    </task>
+    <task id="LOCAL-00055" summary="Fix type arguments erasement">
+      <created>1676888204952</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1676888204952</updated>
+    </task>
+    <task id="LOCAL-00056" summary="Resolve conflicts">
+      <created>1676888380860</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1676888380860</updated>
+    </task>
+    <task id="LOCAL-00057" summary="Docs">
+      <created>1676930742910</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1676930742913</updated>
+    </task>
+    <task id="LOCAL-00058" summary="Docs">
+      <created>1676931339780</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1676931339781</updated>
+    </task>
+    <task id="LOCAL-00059" summary="Update versioning">
+      <created>1676931713291</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1676931713291</updated>
+    </task>
+    <task id="LOCAL-00060" summary="Update Changelog.md">
+      <created>1676932187439</created>
+      <option name="number" value="00060" />
+      <option name="presentableId" value="LOCAL-00060" />
+      <option name="project" value="LOCAL" />
+      <updated>1676932187439</updated>
+    </task>
+    <task id="LOCAL-00061" summary="Update Changelog.md">
+      <created>1676932226545</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1676932226545</updated>
+    </task>
+    <task id="LOCAL-00062" summary="Cleanup">
+      <created>1677599625965</created>
+      <option name="number" value="00062" />
+      <option name="presentableId" value="LOCAL-00062" />
+      <option name="project" value="LOCAL" />
+      <updated>1677599625966</updated>
+    </task>
+    <task id="LOCAL-00063" summary="Add JsonName property">
+      <created>1677606390469</created>
+      <option name="number" value="00063" />
+      <option name="presentableId" value="LOCAL-00063" />
+      <option name="project" value="LOCAL" />
+      <updated>1677606390469</updated>
+    </task>
+    <task id="LOCAL-00064" summary="Refactored to multiplatform">
+      <created>1677979108122</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1677979108122</updated>
+    </task>
+    <task id="LOCAL-00065" summary="Publish plugin">
+      <created>1677979466600</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1677979466600</updated>
+    </task>
+    <task id="LOCAL-00066" summary="Remove comment">
+      <created>1677979658411</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1677979658411</updated>
+    </task>
+    <task id="LOCAL-00067" summary="Publish Multiplatform">
+      <created>1677980406483</created>
+      <option name="number" value="00067" />
+      <option name="presentableId" value="LOCAL-00067" />
+      <option name="project" value="LOCAL" />
+      <updated>1677980406483</updated>
+    </task>
+    <task id="LOCAL-00068" summary="Publish to local">
+      <created>1678020194474</created>
+      <option name="number" value="00068" />
+      <option name="presentableId" value="LOCAL-00068" />
+      <option name="project" value="LOCAL" />
+      <updated>1678020194475</updated>
+    </task>
+    <task id="LOCAL-00069" summary="Publish data">
+      <created>1678045466475</created>
+      <option name="number" value="00069" />
+      <option name="presentableId" value="LOCAL-00069" />
+      <option name="project" value="LOCAL" />
+      <updated>1678045466475</updated>
+    </task>
+    <task id="LOCAL-00070" summary="Gitignore">
+      <created>1678045558487</created>
+      <option name="number" value="00070" />
+      <option name="presentableId" value="LOCAL-00070" />
+      <option name="project" value="LOCAL" />
+      <updated>1678045558487</updated>
+    </task>
+    <task id="LOCAL-00071" summary="Add publish plugin">
+      <created>1678049788633</created>
+      <option name="number" value="00071" />
+      <option name="presentableId" value="LOCAL-00071" />
+      <option name="project" value="LOCAL" />
+      <updated>1678049788634</updated>
+    </task>
+    <task id="LOCAL-00072" summary="Improve publish-simpleJson.gradle.kts">
+      <created>1678295423062</created>
+      <option name="number" value="00072" />
+      <option name="presentableId" value="LOCAL-00072" />
+      <option name="project" value="LOCAL" />
+      <updated>1678295423062</updated>
+    </task>
+    <task id="LOCAL-00073" summary="Versioning">
+      <created>1678295518415</created>
+      <option name="number" value="00073" />
+      <option name="presentableId" value="LOCAL-00073" />
+      <option name="project" value="LOCAL" />
+      <updated>1678295518415</updated>
+    </task>
+    <task id="LOCAL-00074" summary="Rename modules">
+      <created>1678300106202</created>
+      <option name="number" value="00074" />
+      <option name="presentableId" value="LOCAL-00074" />
+      <option name="project" value="LOCAL" />
+      <updated>1678300106202</updated>
+    </task>
+    <task id="LOCAL-00075" summary="Update Readme.md">
+      <created>1678303705005</created>
+      <option name="number" value="00075" />
+      <option name="presentableId" value="LOCAL-00075" />
+      <option name="project" value="LOCAL" />
+      <updated>1678303705005</updated>
+    </task>
+    <task id="LOCAL-00076" summary="Update Readme.md">
+      <created>1678303885543</created>
+      <option name="number" value="00076" />
+      <option name="presentableId" value="LOCAL-00076" />
+      <option name="project" value="LOCAL" />
+      <updated>1678303885543</updated>
+    </task>
+    <task id="LOCAL-00077" summary="Update Readme.md">
+      <created>1678303995317</created>
+      <option name="number" value="00077" />
+      <option name="presentableId" value="LOCAL-00077" />
+      <option name="project" value="LOCAL" />
+      <updated>1678303995317</updated>
+    </task>
+    <task id="LOCAL-00078" summary="Update Readme.md">
+      <created>1678304076622</created>
+      <option name="number" value="00078" />
+      <option name="presentableId" value="LOCAL-00078" />
+      <option name="project" value="LOCAL" />
+      <updated>1678304076622</updated>
+    </task>
+    <task id="LOCAL-00079" summary="Add support for exponential numbers">
+      <created>1678571576831</created>
+      <option name="number" value="00079" />
+      <option name="presentableId" value="LOCAL-00079" />
+      <option name="project" value="LOCAL" />
+      <updated>1678571576832</updated>
+    </task>
+    <task id="LOCAL-00080" summary="Add test for negative exponent">
+      <created>1678571677630</created>
+      <option name="number" value="00080" />
+      <option name="presentableId" value="LOCAL-00080" />
+      <option name="project" value="LOCAL" />
+      <updated>1678571677630</updated>
+    </task>
+    <task id="LOCAL-00081" summary="Update version">
+      <created>1678579878017</created>
+      <option name="number" value="00081" />
+      <option name="presentableId" value="LOCAL-00081" />
+      <option name="project" value="LOCAL" />
+      <updated>1678579878017</updated>
+    </task>
+    <task id="LOCAL-00082" summary="Add more targets">
+      <created>1680309077288</created>
+      <option name="number" value="00082" />
+      <option name="presentableId" value="LOCAL-00082" />
+      <option name="project" value="LOCAL" />
+      <updated>1680309077289</updated>
+    </task>
+    <task id="LOCAL-00083" summary="Refactor">
+      <created>1680466493778</created>
+      <option name="number" value="00083" />
+      <option name="presentableId" value="LOCAL-00083" />
+      <option name="project" value="LOCAL" />
+      <updated>1680466493778</updated>
+    </task>
+    <task id="LOCAL-00084" summary="Change version">
+      <created>1680467133808</created>
+      <option name="number" value="00084" />
+      <option name="presentableId" value="LOCAL-00084" />
+      <option name="project" value="LOCAL" />
+      <updated>1680467133808</updated>
+    </task>
+    <task id="LOCAL-00085" summary="Changelog.md">
+      <created>1680467652526</created>
+      <option name="number" value="00085" />
+      <option name="presentableId" value="LOCAL-00085" />
+      <option name="project" value="LOCAL" />
+      <updated>1680467652527</updated>
+    </task>
+    <task id="LOCAL-00086" summary="More specific exceptions">
+      <created>1680517936801</created>
+      <option name="number" value="00086" />
+      <option name="presentableId" value="LOCAL-00086" />
+      <option name="project" value="LOCAL" />
+      <updated>1680517936801</updated>
+    </task>
+    <task id="LOCAL-00087" summary="Add support to deep recursion on writer">
+      <created>1680527002129</created>
+      <option name="number" value="00087" />
+      <option name="presentableId" value="LOCAL-00087" />
+      <option name="project" value="LOCAL" />
+      <updated>1680527002129</updated>
+    </task>
+    <task id="LOCAL-00088" summary="Cleanup">
+      <created>1680527147923</created>
+      <option name="number" value="00088" />
+      <option name="presentableId" value="LOCAL-00088" />
+      <option name="project" value="LOCAL" />
+      <updated>1680527147923</updated>
+    </task>
+    <task id="LOCAL-00089" summary="Move tests">
+      <created>1680554145728</created>
+      <option name="number" value="00089" />
+      <option name="presentableId" value="LOCAL-00089" />
+      <option name="project" value="LOCAL" />
+      <updated>1680554145728</updated>
+    </task>
+    <task id="LOCAL-00090" summary="Update version">
+      <created>1680603987971</created>
+      <option name="number" value="00090" />
+      <option name="presentableId" value="LOCAL-00090" />
+      <option name="project" value="LOCAL" />
+      <updated>1680603987971</updated>
+    </task>
+    <task id="LOCAL-00091" summary="Changelog.md">
+      <created>1680604386520</created>
+      <option name="number" value="00091" />
+      <option name="presentableId" value="LOCAL-00091" />
+      <option name="project" value="LOCAL" />
+      <updated>1680604386520</updated>
+    </task>
+    <task id="LOCAL-00092" summary="Implementation with serializers [TODO]">
+      <created>1680697662171</created>
+      <option name="number" value="00092" />
+      <option name="presentableId" value="LOCAL-00092" />
+      <option name="project" value="LOCAL" />
+      <updated>1680697662171</updated>
+    </task>
+    <task id="LOCAL-00093" summary="Update kotlin version">
+      <created>1680698134402</created>
+      <option name="number" value="00093" />
+      <option name="presentableId" value="LOCAL-00093" />
+      <option name="project" value="LOCAL" />
+      <updated>1680698134403</updated>
+    </task>
+    <task id="LOCAL-00094" summary="change classes visibility to internal and use only extension methods">
+      <created>1681238768449</created>
+      <option name="number" value="00094" />
+      <option name="presentableId" value="LOCAL-00094" />
+      <option name="project" value="LOCAL" />
+      <updated>1681238768449</updated>
+    </task>
+    <task id="LOCAL-00095" summary="Update version">
+      <created>1681250391983</created>
+      <option name="number" value="00095" />
+      <option name="presentableId" value="LOCAL-00095" />
+      <option name="project" value="LOCAL" />
+      <updated>1681250391983</updated>
+    </task>
+    <task id="LOCAL-00096" summary="Update version">
+      <created>1681329362840</created>
+      <option name="number" value="00096" />
+      <option name="presentableId" value="LOCAL-00096" />
+      <option name="project" value="LOCAL" />
+      <updated>1681329362841</updated>
+    </task>
+    <task id="LOCAL-00097" summary="Update version">
+      <created>1681659314220</created>
+      <option name="number" value="00097" />
+      <option name="presentableId" value="LOCAL-00097" />
+      <option name="project" value="LOCAL" />
+      <updated>1681659314220</updated>
+    </task>
+    <task id="LOCAL-00098" summary="Update version">
+      <created>1682251832368</created>
+      <option name="number" value="00098" />
+      <option name="presentableId" value="LOCAL-00098" />
+      <option name="project" value="LOCAL" />
+      <updated>1682251832369</updated>
+    </task>
+    <task id="LOCAL-00099" summary="Update version">
+      <created>1682442464802</created>
+      <option name="number" value="00099" />
+      <option name="presentableId" value="LOCAL-00099" />
+      <option name="project" value="LOCAL" />
+      <updated>1682442464802</updated>
+    </task>
+    <task id="LOCAL-00100" summary="Allow nullable values">
+      <created>1682981212190</created>
+      <option name="number" value="00100" />
+      <option name="presentableId" value="LOCAL-00100" />
+      <option name="project" value="LOCAL" />
+      <updated>1682981212191</updated>
+    </task>
+    <task id="LOCAL-00101" summary="Use exceptions internally to reduce allocations and improve performance">
+      <created>1687354599871</created>
+      <option name="number" value="00101" />
+      <option name="presentableId" value="LOCAL-00101" />
+      <option name="project" value="LOCAL" />
+      <updated>1687354599871</updated>
+    </task>
+    <option name="localTasksCounter" value="110" />
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <MESSAGE value="Improve publish-simpleJson.gradle.kts" />
+    <MESSAGE value="Versioning" />
+    <MESSAGE value="Move all packages" />
+    <MESSAGE value="Rename modules" />
+    <MESSAGE value="Update Readme.md" />
+    <MESSAGE value="Add support for exponential numbers" />
+    <MESSAGE value="Add test for negative exponent" />
+    <MESSAGE value="Add more targets" />
+    <MESSAGE value="Refactor" />
+    <MESSAGE value="More specific exceptions" />
+    <MESSAGE value="Add support to deep recursion on writer" />
+    <MESSAGE value="Cleanup" />
+    <MESSAGE value="Move tests" />
+    <MESSAGE value="Changelog.md" />
+    <MESSAGE value="Implementation with serializers [TODO]" />
+    <MESSAGE value="Update kotlin version" />
+    <MESSAGE value="Remove classes to use extension methods only" />
+    <MESSAGE value="change classes visibility to internal and use only extension methods" />
+    <MESSAGE value="Allow nullable values" />
+    <MESSAGE value="Update version" />
+    <MESSAGE value="Use exceptions internally to reduce allocations and improve performance" />
+    <MESSAGE value="Add nullable parameter for JsonNode" />
+    <MESSAGE value="Change version" />
+    <MESSAGE value="Update Changelog.md" />
+    <MESSAGE value="Try CI publishing" />
+    <option name="LAST_COMMIT_MESSAGE" value="Try CI publishing" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/src/test/kotlin/JsonReaderTest.kt</url>
+          <line>284</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <watches-manager>
+      <configuration name="GradleRunConfiguration">
+        <watch expression="data" />
+        <watch expression="((java.util.ArrayList)array).get(6)" custom="java.util.ArrayList" />
+        <watch expression="((java.util.ArrayList)array).get(6)" custom="java.util.ArrayList" />
+      </configuration>
+    </watches-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/simpleJson$Tests_in__simpleJson_test_.ic" NAME="Tests in 'simpleJson.test' Coverage Results" MODIFIED="1668858248544" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/simpleJson$Tests_in__simpleJson_core_test_.ic" NAME="Tests in 'simpleJson.core.test' Coverage Results" MODIFIED="1676755933615" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/simpleJson$Tests_in__simpleJson_reflection_test_.ic" NAME="Tests in 'simpleJson.reflection.test' Coverage Results" MODIFIED="1676887790624" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/simpleJson$All_in_simpleJson.ic" NAME="All in simpleJson Coverage Results" MODIFIED="1676755928241" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+  </component>
+</project>

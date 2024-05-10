@@ -1,9 +1,24 @@
-plugins {
-    kotlin("multiplatform")
-    id("publish-simpleJson")
+import com.vanniktech.maven.publish.SonatypeHost
+
+object Meta {
+    const val groupId = "io.github.xbaank"
+    const val artifactId = "simpleJson-core"
+    const val version = "3.0.1"
+    const val name = "simpleJson"
+    const val description = "simpleJson is a library for parsing and generating JSON in Kotlin Multiplatform"
+    const val licenseName = "GNU General Public License v3.0"
+    const val licenseUrl = "https://github.com/xBaank/simpleJson/blob/master/License"
+    const val scmUrl = "https://github.com/xBaank/simpleJson"
+    const val developerName = "xBaank"
+    const val developerUrl = "https://github.com/xBaank"
 }
 
-version = "3.0.0"
+plugins {
+    kotlin("multiplatform")
+    id("com.vanniktech.maven.publish") version "0.28.0"
+}
+
+version = Meta.version
 
 val arrow_version: String by project
 val okio_version: String by project
@@ -26,12 +41,9 @@ kotlin {
         }
     }
     js(IR)
-    macosX64()
     linuxX64()
     mingwX64()
-    watchos()
-    ios()
-    tvos()
+    applyDefaultHierarchyTemplate()
     sourceSets {
         commonMain {
             dependencies {
@@ -42,6 +54,34 @@ kotlin {
         commonTest {
             dependencies {
                 implementation(kotlin("test"))
+            }
+        }
+    }
+}
+
+mavenPublishing {
+    coordinates(Meta.groupId, Meta.artifactId, Meta.version)
+    publishToMavenCentral(SonatypeHost.S01, automaticRelease = true)
+    signAllPublications()
+    pom {
+        name.set(Meta.name)
+        description.set(Meta.description)
+        url.set(Meta.scmUrl)
+
+        licenses {
+            license {
+                name.set(Meta.licenseName)
+                url.set(Meta.licenseUrl)
+            }
+        }
+        scm {
+            url.set(Meta.scmUrl)
+        }
+        developers {
+            developer {
+                id.set(Meta.developerName)
+                name.set(Meta.developerName)
+                url.set(Meta.developerUrl)
             }
         }
     }
