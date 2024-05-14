@@ -167,22 +167,3 @@ val address = json["info"]["address"].asString().getOrElse { "unknown" }
 As you can see, it's much simpler and easier to use and allows you to focus more on the
 data received rather than the types or DTOs that need to be created.
 
-## Reflection
-
-There is a module to use reflection to deserialize and serialize into DTOs
-
-It is only available for JVM and supports only primitive types, lists, and data classes.
-
-```kotlin
-val json = "[1,2,3]"
-
-val instance = deserialize<List<Int>>(json).getOrElse { throw it }
-```
-
-```kotlin
-val json = serialize(listOf(1, 2, 3))
-//json is "[1,2,3]"
-```
-
-
-
