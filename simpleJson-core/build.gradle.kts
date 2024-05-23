@@ -3,7 +3,7 @@ import com.vanniktech.maven.publish.SonatypeHost
 object Meta {
     const val groupId = "io.github.xbaank"
     const val artifactId = "simpleJson-core"
-    const val version = "3.0.1"
+    const val version = "3.0.2"
     const val name = "simpleJson"
     const val description = "simpleJson is a library for parsing and generating JSON in Kotlin Multiplatform"
     const val licenseName = "GNU General Public License v3.0"
