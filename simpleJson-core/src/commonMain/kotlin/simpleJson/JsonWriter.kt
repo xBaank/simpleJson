@@ -143,7 +143,7 @@ internal class PrettyJsonWriter(private val jsonWriter: JsonWriter, val indent: 
 }
 
 private fun BufferedSink.writeEscaped(value: String) = value.forEach { char ->
-    val escaped = CONTROL_CHARACTERS_ESCAPED.getOrNone(char).orNull()
+    val escaped = CONTROL_CHARACTERS_ESCAPED.getOrNone(char).getOrNull()
     if (escaped != null) writeUtf8(escaped) else writeUtf8CodePoint(char.code)
 }
 
