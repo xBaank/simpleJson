@@ -20,8 +20,11 @@ permissions:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        firefox: [ '84.0', 'devedition-84.0b1', 'latest-beta', 'latest-devedition', 'latest-nightly', 'latest-esr', 'latest' ]
 
     steps:
       - uses: actions/checkout@v4
@@ -31,10 +34,11 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Install firefox
+      - name: Setup firefox
+        id: setup-firefox
         uses: browser-actions/setup-firefox@v1
         with:
-          firefox-version: latest
+          firefox-version: ${{ matrix.firefox }}
 
       - name: Run chmod to make gradlew executable
         run: chmod +x ./gradlew
