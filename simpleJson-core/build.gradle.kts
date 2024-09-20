@@ -1,4 +1,6 @@
 import com.vanniktech.maven.publish.SonatypeHost
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 
 object Meta {
     const val groupId = "io.github.xbaank"
@@ -28,19 +30,26 @@ repositories {
     mavenCentral()
 }
 
+tasks.withType<KotlinJvmCompile>().configureEach {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_1_8)
+        java.sourceCompatibility = JavaVersion.VERSION_1_8
+        java.targetCompatibility = JavaVersion.VERSION_1_8
+    }
+}
+
 kotlin {
-    jvm {
-        compilations.all {
-            kotlinOptions {
-                jvmTarget = JavaVersion.VERSION_1_8.toString()
-            }
-            java {
-                sourceCompatibility = JavaVersion.VERSION_1_8
-                targetCompatibility = JavaVersion.VERSION_1_8
+    jvm()
+    js {
+        browser {
+            testTask {
+                useKarma {
+                    useFirefox()
+                }
             }
         }
+        nodejs()
     }
-    js(IR)
     linuxX64()
     mingwX64()
     applyDefaultHierarchyTemplate()

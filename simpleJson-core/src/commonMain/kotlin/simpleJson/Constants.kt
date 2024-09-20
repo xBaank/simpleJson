@@ -10,4 +10,5 @@ internal const val JSON_DOUBLE_QUOTE = '"'
 internal const val JSON_TRUE = 't'
 internal const val JSON_FALSE = 'f'
 internal const val JSON_NULL = 'n'
+internal const val NULL_TERMINATOR = '\u0000'
 

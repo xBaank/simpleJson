@@ -25,10 +25,14 @@ private val NUMBERS_CHARACTERS = STARTING_NUMBERS_CHARACTERS + arrayOf('.', 'e',
  */
 internal class JsonReader(private val data: String) {
     private var index = 0
-    private inline val current get() = data[index]
+    private inline val current: Char
+        get() {
+            if (data[index] == NULL_TERMINATOR) throw IndexOutOfBoundsException()
+            return data[index]
+        }
     private inline val exhausted get() = index >= data.length
 
-    
+
     /**
      * Reads the input stream and returns a JsonNode
      * @return Either a JsonException or the JsonNode
@@ -123,6 +127,7 @@ internal class JsonReader(private val data: String) {
                 skipWhiteSpaces()
                 continue
             }
+
             throw JsonParseException("Expected ',' or '}' but found $current")
 
         } while (current != JSON_RIGHT_BRACE)
@@ -227,7 +232,7 @@ internal class JsonReader(private val data: String) {
     private inline fun readOrThrow(
         length: Int,
         exception: (String) -> Nothing,
-        predicate: (String) -> Boolean
+        predicate: (String) -> Boolean,
     ): String {
         val result = StringBuilder().append(current)
 
