@@ -30,11 +30,11 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - uses: browser-actions/setup-chrome@v1
+      - name: Setup firefox
+        id: setup-firefox
+        uses: browser-actions/setup-firefox@v1
         with:
-          install-chromedriver: true
-          install-dependencies: true
-
+          firefox-version: latest
 
       - name: Run chmod to make gradlew executable
         run: chmod +x ./gradlew
