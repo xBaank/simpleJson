@@ -30,7 +30,8 @@ jobs:
 
       - name: Install firefox
         uses: browser-actions/setup-firefox@v1
-        run: firefox --version
+        with:
+          firefox-version: latest
 
       - name: Run chmod to make gradlew executable
         run: chmod +x ./gradlew
