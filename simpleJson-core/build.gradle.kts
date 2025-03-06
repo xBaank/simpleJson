@@ -5,7 +5,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 object Meta {
     const val groupId = "io.github.xbaank"
     const val artifactId = "simpleJson-core"
-    const val version = "3.0.3"
+    const val version = "3.0.4"
     const val name = "simpleJson"
     const val description = "simpleJson is a library for parsing and generating JSON in Kotlin Multiplatform"
     const val licenseName = "GNU General Public License v3.0"
