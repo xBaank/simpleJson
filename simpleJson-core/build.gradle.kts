@@ -32,9 +32,9 @@ repositories {
 
 tasks.withType<KotlinJvmCompile>().configureEach {
     compilerOptions {
-        jvmTarget.set(JvmTarget.JVM_1_8)
-        java.sourceCompatibility = JavaVersion.VERSION_1_8
-        java.targetCompatibility = JavaVersion.VERSION_1_8
+        jvmTarget.set(JvmTarget.JVM_11)
+        java.sourceCompatibility = JavaVersion.VERSION_11
+        java.targetCompatibility = JavaVersion.VERSION_11
     }
 }
 
