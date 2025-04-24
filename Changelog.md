@@ -1,3 +1,8 @@
+## 4.0.0
+
+- Updated dependencies
+- Changed JVM target to 11
+
 ## 3.0.4
 
 - Updated dependencies
