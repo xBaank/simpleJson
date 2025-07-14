@@ -17,7 +17,7 @@ object Meta {
 
 plugins {
     kotlin("multiplatform")
-    id("com.vanniktech.maven.publish") version "0.32.0"
+    id("com.vanniktech.maven.publish") version "0.34.0"
 }
 
 version = Meta.version
